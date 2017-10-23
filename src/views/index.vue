@@ -35,20 +35,26 @@
                 </gzmenu>
             </div>
         </div>
-        <div class="content">
-                <div class="layout-header ivu-menu-primary">
-                    <Button type="text" @click="toggleClick">
+        <div class="main">
+                <div class="layout-header ">
+                    <Button type="text" class="layout-header-botton" @click="toggleClick">
                         <Icon type="navicon" size="32"></Icon>
                     </Button>
+                    <div class="layout-breadcrumb">
+                      <Breadcrumb>
+                        <BreadcrumbItem  v-for="item in dataBreadcrumb" :key="item">{{item}}</BreadcrumbItem>
+                      </Breadcrumb>
+                   </div>
                 </div>
-                <div class="layout-breadcrumb">
-                    <Breadcrumb>
-                      <BreadcrumbItem  v-for="item in dataBreadcrumb" :key="item">{{item}}</BreadcrumbItem>
-                    </Breadcrumb>
-                </div>
+
+
+                  <tags-page-opened></tags-page-opened>
+              
+
                 <div class="layout-content">
-                  <h1>{{$parent.storeData}}</h1>
+                     <keep-alive :include="cachePage">
                     <router-view></router-view>
+                    </keep-alive>
                 </div>
                 <div class="layout-copy ">
                     2011-2016 &copy; TalkingData
@@ -80,15 +86,17 @@
 .leftFull {
   width: 50px;
 }
-
-.content {
+.layout-header-botton {
+  margin: 5px;
+}
+.main {
   height: 100%;
   overflow: hidden;
   position: relative;
   background: #f5f7f9;
 }
 
-.content {
+.main {
   transition: width 0.2s;
 }
 
@@ -128,35 +136,38 @@
 .layout-header {
   height: 60px;
   width: 100%;
-  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.1);
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
+  /* box-shadow: 0 1px 1px rgba(0, 0, 0, 0.1); */
+  box-shadow: 0 2px 1px 1px hsla(0, 0%, 39%, 0.1);
+  background-color: white;
 }
 
 .layout-breadcrumb {
-  padding: 10px 15px 0;
-  width: 100%;
-  height: 31px;
-  top: 60px;
+  padding: 10px;
+  top: 0px;
   position: absolute;
-  left: 0;
-  right: 0;
+  left: 60px;
+  right: 340px;
+}
+.ivu-breadcrumb {
+  padding: 8px 15px 0;
 }
 
 .layout-content {
   min-height: 200px;
   overflow: hidden;
-  background: #fff;
   border-radius: 4px;
   width: 100%;
-  top: 91px;
+  top: 104px;
   bottom: 48px;
   position: absolute;
   left: 0;
   right: 0;
-  margin-top: 10px;
+  padding-left: 10px;
+}
+.content {
+  background: #fff;
+  width: 100%;
+  height: 100%;
 }
 
 .layout-copy {
@@ -175,16 +186,19 @@
 <script>
 import gzmenu from "../components/menu/index";
 import Util from "../libs/util";
+import tagsPageOpened from "./main_components/tagsPageOpened.vue";
 
 export default {
   components: {
-    gzmenu
+    gzmenu,
+    tagsPageOpened
   },
   data() {
     return {
       bkStatus: false,
       isMinMenu: false,
-      dataBreadcrumb: []
+      dataBreadcrumb: [],
+      pageTagsList: []
     };
   },
   created() {
@@ -201,6 +215,10 @@ export default {
     }
   },
   computed: {
+    cachePage() {
+       console.dir(this.$store.state.cachePage);
+      return this.$store.state.cachePage;
+    },
     menuWidth() {
       return this.isMinMenu ? "100%" : "250px";
       //return '100%';
@@ -244,19 +262,11 @@ export default {
       });
     },
     routeTo(e) {
-      //var item = this.getNode(this.$parent.dataMenus, e);
       var item = Util.searchJson(
         this.$parent.dataMenus,
         "items",
         parm => parm.name === e
       );
-      // this.dataBreadcrumb = [];
-      // var v = item;
-      // this.dataBreadcrumb.splice(0, 0, v.text);
-      // while (v.parentNode) {
-      //   this.dataBreadcrumb.splice(0, 0, v.parentNode.text);
-      //   v = v.parentNode;
-      // }
       this.setBreadcrumb(item);
       this.$router.push({ name: item.name });
     },
@@ -267,34 +277,6 @@ export default {
       while (v.parentNode) {
         this.dataBreadcrumb.splice(0, 0, v.parentNode.text);
         v = v.parentNode;
-      }
-    },
-    getNode(jsondata, name) {
-      var node;
-      //1.第一层 root 深度遍历整个JSON
-      for (var i = 0; i < jsondata.length; i++) {
-        var obj = jsondata[i];
-        //没有就下一个
-        if (!obj || !obj.name) {
-          continue;
-        }
-
-        //2.有节点就开始找，一直递归下去
-        if (obj.name == name) {
-          //找到了与nodeId匹配的节点，结束递归
-          return obj;
-        } else {
-          //3.如果有子节点就开始找
-          if (obj.items && obj.items.length > 0) {
-            //4.递归前，记录当前节点，作为parent 父亲
-            //递归往下找
-            var v = this.getNode(obj.items, name);
-            if (v) {
-              v.parentNode = obj;
-              return v;
-            }
-          }
-        }
       }
     }
   }

@@ -38,13 +38,22 @@ router.afterEach(() => {
 });
 const store = new Vuex.Store({
     state: {
-
+        cachePage: []
     },
     getters: {
 
     },
     mutations: {
-
+        closePage (state, name) {
+            state.cachePage.forEach((item, index) => {
+                if (item === name) {
+                    state.cachePage.splice(index, 1);
+                }
+            });
+        },
+        increateTag (state, tagObj) {
+            state.cachePage.push(tagObj.name);
+        },
     },
     actions: {
 

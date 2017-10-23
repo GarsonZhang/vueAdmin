@@ -47,6 +47,7 @@ var txt=` # 后台管理系统
 
 
 export default {
+    name:'about',
     components: {
         mavonEditor
     },
