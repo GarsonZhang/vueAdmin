@@ -34,7 +34,8 @@ export default {
       Util.ajax.get("/static/menus.json").then(res => {
         this.dataMenus = res.data;
         var customer_router = Util.convertRouteMap(res.data);
-        this.$router.options.routes.push(customer_router);
+        var v={children:customer_router};
+        this.$router.options.routes.push(v);
         this.$router.addRoutes(customer_router);
 
         //测试异步操作

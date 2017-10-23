@@ -54,6 +54,9 @@ const store = new Vuex.Store({
         increateTag (state, tagObj) {
             state.cachePage.push(tagObj.name);
         },
+        clearAllTag(state){
+            state.cachePage.splice(0,state.cachePage.length);
+        }
     },
     actions: {
 

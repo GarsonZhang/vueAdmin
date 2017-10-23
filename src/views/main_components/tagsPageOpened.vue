@@ -84,12 +84,24 @@ export default {
         }
     },
     created () {
-        debugger
+        // debugger
+        this.clearRouter();
         var item = Util.searchJson(
             this.$router.options.routes,
-            "items",
+            "children",
             parm => parm.name === 'home'
         );
+        this.addRouter(item);
+        
+        //
+        item = Util.searchJson(
+            this.$router.options.routes,
+            "children",
+            parm => parm.name === this.$route.name
+        );
+        console.dir(this.$route.name);
+        console.dir(item);
+        if(item)
         this.addRouter(item);
         //console.log('tag create');
     },
@@ -104,7 +116,10 @@ export default {
                 this.pageTagsList.push(item);
             }
         },
-        removeRouter(name){
+        clearRouter(){
+            this.$store.commit('clearAllTag');
+        },
+        removeTags(name){
                //this.$store.commit('closePage', item.name);
              var v=Util.searchJson(this.pageTagsList,null,parm => parm.name === name);
              if(v){
@@ -119,7 +134,7 @@ export default {
             //this.$store.commit('removeTag', name);
             this.$store.commit('closePage', name);
 
-            this.removeRouter(name);
+            this.removeTags(name);
              this.$router.push({
                     name: 'home'
                 });            
