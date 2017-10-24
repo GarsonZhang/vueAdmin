@@ -14,7 +14,7 @@ Vue.use(Vuex);
 Vue.use(iView);
 
 Vue.prototype.$axios = axios;
-axios.defaults.baseURL = 'http://' + window.location.hostname + ':'+window.location.port+'/data/';
+axios.defaults.baseURL = 'http://' + window.location.hostname + ':' + window.location.port + '/data/';
 axios.defaults.timeout = 3000;
 
 // 路由配置
@@ -44,19 +44,34 @@ const store = new Vuex.Store({
 
     },
     mutations: {
-        closePage (state, name) {
+        closePage(state, name) {
             state.cachePage.forEach((item, index) => {
                 if (item === name) {
                     state.cachePage.splice(index, 1);
                 }
             });
         },
-        increateTag (state, tagObj) {
+        increateTag(state, tagObj) {
             state.cachePage.push(tagObj.name);
         },
-        clearAllTag(state){
-            state.cachePage.splice(0,state.cachePage.length);
-        }
+        clearAllTags(state) {
+            state.cachePage.splice(1, state.cachePage.length);
+        },
+        clearOtherTags(state, name) {
+            let currentIndex = -1;
+            for (var i = 0; i < state.cachePage.length; i++) {
+                if (state.cachePage[i] === name) {
+                    currentIndex = i;
+                    break;
+                }
+            }
+            if (currentIndex === 0) {
+                this.clearAllTags(state);
+            } else {
+                state.cachePage.splice(currentIndex + 1);
+                state.cachePage.splice(1, currentIndex - 1);
+            }
+        },
     },
     actions: {
 
@@ -69,7 +84,7 @@ new Vue({
     router: router,
     store: store,
     render: h => h(App),
-    created () {
+    created() {
         // console.log('main.js   created');
 
         // var menuData=[{

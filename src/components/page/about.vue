@@ -5,7 +5,9 @@
   margin: 10px 20px 0 30px;
   color: black;
 }
-
+.v-note-wrapper{
+    z-index: 10;
+}
 </style>
 
 <template>
