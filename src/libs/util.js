@@ -86,7 +86,24 @@ const ajaxUrl = env === 'development' ?
 
 util.ajax = axios.create({
 	baseURL: ajaxUrl,
-	timeout: 30000
+	timeout: 10000
 });
+
+util.ajaxRemote = axios.create({
+	baseURL: "http://localhost:4462/api",
+	timeout: 10000
+});
+
+
+util.deepCopy=function(obj){
+    if(typeof obj != 'object'){
+        return obj;
+    }
+    var newobj = {};
+    for ( var attr in obj) {
+        newobj[attr] = this.deepCopy(obj[attr]);
+    }
+    return newobj;
+}
 
 export default util;

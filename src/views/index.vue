@@ -63,6 +63,12 @@
         </div>
     </div>
 </template>
+<style>
+.content{
+  position: relative;
+}
+</style>
+
 <style scoped>
 .layout {
   width: 100%;

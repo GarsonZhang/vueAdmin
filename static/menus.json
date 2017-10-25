@@ -70,13 +70,18 @@
 		"componentName":"index.vue",
 		"items": [
 			{
+				"name": "module",
+				"routeName": "/module",
+				"text": "模块管理",
+				"componentPath":"components",
+				"componentName":"page/module/index.vue"
+			},{
 				"name": "about",
 				"routeName": "/about",
 				"text": "关于",
 				"componentPath":"components",
 				"componentName":"page/about.vue"
-			},
-			{
+			},{
 				"name": "gz-3-2",
 				"routeName": "/t3-2",
 				"text": "选项2",

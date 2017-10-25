@@ -6,16 +6,18 @@ import Vuex from 'vuex';
 import Util from './libs/util';
 import App from './app.vue';
 import 'iview/dist/styles/iview.css';
-import axios from 'axios';
+//import axios from 'axios';
 
 Vue.use(VueRouter);
 Vue.use(Vuex);
 
 Vue.use(iView);
 
-Vue.prototype.$axios = axios;
-axios.defaults.baseURL = 'http://' + window.location.hostname + ':' + window.location.port + '/data/';
-axios.defaults.timeout = 3000;
+// Vue.prototype.$axios = axios;
+// axios.defaults.baseURL = 'http://' + window.location.hostname + ':' + window.location.port + '/data/';
+// axios.defaults.timeout = 3000;
+
+Vue.prototype.$utils = Util;
 
 // 路由配置
 const RouterConfig = {
