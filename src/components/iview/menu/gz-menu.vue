@@ -2,13 +2,13 @@
     <ul :class="classes" v-on:mouseenter="showMenu()" v-on:mouseleave="hideMenu()" :style="styles"><slot></slot></ul>
 </template>
 <script>
-    import { oneOf, findComponentsDownward } from '../../utils/assist';
-    import Emitter from '../../mixins/emitter';
+    import { oneOf, findComponentsDownward } from '../.depend/utils/assist';
+    import Emitter from '../.depend/mixins/emitter';
 
     const prefixCls = 'ivu-menu';
 
     export default {
-        name: 'Menu',
+        name: 'Menu',//这里名字不能改，因为submenu有关联
         mixins: [ Emitter ],
         props: {
             mode: {

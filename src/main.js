@@ -7,11 +7,13 @@ import Util from './libs/util';
 import App from './app.vue';
 import 'iview/dist/styles/iview.css';
 //import axios from 'axios';
+import gziview from './components/global';
 
 Vue.use(VueRouter);
 Vue.use(Vuex);
-
 Vue.use(iView);
+
+Vue.use(gziview);
 
 // Vue.prototype.$axios = axios;
 // axios.defaults.baseURL = 'http://' + window.location.hostname + ':' + window.location.port + '/data/';

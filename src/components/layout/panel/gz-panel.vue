@@ -1,12 +1,12 @@
 <template>
   <div class="container">
-      <div class="gz-top" :style="_styleTop">
+      <div :class="topClass" :style="_styleTop">
           <slot name="top"></slot>
       </div>
-      <div class="gz-main" :style="_styleMain">
+      <div :class="mainClass" :style="_styleMain">
           <slot name="main" class="abc"></slot>
       </div>
-      <div class="gz-bottom" :style="_styleBottom">
+      <div :class="bottomClass" :style="_styleBottom">
           <slot name="bottom"></slot>
       </div>
   </div>
@@ -18,6 +18,10 @@ export default {
     return {};
   },
   props: {
+    childFull100:{//第一个子元素100%铺满
+      type:Boolean,
+      default:true
+    },
     topHeight: {//设置top高度
       type: String,
       default: "60px"
@@ -41,7 +45,7 @@ export default {
   },
   methods: {
     gobject() {
-      return {};
+      return {}
     }
   },
   computed: {
@@ -64,18 +68,26 @@ export default {
       if (this.bottomStyle) v = this.$utils.deepCopy(this.bottomStyle);
       v.height = this.bottomHeight;
       return v;
+    },
+    topClass(){
+        return this.childFull100?'fill-100 gz-top':'gz-top';
+    },
+    mainClass(){
+        return this.childFull100?'fill-100 gz-main':'gz-main';
+    },
+    bottomClass(){
+        return this.childFull100?'fill-100 gz-bottom':'gz-bottom';
     }
   }
 };
 </script>
-<<style scoped>
+<style scoped>
 .container{
     position: relative;
     height: 100%;
     width:100%;
 }
 .gz-top{
-    background-color: silver;
 }
 .gz-main{
     min-height: 200px;
@@ -84,7 +96,6 @@ export default {
     position: absolute;
     left: 0;
     right: 0;
-    background: #e4e5e7;
 }
 .gz-bottom{
     color: #9ea7b4;
@@ -93,8 +104,17 @@ export default {
     bottom: 0;
     left: 0;
     right: 0;
-    background-color: #f5f7f9;
 }
+
+.fill-100>:first-child{
+  width:100%;
+  height:100%;
+}
+</style>
+<style lang="less" scoped>
+  // .gz-top{
+  //   background-color: red;
+  // }
 </style>
 
 

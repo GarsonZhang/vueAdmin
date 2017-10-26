@@ -1,8 +1,8 @@
 <template>
     <div ref="scrollCon" @mousewheel="handlescroll" class="tags-outer-scroll-con">
         <div class="close-all-tag-con">
-            <Dropdown @on-click="handleTagsOption">
-                <Button size="small" type="primary">
+            <Dropdown trigger="click" @on-click="handleTagsOption">
+                <Button size="small" type="primary" >
                     标签选项
                     <Icon type="arrow-down-b"></Icon>
                 </Button>
@@ -55,14 +55,14 @@
   text-align: center;
   width: 110px;
   height: 100%;
-  background: #fff;
-  box-shadow: -3px 0 15px 3px rgba(0, 0, 0, 0.1);
+  /* background: #fff;
+  box-shadow: -3px 0 15px 3px rgba(0, 0, 0, 0.1); */
+  background:transparent;
   z-index: 500;
 }
 </style>
 
 <script>
-import Util from "../../libs/util";
 export default {
   name: "tagsPageOpened",
   data() {
@@ -86,7 +86,7 @@ export default {
   created() {
     // debugger
     this.clearRouter();
-    var item = Util.searchJson(
+    var item = this.$utils.searchJson(
       this.$router.options.routes,
       "children",
       parm => parm.name === "home"

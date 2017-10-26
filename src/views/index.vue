@@ -3,7 +3,7 @@
     <div class="layout fullH">
         <div class="left" v-bind:class="classLeft">
             <div class="divFlag">
-                <gzmenu active-name="1-2" theme="dark" class="menu" accordion :width="menuWidth"  :open-names="['1']" 
+                <gz-menu active-name="1-2" theme="dark" class="menu" accordion :width="menuWidth"  :open-names="['1']" 
                 v-on:mouseenter="showMenu()" v-on:mouseleave="hideMenu()" @on-select="routeTo">
                     <div class="menuHeader">
                         <div class="menuHeaderContent" @click="toggleClick"></div>
@@ -32,7 +32,7 @@
                        
                     </div>
 
-                </gzmenu>
+                </gz-menu>
             </div>
         </div>
         <div class="main">
@@ -190,13 +190,10 @@
 </style>
 
 <script>
-import gzmenu from "../components/menu/index";
-import Util from "../libs/util";
-import tagsPageOpened from "./main_components/tagsPageOpened.vue";
+import {tagsPageOpened} from "../components/customer";
 
 export default {
   components: {
-    gzmenu,
     tagsPageOpened
   },
   data() {
@@ -212,7 +209,7 @@ export default {
     //this.$route.path
     if (this.$route.path.length > 1) {
       console.log("index.vue  created");
-      var item = Util.searchJson(
+      var item = this.$utils.searchJson(
         this.$parent.dataMenus,
         "items",
         parm => parm.routeName === this.$route.path
@@ -268,7 +265,7 @@ export default {
       });
     },
     routeTo(e) {
-      var item = Util.searchJson(
+      var item = this.$utils.searchJson(
         this.$parent.dataMenus,
         "items",
         parm => parm.name === e

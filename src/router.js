@@ -1,14 +1,14 @@
 const routers = [{
-    name: 'home',
+    name: 'index',
     path: '/',
     meta: {
         title: '首页'
     },
     component: (resolve) => require(['./views/index.vue'], resolve),
     children:[{
-        name:'vuehome',
+        name:'home',
         path:'/home',
-        meta: { title:'首页2' },
+        meta: { title:'首页' },
         component: (resolve) => require(['./components/page/home.vue'], resolve)
     },
     { path: '/', redirect: '/home' }]

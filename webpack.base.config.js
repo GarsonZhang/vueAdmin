@@ -16,7 +16,10 @@ module.exports = {
                 loader: 'vue-loader',
                 options: {
                     loaders: {
-
+                        less: ExtractTextPlugin.extract({
+                            use: ['css-loader?minimize', 'autoprefixer-loader', 'less-loader'],
+                            fallback: 'vue-style-loader'
+                        }),
                         css: ExtractTextPlugin.extract({
                             use: ['css-loader', 'autoprefixer-loader'],
                             fallback: 'vue-style-loader'
@@ -40,7 +43,13 @@ module.exports = {
                     fallback: 'style-loader'
                 })
             },
-
+            {
+                test: /\.less/,
+                use: ExtractTextPlugin.extract({
+                    use: ['autoprefixer-loader', 'less-loader'],
+                    fallback: 'style-loader'
+                })
+            },
             {
                 test: /\.(gif|jpg|png|woff|svg|eot|ttf)\??.*$/,
                 loader: 'url-loader?limit=1024'

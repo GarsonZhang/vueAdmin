@@ -1,5 +1,5 @@
 <template>
-    <Card class="a">
+    <Card class="a">   
         <p slot="title">系统登录</p>
         <Form ref="formInline" :model="formInline" :rules="ruleInline">
             <FormItem prop="user">
@@ -13,7 +13,7 @@
                 </Input>
             </FormItem>
             <FormItem>
-                <Button type="primary" @click="handleSubmit('formInline')">登录</Button>
+                <GzButton type="primary" @click="handleSubmit('formInline')" text="登录" loadingText="登录中"></GzButton>
                 <Button type="ghost" @click="handleReset('formInline')" style="margin-left: 8px">重置</Button>
             </FormItem>
         </Form>
@@ -46,6 +46,7 @@ body {
 </style>
 
 <script>
+import GzButton from '../components/iview/button';
 export default {
     data() {
         return {
@@ -64,8 +65,12 @@ export default {
             }
         }
     },
+    components: {
+        GzButton
+    },
     methods: {
         handleSubmit(name) {
+            debugger
             this.$refs[name].validate((valid) => {
                 if (valid) {
                     // this.$Message.success('提交成功!');
