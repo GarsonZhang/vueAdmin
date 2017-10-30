@@ -2,8 +2,10 @@
     <button :type="htmlType" :class="classes" :disabled="disabled" @click="handleClick">
         <Icon class="ivu-load-loop" type="load-c" v-if="loading"></Icon>
         <Icon :type="icon" v-if="icon && !loading"></Icon>
-          <span v-if="!loading">{{text}}</span>
-          <span v-else>{{loadingText}}</span>
+          <span v-if="showText">
+            <span v-if="!loading">{{text}}</span>
+            <span v-else>{{loadingText}}</span>
+          </span>
     </button>
 </template>
 <script>
@@ -42,8 +44,18 @@
                 type: Boolean,
                 default: false
             },
-            text:String,
-            loadingText:String
+            text:{
+                type:String,
+                default:''
+            },
+            loadingText:{
+                type:String,
+                default:''
+            },
+            showText:{
+                type:Boolean,
+                default:true
+            }
         },
         data () {
             return {

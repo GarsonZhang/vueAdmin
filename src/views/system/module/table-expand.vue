@@ -65,14 +65,14 @@ export default {
   }
 }
 </script>
-<style>
-.ivu-table-expanded-cell{
-    padding: 0px !important;
-    padding-left: 30px !important;
-}
-.gzchild td {
-    background-color: #f5f7f9;
+<style >
+.gzchild tr td {
+    /* background-color: #f5f7f9; */
     color: #969191;
+}
+
+.gztag .ivu-table-row-highlight td{
+    background-color: #ebf7ff;
 }
 </style>
 

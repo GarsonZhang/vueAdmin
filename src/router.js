@@ -9,7 +9,7 @@ const routers = [{
         name:'home',
         path:'/home',
         meta: { title:'首页' },
-        component: (resolve) => require(['./components/page/home.vue'], resolve)
+        component: (resolve) => require(['./views/home.vue'], resolve)
     },
     { path: '/', redirect: '/home' }]
 },

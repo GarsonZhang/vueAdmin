@@ -3,9 +3,12 @@ import env from '../config/env';
 import Routers from '../router';
 import menuData from '../data/menu.js'
 
+import axiosProvider from './axios'
+
 let util = {
 
 };
+
 util.title = function (title) {
 	title = title ? title + ' - Home' : 'iView project';
 	window.document.title = title;
@@ -20,13 +23,13 @@ util.searchJson = function (jsondata, childKey, filter) {
 			//找到了与nodeId匹配的节点，结束递归
 			return obj;
 		} else {
-			
+
 			if (childKey) {
 				//3.如果有子节点就开始找
 				if (obj[childKey] && obj[childKey].length > 0) {
 					//4.递归前，记录当前节点，作为parent 父亲
 					//递归往下找
-					var v = this.searchJson(obj[childKey],childKey, filter);
+					var v = this.searchJson(obj[childKey], childKey, filter);
 					if (v) {
 						v.parentNode = obj;
 						return v;
@@ -42,18 +45,18 @@ util.convertRouteMap = function (menuData) {
 	//var route = this.searchJson(_route, null, item => item.name === "home");
 	menuData.forEach(function (module) {
 
-		var menuModule={
-			name:module.name,
+		var menuModule = {
+			name: module.name,
 			meta: {
 				title: module.text
 			},
-			path:'/authority'+module.name,
+			path: '/authority' + module.name,
 			component: getPromisedComponent(module.componentPath, module.componentName),
-			children:[]
+			children: []
 		};
 
 		module.items.forEach(function (item) {
-			
+
 			menuModule.children.push({
 				name: item.name,
 				path: item.routeName,
@@ -71,8 +74,9 @@ util.convertRouteMap = function (menuData) {
 		return function (resolve, reject) {
 			if (module === "components")
 				require(["../components/" + url], resolve)
-			else if (module === "views")
+			else if (module === "views") {
 				require(["../views/" + url], resolve)
+			}
 		}
 	}
 
@@ -89,21 +93,25 @@ util.ajax = axios.create({
 	timeout: 10000
 });
 
-util.ajaxRemote = axios.create({
-	baseURL: "http://localhost:4462/api",
-	timeout: 10000
-});
+
+util.ajaxRemote = axiosProvider._getRemote();
 
 
-util.deepCopy=function(obj){
-    if(typeof obj != 'object'){
-        return obj;
-    }
-    var newobj = {};
-    for ( var attr in obj) {
-        newobj[attr] = this.deepCopy(obj[attr]);
-    }
-    return newobj;
+
+util.deepCopy = function (obj) {
+	if (typeof obj != 'object') {
+		return obj;
+	}
+	var newobj = {};
+	for (var attr in obj) {
+		newobj[attr] = this.deepCopy(obj[attr]);
+	}
+	return newobj;
+}
+
+util.isNULL = function (obj) {
+	var v = obj === null || obj === undefined || obj.length < 1;
+	return v;
 }
 
 export default util;

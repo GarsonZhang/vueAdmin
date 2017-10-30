@@ -67,6 +67,16 @@
 .content{
   position: relative;
 }
+.fill-height,.fill-height.ivu-row{
+  height: 100%;
+}
+.fill-width{
+  width: 100%;
+}
+.fill-all{
+  height: 100%;
+  width: 100%;
+}
 </style>
 
 <style scoped>

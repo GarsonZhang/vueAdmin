@@ -1,11 +1,14 @@
 import gzButton from './iview//button';
 import GzModal from './iview/modal';
 import gzMenu from './iview/menu';
+import TreeTable from './iview/treeTable';
+
 
 import gzPanel from './layout/panel';
 
+
 const gziview = {
-    gzButton, GzModal,gzMenu,gzPanel
+    gzButton, GzModal, gzMenu, gzPanel, TreeTable
 };
 
 const install = function (Vue) {
@@ -14,4 +17,4 @@ const install = function (Vue) {
     });
 };
 
-export default Object.assign(gziview,{install});
+export default Object.assign(gziview, { install });

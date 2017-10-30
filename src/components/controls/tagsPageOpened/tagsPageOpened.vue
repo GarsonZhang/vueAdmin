@@ -94,7 +94,7 @@ export default {
     this.addRouter(item);
 
     //
-    item = Util.searchJson(
+    item = this.$utils.searchJson(
       this.$router.options.routes,
       "children",
       parm => parm.name === this.$route.name
@@ -106,7 +106,7 @@ export default {
   },
   methods: {
     addRouter(item) {
-      var v = Util.searchJson(
+      var v = this.$utils.searchJson(
         this.pageTagsList,
         null,
         parm => parm.name === item.name
@@ -123,7 +123,7 @@ export default {
     },
     removeTags(name) {
       //this.$store.commit('closePage', item.name);
-      var v = Util.searchJson(
+      var v = this.$utils.searchJson(
         this.pageTagsList,
         null,
         parm => parm.name === name

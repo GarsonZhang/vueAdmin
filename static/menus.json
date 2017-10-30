@@ -73,8 +73,8 @@
 				"name": "module",
 				"routeName": "/module",
 				"text": "模块管理",
-				"componentPath":"components",
-				"componentName":"page/module/index.vue"
+				"componentPath":"views",
+				"componentName":"system/module/index.vue"
 			},{
 				"name": "about",
 				"routeName": "/about",
