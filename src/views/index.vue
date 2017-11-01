@@ -64,16 +64,17 @@
     </div>
 </template>
 <style>
-.content{
+.content {
   position: relative;
 }
-.fill-height,.fill-height.ivu-row{
+.fill-height,
+.fill-height.ivu-row {
   height: 100%;
 }
-.fill-width{
+.fill-width {
   width: 100%;
 }
-.fill-all{
+.fill-all {
   height: 100%;
   width: 100%;
 }
@@ -200,7 +201,7 @@
 </style>
 
 <script>
-import {tagsPageOpened} from "../components/customer";
+import { tagsPageOpened } from "../components/customer";
 
 export default {
   components: {
@@ -229,7 +230,7 @@ export default {
   },
   computed: {
     cachePage() {
-       console.dir(this.$store.state.cachePage);
+      console.dir(this.$store.state.cachePage);
       return this.$store.state.cachePage;
     },
     menuWidth() {

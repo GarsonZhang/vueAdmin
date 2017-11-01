@@ -99,8 +99,8 @@ export default {
     classes() {
       return [
         {
-          [`gz-panel-layout`]: true,
-          [`${this.className}`]: !!this.className
+          [`gz-panel-layout`]: true
+          // [`${this.className}`]: !!this.className
         }
       ];
     }

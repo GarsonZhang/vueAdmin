@@ -2,7 +2,7 @@ import axios from 'axios';
 import env from '../config/env';
 import Routers from '../router';
 import menuData from '../data/menu.js'
-
+import Promise from 'Promise';
 import axiosProvider from './axios'
 
 let util = {
@@ -39,6 +39,26 @@ util.searchJson = function (jsondata, childKey, filter) {
 		}
 	}
 };
+util.searchJsonIndex = function (jsondata, filter) {
+	for (var i = 0; i < jsondata.length; i++) {
+		var obj = jsondata[i];
+		if (filter(obj)) {
+			return i;
+		}
+	}
+	return -1;
+};
+util.searchObserver = function (data, childKey, filter) {
+	let selectionIndexes = [];
+	for (let i in data) {
+		var obj = data[i];
+		if (filter(obj)) {
+			return obj;
+		}
+
+	}
+}
+
 util.convertRouteMap = function (menuData) {
 
 	var _route = [];
@@ -107,7 +127,47 @@ util.deepCopy = function (obj) {
 		newobj[attr] = this.deepCopy(obj[attr]);
 	}
 	return newobj;
-}
+};
+
+
+util.typeOf = function (obj) {
+	const toString = Object.prototype.toString;
+	const map = {
+		'[object Boolean]': 'boolean',
+		'[object Number]': 'number',
+		'[object String]': 'string',
+		'[object Function]': 'function',
+		'[object Array]': 'array',
+		'[object Date]': 'date',
+		'[object RegExp]': 'regExp',
+		'[object Undefined]': 'undefined',
+		'[object Null]': 'null',
+		'[object Object]': 'object'
+	};
+	return map[toString.call(obj)];
+};
+
+util.deepCopyEx = function (data) {
+	const t = this.typeOf(data);
+	let o;
+	if (t === 'array') {
+		o = [];
+	} else if (t === 'object') {
+		o = {};
+	} else {
+		return data;
+	}
+	if (t === 'array') {
+		for (let i = 0; i < data.length; i++) {
+			o.push(this.deepCopy(data[i]));
+		}
+	} else if (t === 'object') {
+		for (let i in data) {
+			o[i] = this.deepCopy(data[i]);
+		}
+	}
+	return o;
+};
 
 util.isNULL = function (obj) {
 	var v = obj === null || obj === undefined || obj.length < 1;

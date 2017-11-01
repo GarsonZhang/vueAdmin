@@ -35,7 +35,7 @@ axiosProvider._getRemote = function () {
         });  
     */
     //处理响应
-    v.interceptors.response.use(this.axiosSuccess,this.axiosError);
+    v.interceptors.response.use(this.axiosSuccess, this.axiosError);
 
     return v;
 };
@@ -45,10 +45,16 @@ axiosProvider.axiosSuccess = function (response) {
 };
 axiosProvider.axiosError = function (err) {
     if (err && err.response) {
+
         switch (err.response.status) {
-            case 400:
-                err.message = '请求错误';
-                break;
+            case 400: {
+                //{"Message":"请求无效。","ModelState":{"model.componentName":["组件名称不能为空"]}}
+                var msg = err.response.data.Message;
+                for (let k in err.response.data.ModelState) {
+                    msg += ('<br/>' + err.response.data.ModelState[k]);
+                }
+                err.message = msg;
+            } break;
             case 401:
                 err.message = '未授权，请登录';
                 break;
@@ -95,9 +101,9 @@ axiosProvider.axiosError = function (err) {
         err.message = '网络不可用';
     }
     Vue.prototype.$Modal.error({
-        title:'请求异常',
-        content:err.message,
-        okText:'确定'
+        title: '请求异常',
+        content: err.message,
+        okText: '确定'
     });
     return Promise.reject(err);
 };
