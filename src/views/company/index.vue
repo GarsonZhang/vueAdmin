@@ -37,10 +37,11 @@
                     <Input v-model="editData.companyName_en" placeholder="请输入公司英文地址"></Input>
                 </FormItem>
                 <FormItem label="上级公司" prop="parentID">
-                    <Select v-model="editData.parentID" placeholder="请选择上级公司">
+                  <SelectCompany></SelectCompany>
+                    <!-- <Select v-model="editData.parentID" placeholder="请选择上级公司">
                         <Option value="views">views</Option>
                         <Option value="components">components</Option>
-                    </Select>
+                    </Select> -->
                 </FormItem>
                 <FormItem label="责任人" prop="principalName">
                     <Input v-model="editData.principalName" placeholder="请输入责任人"></Input>
@@ -67,6 +68,7 @@
 </style>
 <script>
 import { ReqCommonDataCompany } from "../../libs/request";
+import SelectCompany from './selectCompany';
 import Msg from "../../mixins/msg";
 export default {
   data() {
@@ -122,6 +124,9 @@ export default {
     };
   },
   mixins: [Msg],
+  components: {
+    SelectCompany
+  },
   created() {
     this.request = ReqCommonDataCompany;
     this.doLoadList();
