@@ -35,7 +35,11 @@ export default {
       type: Object,
       default: this.gobject
     },
-    className: String
+    className: String,
+    autoHeight: {
+      type: Boolean,
+      default: true
+    }
   },
   methods: {
     gobject() {
@@ -52,6 +56,21 @@ export default {
   },
   mounted() {
     this.reLayout();
+    var me = this;
+    if (this.autoHeight) {
+      window.addEventListener("resize", function() {
+        // console.log("systemModuleForm onresize");
+        if (!me.resizeTimer) {
+          //设置延时，禁止过大消耗浏览器性能
+          me.resizeTimer = true;
+          setTimeout(function() {
+            // console.log("reLayout");
+            me.reLayout();
+            me.resizeTimer = false;
+          }, 400);
+        }
+      });
+    }
   },
   computed: {
     _styleTop() {
@@ -133,7 +152,6 @@ export default {
   left: 0;
   right: 0;
 }
-
 </style>
 <style lang="less" scoped>
 // .gz-top{

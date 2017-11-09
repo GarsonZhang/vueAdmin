@@ -20,6 +20,14 @@ const routers = [{
         title: '登录'
     },
     component: (resolve) => require(['./views/login.vue'], resolve)
+},
+{
+    name: 'test',
+    path: '/test',
+    meta: {
+        title: '测试'
+    },
+    component: (resolve) => require(['./views/test.vue'], resolve)
 }
 ];
 

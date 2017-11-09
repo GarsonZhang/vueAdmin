@@ -47,6 +47,9 @@ export default {
             this.setMsgLoaction();
         },
         ask(title, content, onOK, onCancel) {
+            this.showAsk(title, content, onOK, onCancel);
+        },
+        showAsk(title, content, onOK, onCancel) {
             this.$Modal.confirm({
                 title: title,
                 content: content,

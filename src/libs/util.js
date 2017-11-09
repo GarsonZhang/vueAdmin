@@ -105,8 +105,8 @@ util.convertRouteMap = function (menuData) {
 const ajaxUrl = env === 'development' ?
 	window.location.origin :
 	env === 'production' ?
-		'https://www.url.com' :
-		'https://debug.url.com';
+	window.location.origin :
+	window.location.origin;
 
 util.ajax = axios.create({
 	baseURL: ajaxUrl,

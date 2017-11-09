@@ -218,6 +218,9 @@ export default {
   created() {
     //debugger;f
     //this.$route.path
+    console.log("app.vue   created");
+  
+
     if (this.$route.path.length > 1) {
       console.log("index.vue  created");
       var item = this.$utils.searchJson(

@@ -12,6 +12,7 @@ function paramsForGet(obj) {
 function paramsForGet_ID(_id){
     return paramsForGet({ id: _id });
 }
+
 //模块请求类
 const requestModule = {
     list() {
@@ -102,4 +103,29 @@ const requestForm = {
     }
 };
 
-export { requestModule, requestForm };
+const system={
+    getMenu() {
+        return ajaxRemote.get('/menu/all');
+    },
+};
+
+const ReqCommonDataCompany={
+    list(){
+        return ajaxRemote.get('/company/list');
+    },
+    search(code){
+        return ajaxRemote.get('/company/search',paramsForGet({code:code}));
+    },
+    get(_id) {
+        var config = paramsForGet_ID(_id);
+        return ajaxRemote.get('/company/get', config);
+    },
+    delete(rowid){
+        return ajaxRemote.get('/company/delete',paramsForGet({rowID:rowid}));
+    },
+    update(data){
+        return ajaxRemote.post('/company/update', data);
+    }
+};
+
+export { requestModule, requestForm,system,ReqCommonDataCompany };

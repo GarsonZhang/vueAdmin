@@ -4,13 +4,14 @@ import gzMenu from './iview/menu';
 import TreeTable from './iview/treeTable';
 
 import DragableTable from './iview/table/dragableTable';
+import GzTreeGrid from './iview/treeGrid/tree';
 
 
 import gzPanel from './layout/panel';
 
 
 const gziview = {
-    gzButton, GzModal, gzMenu, gzPanel, TreeTable,DragableTable
+    gzButton, GzModal, gzMenu, gzPanel, TreeTable,DragableTable,GzTreeGrid
 };
 
 const install = function (Vue) {

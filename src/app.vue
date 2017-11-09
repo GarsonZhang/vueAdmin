@@ -14,7 +14,7 @@ body {
 </style>
 
 <script>
-
+import {system} from './libs/request'
 
 export default {
   data() {
@@ -23,7 +23,7 @@ export default {
     };
   },
   created() {
-    console.log("app.vue   created");
+    //判断是否登录，如果登录就获取，如果没登录，则在登录后获取
     this.getMenus();
   },
   mounted() {},
@@ -31,10 +31,19 @@ export default {
   methods: {
     getMenus() {
       //console.log('1 '+this.getNowFormatDate());
-      this.$utils.ajax.get("/static/menus.json").then(res => {
+
+      // this.$utils.ajax.get("/static/menus.json").then(res => {
+      //   this.dataMenus = res.data;
+      //   var customer_router = this.$utils.convertRouteMap(res.data);
+      //   var v={children:customer_router};
+      //   this.$router.options.routes.push(v);
+      //   this.$router.addRoutes(customer_router);
+      // });
+
+      system.getMenu().then(res => {
         this.dataMenus = res.data;
         var customer_router = this.$utils.convertRouteMap(res.data);
-        var v={children:customer_router};
+        var v = { children: customer_router };
         this.$router.options.routes.push(v);
         this.$router.addRoutes(customer_router);
       });
