@@ -4,60 +4,76 @@ import Routers from '../router';
 import menuData from '../data/menu.js'
 import Promise from 'Promise';
 import axiosProvider from './axios'
+import jsonSearch from './jsonSearch'
 
 let util = {
 
 };
 
+util.jsonSearch = jsonSearch;
+
 util.title = function (title) {
 	title = title ? title + ' - Home' : 'iView project';
 	window.document.title = title;
 };
-util.searchJson = function (jsondata, childKey, filter) {
-	var node;
-	//1.第一层 root 深度遍历整个JSON
-	for (var i = 0; i < jsondata.length; i++) {
-		var obj = jsondata[i];
-		//2.有节点就开始找，一直递归下去
-		if (filter(obj)) {
-			//找到了与nodeId匹配的节点，结束递归
-			return obj;
-		} else {
 
-			if (childKey) {
-				//3.如果有子节点就开始找
-				if (obj[childKey] && obj[childKey].length > 0) {
-					//4.递归前，记录当前节点，作为parent 父亲
-					//递归往下找
-					var v = this.searchJson(obj[childKey], childKey, filter);
-					if (v) {
-						v.parentNode = obj;
-						return v;
-					}
-				}
-			}
-		}
-	}
-};
-util.searchJsonIndex = function (jsondata, filter) {
-	for (var i = 0; i < jsondata.length; i++) {
-		var obj = jsondata[i];
-		if (filter(obj)) {
-			return i;
-		}
-	}
-	return -1;
-};
-util.searchObserver = function (data, childKey, filter) {
-	let selectionIndexes = [];
-	for (let i in data) {
-		var obj = data[i];
-		if (filter(obj)) {
-			return obj;
-		}
+// util.searchJsonFromArray = function (arrayData, childKey, filter) {
+// 	for (var i = 0; i < arrayData.length; i++) {
+// 		var v = this.searchJsonEx(arrayData[i], childKey, filter);
+// 		if (v)
+// 			return v;
+// 	}
+// };
 
-	}
-}
+// util.searchJsonEx = function (objdata, childKey, filter) {
+// 	var node;
+// 	//1.第一层 root 深度遍历整个JSON
+// 	var jsondata = objdata[childKey];
+// 	if (!jsondata) return null;
+// 	for (var i = 0; i < jsondata.length; i++) {
+// 		var obj = jsondata[i];
+// 		//2.有节点就开始找，一直递归下去
+// 		if (filter(obj)) {
+// 			//找到了与nodeId匹配的节点，结束递归
+// 			// debugger;
+// 			obj.parentNode = objdata;
+// 			return obj;
+// 		} else {
+
+// 			if (childKey) {
+// 				//3.如果有子节点就开始找
+// 				if (obj[childKey] && obj[childKey].length > 0) {
+// 					//4.递归前，记录当前节点，作为parent 父亲
+// 					//递归往下找
+// 					var v = this.searchJsonEx(obj, childKey, filter);
+// 					if (v) {
+// 						obj.parentNode=objdata;
+// 						return v;
+// 					}
+// 				}
+// 			}
+// 		}
+// 	}
+// };
+// util.searchJsonIndex = function (jsondata, filter) {
+// 	for (var i = 0; i < jsondata.length; i++) {
+// 		var obj = jsondata[i];
+// 		if (filter(obj)) {
+// 			return i;
+// 		}
+// 	}
+// 	return -1;
+// };
+// util.searchObserver = function (data, childKey, filter) {
+// 	let selectionIndexes = [];
+// 	for (let i in data) {
+// 		var obj = data[i];
+// 		if (filter(obj)) {
+// 			return obj;
+// 		}
+
+// 	}
+// }
 
 util.convertRouteMap = function (menuData) {
 
@@ -105,8 +121,8 @@ util.convertRouteMap = function (menuData) {
 const ajaxUrl = env === 'development' ?
 	window.location.origin :
 	env === 'production' ?
-	window.location.origin :
-	window.location.origin;
+		window.location.origin :
+		window.location.origin;
 
 util.ajax = axios.create({
 	baseURL: ajaxUrl,

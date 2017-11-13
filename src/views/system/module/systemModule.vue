@@ -1,6 +1,6 @@
 <template>
 <div>
-   <gz-panel ref="gzPanelModule" :childFull100=true :autoHeight=true >
+   <gz-panel ref="gzPanelModule" class="borderPanel" :childFull100=true :autoHeight=true >
             <div slot="top" class="tools"  v-if="sortStatus">    
                <Button type="text">排序已开启</Button>
                 <ButtonGroup class="tooltipButtonGroup float-right">

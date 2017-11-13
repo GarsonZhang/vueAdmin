@@ -17,7 +17,7 @@
           </gz-panel>
 
            <Modal
-                ref="refName_modal"
+                :ref="refName_modal"
                 title="数据编辑"
                 v-model="modalStatus"
                 width=80
@@ -37,11 +37,7 @@
                     <Input v-model="editData.companyName_en" placeholder="请输入公司英文地址"></Input>
                 </FormItem>
                 <FormItem label="上级公司" prop="parentID">
-                  <SelectCompany></SelectCompany>
-                    <!-- <Select v-model="editData.parentID" placeholder="请选择上级公司">
-                        <Option value="views">views</Option>
-                        <Option value="components">components</Option>
-                    </Select> -->
+                  <SelectCompany :ref="refName_companyTree" @onSelected="onSelected" v-model="editData.parentID"></SelectCompany>
                 </FormItem>
                 <FormItem label="责任人" prop="principalName">
                     <Input v-model="editData.principalName" placeholder="请输入责任人"></Input>
@@ -68,7 +64,7 @@
 </style>
 <script>
 import { ReqCommonDataCompany } from "../../libs/request";
-import SelectCompany from './selectCompany';
+import SelectCompany from "./selectCompany";
 import Msg from "../../mixins/msg";
 export default {
   data() {
@@ -120,7 +116,8 @@ export default {
       },
       refName_form: "modalForm",
       refName_dataList: "dataList",
-      refName_modal: "editModal"
+      refName_modal: "editModal",
+      refName_companyTree: "companyTree"
     };
   },
   mixins: [Msg],
@@ -162,7 +159,7 @@ export default {
     //修改事件
     event_click_edit(event, component) {
       var row = this.$refs[this.refName_dataList].getSelectObj();
-      debugger;
+      // debugger;
       if (!row) {
         component.loading = false;
         this.showWarning("请先选择要编辑的模块");
@@ -190,6 +187,7 @@ export default {
 
       if (row.children && row.children.length > 0) {
         this.showWarning("不允许删除，请先删除子公司");
+        component.loading = false;
         return;
       }
       var me = this;
@@ -202,10 +200,16 @@ export default {
           this.request
             .delete(row.rowID)
             .then(res => {
-              var index = me.$utils.searchJsonIndex(me.data, p => {
-                return p.rowID == row.rowID;
-              });
-              me.data.splice(index, 1);
+              var obj = this.$utils.jsonSearch.search(
+                me.data,
+                "children",
+                p => {
+                  return p.rowID == row.rowID;
+                }
+              );
+              var index = obj.parentNode.children.indexOf(obj);
+
+              obj.parentNode.children.splice(index, 1);
               me.showInfo("删除成功");
               component.loading = false;
             })
@@ -244,16 +248,17 @@ export default {
       } else req = this.request.update(this.editData);
       req
         .then(res => {
-          if (me.editStatus == 1) {
-            //新增
-            me.data.push(res.data);
-            // me.sortCache.push(me.data.length - 1);
-          } else {
-            var index = me.$utils.searchJsonIndex(me.data, p => {
-              return p.rowID == me.editData.rowID;
-            });
-            me.data.splice(index, 1, me.editData);
-          }
+          // if (me.editStatus == 1) {
+          //   //新增
+          //   me.data.push(res.data);
+          //   // me.sortCache.push(me.data.length - 1);
+          // } else {
+          //   var index = me.$utils.searchJsonIndex(me.data, p => {
+          //     return p.rowID == me.editData.rowID;
+          //   });
+          //   me.data.splice(index, 1, me.editData);
+          // }
+          this.doLoadList();
           me.editStatus = 0;
           me.showInfo("保存成功", 3);
         })
@@ -276,6 +281,48 @@ export default {
             reject(err);
           });
       });
+    },
+    onSelected(value, e) {
+      var me = this;
+      // debugger
+      if (this.$utils.isNULL(value)) {
+        this.editData.levelID = 0;
+        this.editData.parentID = "";
+        this.editData.parentFullID = "";
+        this.editData.parentFullName = "";
+        return;
+      }
+      if (this.editData.rowID === value) {
+        //这里要用异步
+        setTimeout(function() {
+          me.editData.parentID = "";
+        }, 50);
+        me.editData.levelID = 0;
+        me.editData.parentFullID = "";
+        me.editData.parentFullName = "";
+        this.showWarning("上级公司不能是自己,请重新选择");
+        return;
+      }
+      if (e.parentID && e.parentID.indexOf("/" + this.editData.rowID) >= 0) {
+        //这里要用异步
+        setTimeout(function() {
+          me.editData.parentID = "";
+        }, 50);
+        this.editData.levelID = 0;
+        me.editData.parentFullID = "";
+        me.editData.parentFullName = "";
+        this.showWarning("上级公司不能是自己的子公司");
+        return;
+      }
+      this.editData.levelID = (e.levelID ? e.levelID : 0) + 1;
+      // debugger
+      this.editData.parentFullID = e.parentID + "/" + e.value;
+      this.editData.parentFullName = e.parentName + "/" + e.label;
+    }
+  },
+  watch: {
+    editStatus(val) {
+      if (val > 0) this.$refs[this.refName_companyTree].refreshData();
     }
   }
 };

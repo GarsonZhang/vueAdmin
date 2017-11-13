@@ -23,6 +23,7 @@ export default {
     };
   },
   created() {
+    // debugger
     //判断是否登录，如果登录就获取，如果没登录，则在登录后获取
     this.getMenus();
   },
@@ -44,6 +45,7 @@ export default {
         this.dataMenus = res.data;
         var customer_router = this.$utils.convertRouteMap(res.data);
         var v = { children: customer_router };
+        // debugger;
         this.$router.options.routes.push(v);
         this.$router.addRoutes(customer_router);
       });

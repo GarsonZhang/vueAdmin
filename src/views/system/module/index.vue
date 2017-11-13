@@ -46,6 +46,8 @@
   font-weight: 700;
   text-overflow: ellipsis;
   white-space: nowrap;
+}.borderPanel {
+  border: 1px solid #e9eaec !important;
 }
 </style>
 <script>

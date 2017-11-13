@@ -52,6 +52,7 @@
               
 
                 <div class="layout-content">
+                    
                      <keep-alive :include="cachePage">
                     <router-view></router-view>
                     </keep-alive>
@@ -218,12 +219,11 @@ export default {
   created() {
     //debugger;f
     //this.$route.path
-    console.log("app.vue   created");
-  
+    // console.log("app.vue   created");
 
     if (this.$route.path.length > 1) {
-      console.log("index.vue  created");
-      var item = this.$utils.searchJson(
+      // console.log("index.vue  created");
+      var item = this.$utils.jsonSearch.search(
         this.$parent.dataMenus,
         "items",
         parm => parm.routeName === this.$route.path
@@ -233,7 +233,8 @@ export default {
   },
   computed: {
     cachePage() {
-      console.dir(this.$store.state.cachePage);
+      // console.log("判断是否需要keep-alive");
+      //console.dir(this.$store.state.cachePage);
       return this.$store.state.cachePage;
     },
     menuWidth() {
@@ -279,19 +280,27 @@ export default {
       });
     },
     routeTo(e) {
-      var item = this.$utils.searchJson(
+      // console.log("routeTo");
+      // console.dir(e);
+      var item = this.$utils.jsonSearch.search(
         this.$parent.dataMenus,
         "items",
         parm => parm.name === e
       );
+      // console.log("this.$router.push({ name: " + item.name + " });");
       this.setBreadcrumb(item);
+
       this.$router.push({ name: item.name });
+      // console.log("route结束:");
     },
     setBreadcrumb(item) {
       this.dataBreadcrumb = [];
       var v = item;
       this.dataBreadcrumb.splice(0, 0, v.text);
+      var num = 0;
       while (v.parentNode) {
+        console.log(num++);
+        if (num > 40) debugger; //这里或许就死循环了
         this.dataBreadcrumb.splice(0, 0, v.parentNode.text);
         v = v.parentNode;
       }

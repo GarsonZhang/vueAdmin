@@ -86,7 +86,7 @@ export default {
   created() {
     // debugger
     this.clearRouter();
-    var item = this.$utils.searchJson(
+    var item = this.$utils.jsonSearch.search(
       this.$router.options.routes,
       "children",
       parm => parm.name === "home"
@@ -94,19 +94,20 @@ export default {
     this.addRouter(item);
 
     //
-    item = this.$utils.searchJson(
+    item = this.$utils.jsonSearch.search(
       this.$router.options.routes,
       "children",
       parm => parm.name === this.$route.name
     );
-    console.dir(this.$route.name);
-    console.dir(item);
+    // console.dir(this.$route.name);
+    // console.dir(item);
     if (item) this.addRouter(item);
     //console.log('tag create');
   },
   methods: {
     addRouter(item) {
-      var v = this.$utils.searchJson(
+      // debugger
+      var v = this.$utils.jsonSearch.search(
         this.pageTagsList,
         null,
         parm => parm.name === item.name
@@ -123,7 +124,7 @@ export default {
     },
     removeTags(name) {
       //this.$store.commit('closePage', item.name);
-      var v = this.$utils.searchJson(
+      var v = this.$utils.jsonSearch.search(
         this.pageTagsList,
         null,
         parm => parm.name === name

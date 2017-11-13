@@ -46,11 +46,16 @@ export default {
       return {};
     },
     reLayout() {
-      this.topHeight = this.$refs.top.firstChild
-        ? this.$refs.top.firstChild.getBoundingClientRect().height + "px"
+      // debugger
+      this.topHeight = this.$refs.top
+        ? this.$refs.top.firstChild
+          ? this.$refs.top.firstChild.getBoundingClientRect().height + "px"
+          : "0px"
         : "0px";
-      this.bottomHeight = this.$refs.bootom.firstChild
-        ? this.$refs.bootom.firstChild.getBoundingClientRect().height + `px`
+      this.bottomHeight = this.$refs.bootom
+        ? this.$refs.bootom.firstChild
+          ? this.$refs.bootom.firstChild.getBoundingClientRect().height + `px`
+          : "0px"
         : "0px";
     }
   },

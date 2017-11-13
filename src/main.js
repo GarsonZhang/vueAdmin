@@ -31,6 +31,9 @@ const router = new VueRouter(RouterConfig);
 
 
 router.beforeEach((to, from, next) => {
+    // console.log('router.beforeEach');
+    // console.dir(to);
+    // console.dir(from);
     iView.LoadingBar.start();
     Util.title(to.meta.title);
     next();

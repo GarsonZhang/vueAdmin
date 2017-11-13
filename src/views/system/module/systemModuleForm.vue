@@ -1,6 +1,6 @@
 <template>
   <div>
-       <gz-panel ref="gzPanelForm" :childFull100=true >
+       <gz-panel ref="gzPanelForm" class="borderPanel" :childFull100=true >
               <div slot="top" class="tools"  v-if="sortStatus">    
                 <Button type="text">排序已开启</Button>
                 <ButtonGroup class="float-right">

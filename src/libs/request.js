@@ -113,12 +113,18 @@ const ReqCommonDataCompany={
     list(){
         return ajaxRemote.get('/company/list');
     },
+    treeData(){
+        return ajaxRemote.get('/company/treedata');
+    },
     search(code){
         return ajaxRemote.get('/company/search',paramsForGet({code:code}));
     },
     get(_id) {
         var config = paramsForGet_ID(_id);
         return ajaxRemote.get('/company/get', config);
+    },
+    create(data) {
+        return ajaxRemote.post('/company/create', data);
     },
     delete(rowid){
         return ajaxRemote.get('/company/delete',paramsForGet({rowID:rowid}));
