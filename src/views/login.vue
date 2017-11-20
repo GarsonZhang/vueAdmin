@@ -70,7 +70,7 @@ export default {
     },
     methods: {
         handleSubmit(name) {
-            debugger
+            // debugger
             this.$refs[name].validate((valid) => {
                 if (valid) {
                     // this.$Message.success('提交成功!');

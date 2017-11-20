@@ -8,7 +8,7 @@
 export default {
   methods: {
       onClick(){
-        debugger
+        // debugger
         var v=  this.$utils.jsonSearch.test6(121);
          console.dir(v);
       }

@@ -14,7 +14,7 @@
     v-on:mouseenter="handleMouseOver" 
     v-on:mouseleave="handleMouseLeave"
     > 
-     <td v-if="showRowNum" style="text-align:center;">
+     <td v-if="showRowNum" style="text-align:center;width:50px;">
         {{rowNum}}
       </td>
     <td style="width:50px; " @click.stop="handleClick" >

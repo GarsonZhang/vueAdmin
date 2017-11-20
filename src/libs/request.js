@@ -9,7 +9,7 @@ function paramsForGet(obj) {
     };
 }
 
-function paramsForGet_ID(_id){
+function paramsForGet_ID(_id) {
     return paramsForGet({ id: _id });
 }
 
@@ -82,7 +82,7 @@ const requestModule = {
 const requestForm = {
     list(_id) {
         var config = paramsForGet_ID(_id);
-        return ajaxRemote.get('/moduleform/list',config);
+        return ajaxRemote.get('/moduleform/list', config);
     },
     get(_id) {
         var config = paramsForGet_ID(_id);
@@ -103,21 +103,21 @@ const requestForm = {
     }
 };
 
-const system={
+const system = {
     getMenu() {
         return ajaxRemote.get('/menu/all');
     },
 };
 
-const ReqCommonDataCompany={
-    list(){
+const ReqCommonDataCompany = {
+    list() {
         return ajaxRemote.get('/company/list');
     },
-    treeData(){
+    treeData() {
         return ajaxRemote.get('/company/treedata');
     },
-    search(code){
-        return ajaxRemote.get('/company/search',paramsForGet({code:code}));
+    search(code) {
+        return ajaxRemote.get('/company/search', paramsForGet({ code: code }));
     },
     get(_id) {
         var config = paramsForGet_ID(_id);
@@ -126,12 +126,38 @@ const ReqCommonDataCompany={
     create(data) {
         return ajaxRemote.post('/company/create', data);
     },
-    delete(rowid){
-        return ajaxRemote.get('/company/delete',paramsForGet({rowID:rowid}));
+    delete(rowid) {
+        return ajaxRemote.get('/company/delete', paramsForGet({ rowID: rowid }));
     },
-    update(data){
+    update(data) {
         return ajaxRemote.post('/company/update', data);
     }
 };
 
-export { requestModule, requestForm,system,ReqCommonDataCompany };
+const requestCommonDataDept = {
+    list(_companyID) {
+        // debugger
+        return ajaxRemote.get('/dept/list', paramsForGet({ companyID: _companyID }));
+    },
+    treeData() {
+        return ajaxRemote.get('/dept/treedata');
+    },
+    search(_companyID,code) {
+        return ajaxRemote.get('/dept/search', paramsForGet({ companyID:_companyID,code: code }));
+    },
+    get(_id) {
+        var config = paramsForGet({ rowID: _id });
+        return ajaxRemote.get('/dept/get', config);
+    },
+    create(data) {
+        return ajaxRemote.post('/dept/create', data);
+    },
+    delete(rowid) {
+        return ajaxRemote.get('/dept/delete', paramsForGet({ rowID: rowid }));
+    },
+    update(data) {
+        return ajaxRemote.post('/dept/update', data);
+    }
+};
+
+export { requestModule, requestForm, system, ReqCommonDataCompany, requestCommonDataDept };

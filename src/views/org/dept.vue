@@ -1,5 +1,5 @@
 <template>
-    <div class="content">
+    <div class="content fillheight">
          <gz-panel ref="gzPanelForm" :childFull100=true >
 
               <div slot="top" class="tools" >      
@@ -11,7 +11,7 @@
                 </ButtonGroup>
               </div>
 
-              <div slot="main">
+              <div slot="main" class="main">
                 <gz-tree-grid :ref="refName_dataList" :columns="columns" :data="data" :nodeKey='dataKey' :childrenKey="dataChildrenKey" :showRowNum="true"></gz-tree-grid>
               </div>
           </gz-panel>
@@ -27,17 +27,14 @@
                 @on-ok="event_formSubmit"
                 @on-cancel="event_formCancel">
                 <Form :ref="refName_form" :model="editData" :rules="dataRule"  label-position="left" :label-width="80">
-                <FormItem label="公司编码" prop="companyCode">
-                    <Input v-model="editData.companyCode" placeholder="请输入公司编码"></Input>
+                <FormItem label="部门编码" prop="deptCode">
+                    <Input v-model="editData.deptCode" placeholder="请输入部门编码"></Input>
                 </FormItem>
-                <FormItem label="中文名称" prop="companyName_chs">
-                    <Input v-model="editData.companyName_chs" placeholder="请输入公司中文名称"></Input>
+                <FormItem label="部门名称" prop="deptName">
+                    <Input v-model="editData.deptName" placeholder="请输入部门名称"></Input>
                 </FormItem>
-                <FormItem label="英文名称" prop="companyName_en">
-                    <Input v-model="editData.companyName_en" placeholder="请输入公司英文地址"></Input>
-                </FormItem>
-                <FormItem label="上级公司" prop="parentID">
-                  <SelectCompany :ref="refName_companyTree" @onSelected="onSelected" v-model="editData.parentID"></SelectCompany>
+                <FormItem label="上级部门" prop="parentID">
+                  <SelectDept :ref="refName_deptTree" :companyID="companyID" @onSelected="onSelected" v-model="editData.parentID"></SelectDept>
                 </FormItem>
                 <FormItem label="责任人" prop="principalName">
                     <Input v-model="editData.principalName" placeholder="请输入责任人"></Input>
@@ -48,8 +45,8 @@
                 <FormItem label="邮箱地址" prop="principalEmail">
                     <Input v-model="editData.principalEmail" placeholder="请输入邮箱地址"></Input>
                 </FormItem>
-                <FormItem label="公司地址" prop="address">
-                    <Input v-model="editData.address" placeholder="请输入公司地址"></Input>
+                <FormItem label="备注" prop="remark">
+                    <Input v-model="editData.remark" placeholder="请输入备注信息"></Input>
                 </FormItem>
                 </Form>
             </Modal>
@@ -61,27 +58,34 @@
   padding-left: 5px;
   padding-bottom: 5px;
 }
+.content{
+  height: 100%;
+}
+.main{
+  height: 100%;
+}
 </style>
 <script>
-import { ReqCommonDataCompany } from "../../libs/request";
-import SelectCompany from "./selectCompany";
+import { requestCommonDataDept } from "../../libs/request";
+import SelectDept from "./selectDept";
 import Msg from "../../mixins/msg";
 export default {
+  name: "dept",
   data() {
     return {
       request: null,
       columns: [
         {
-          title: "公司编码",
-          key: "companyCode"
+          title: "部门编码",
+          key: "deptCode"
         },
         {
-          title: "中文名称",
-          key: "companyName_chs"
+          title: "部门名称",
+          key: "deptName"
         },
         {
-          title: "英文名称",
-          key: "companyName_en"
+          title: "部门简称",
+          key: "deptShortName"
         },
         {
           title: "责任人",
@@ -102,14 +106,14 @@ export default {
       editData: {},
       editStatus: 0,
       dataRule: {
-        companyCode: [{ required: true, message: "公司编码不能为空", trigger: "blur" }],
-        companyName_chs: [
-          { required: true, message: "公司中文名称不能为空", trigger: "blur" },
+        deptCode: [{ required: true, message: "部门编码不能为空", trigger: "blur" }],
+        deptName: [
+          { required: true, message: "部门名称不能为空", trigger: "blur" },
           {
             type: "string",
             min: 3,
             max: 20,
-            message: "中文名称长度必须大于3且小于20",
+            message: "部门名称长度必须大于3且小于20",
             trigger: "blur"
           }
         ]
@@ -117,16 +121,18 @@ export default {
       refName_form: "modalForm",
       refName_dataList: "dataList",
       refName_modal: "editModal",
-      refName_companyTree: "companyTree"
+      refName_deptTree: "deptTree"
     };
+  },
+  props: {
+    companyID: String
   },
   mixins: [Msg],
   components: {
-    SelectCompany
+    SelectDept
   },
   created() {
-    this.request = ReqCommonDataCompany;
-    this.doLoadList();
+    this.request = requestCommonDataDept;
   },
   computed: {
     modalStatus: {
@@ -152,6 +158,12 @@ export default {
     },
     //新增事件
     event_click_create(event, component) {
+      // debugger
+      if(this.$utils.isNULL(this.companyID)){
+        this.showWarning('机构为空，不能添加部门');
+        component.loading = false;
+        return;
+      }
       this.editData = {};
       this.editStatus = 1;
       component.loading = false;
@@ -162,7 +174,7 @@ export default {
       // debugger;
       if (!row) {
         component.loading = false;
-        this.showWarning("请先选择要修改的机构");
+        this.showWarning("请先选择要修改的部门");
         return;
       }
       this.request
@@ -181,18 +193,18 @@ export default {
       var row = this.$refs[this.refName_dataList].getSelectObj();
       if (!row) {
         component.loading = false;
-        this.showWarning("请先选择要删除的机构");
+        this.showWarning("请先选择要删除的部门");
         return;
       }
 
       if (row.children && row.children.length > 0) {
-        this.showWarning("不允许删除，请先删除子公司");
+        this.showWarning("不允许删除，请先删除子部门");
         component.loading = false;
         return;
       }
       var me = this;
       var title = "提醒";
-      var content = "确定要删除公司【" + row.companyName_chs + "】吗？删除以后";
+      var content = "确定要删除部门【" + row.deptName + "】吗？删除以后无法恢复";
       this.showAsk(
         title,
         content,
@@ -242,22 +254,13 @@ export default {
       var req;
       var me = this;
       // 新增 or 修改
+      // debugger
       if (this.editStatus == 1) {
-        // this.editData["sort"] = this.data.length;
+        this.editData.companyID = this.companyID;
         req = this.request.create(this.editData);
       } else req = this.request.update(this.editData);
       req
         .then(res => {
-          // if (me.editStatus == 1) {
-          //   //新增
-          //   me.data.push(res.data);
-          //   // me.sortCache.push(me.data.length - 1);
-          // } else {
-          //   var index = me.$utils.searchJsonIndex(me.data, p => {
-          //     return p.rowID == me.editData.rowID;
-          //   });
-          //   me.data.splice(index, 1, me.editData);
-          // }
           this.doLoadList();
           me.editStatus = 0;
           me.showInfo("保存成功", 3);
@@ -270,16 +273,22 @@ export default {
     doLoadList() {
       var me = this;
       return new Promise(function(resolve, reject) {
-        me.request
-          .list()
-          .then(res => {
-            me.data = res.data;
-            resolve(res);
-          })
-          .catch(err => {
-            me.data = {};
-            reject(err);
-          });
+        // debugger;
+        if (me.$utils.isNULL(me.companyID)) {
+          me.data = [];
+          resolve(null);
+        } else {
+          me.request
+            .list(me.companyID)
+            .then(res => {
+              me.data = res.data;
+              resolve(res);
+            })
+            .catch(err => {
+              me.data = {};
+              reject(err);
+            });
+        }
       });
     },
     onSelected(value, e) {
@@ -300,7 +309,7 @@ export default {
         me.editData.levelID = 0;
         me.editData.parentFullID = "";
         me.editData.parentFullName = "";
-        this.showWarning("上级公司不能是自己,请重新选择");
+        this.showWarning("上级部门不能是自己,请重新选择");
         return;
       }
       if (e.parentID && e.parentID.indexOf("/" + this.editData.rowID) >= 0) {
@@ -311,7 +320,7 @@ export default {
         this.editData.levelID = 0;
         me.editData.parentFullID = "";
         me.editData.parentFullName = "";
-        this.showWarning("上级公司不能是自己的子公司");
+        this.showWarning("上级部门不能是自己的子部门");
         return;
       }
       this.editData.levelID = (e.levelID ? e.levelID : 0) + 1;
@@ -322,7 +331,11 @@ export default {
   },
   watch: {
     editStatus(val) {
-      if (val > 0) this.$refs[this.refName_companyTree].refreshData();
+      if (val > 0) this.$refs[this.refName_deptTree].refreshData();
+    },
+    companyID(val) {
+        // debugger;
+      this.doLoadList();
     }
   }
 };

@@ -49,11 +49,25 @@ axiosProvider.axiosError = function (err) {
         switch (err.response.status) {
             case 400: {
                 //{"Message":"请求无效。","ModelState":{"model.componentName":["组件名称不能为空"]}}
-                var msg = err.response.data.Message;
-                for (let k in err.response.data.ModelState) {
-                    msg += ('<br/>' + err.response.data.ModelState[k]);
+                var msg = '';
+                switch (err.response.data.error) {
+                    case 1:
+                    case -1: {
+                        msg = '请求失败：<br/>';
+                        err.message = err.response.data.message;
+                    } break;
+                    case -2: {
+                        msg = '表单验证失败：<br/>';
+                        for (let k in err.response.data.data.ModelState) {
+                            msg += ('<br/>' + err.response.data.ModelState[k]);
+                        }
+                        err.message = msg;
+                    } break;
+                    case 2: {
+                        msg = '请求发生异常：<br/>';
+                        err.message = err.response.data.message;
+                    } break;
                 }
-                err.message = msg;
             } break;
             case 401:
                 err.message = '未授权，请登录';
@@ -105,7 +119,7 @@ axiosProvider.axiosError = function (err) {
         content: err.message,
         okText: '确定'
     });
-    return Promise.reject(err);
+    return Promise.reject(err); // eslint-disable-line no-undef
 };
 
 export default axiosProvider;
