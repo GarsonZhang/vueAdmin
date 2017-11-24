@@ -13,6 +13,16 @@ function paramsForGet_ID(_id) {
     return paramsForGet({ id: _id });
 }
 
+// function doajax(ajax) {
+//     new Promise(function (resolve, reject) {
+//         ajax.then(res => {
+//             resolve(res.data.data);
+//         }).catch(err => {
+//             reject(err);
+//         });
+//     });
+// }
+
 //模块请求类
 const requestModule = {
     list() {
@@ -142,8 +152,8 @@ const requestCommonDataDept = {
     treeData() {
         return ajaxRemote.get('/dept/treedata');
     },
-    search(_companyID,code) {
-        return ajaxRemote.get('/dept/search', paramsForGet({ companyID:_companyID,code: code }));
+    search(_companyID, code) {
+        return ajaxRemote.get('/dept/search', paramsForGet({ companyID: _companyID, code: code }));
     },
     get(_id) {
         var config = paramsForGet({ rowID: _id });
@@ -160,4 +170,50 @@ const requestCommonDataDept = {
     }
 };
 
-export { requestModule, requestForm, system, ReqCommonDataCompany, requestCommonDataDept };
+
+function _list(controller, pageIndex, pageSize) {
+    return ajaxRemote.get('/' + controller + '/list', paramsForGet({ pageSize: pageSize, pageIndex: pageIndex }));
+}
+function _create(controller, data) {
+    return ajaxRemote.post('/' + controller + '/create', data);
+}
+function _delete(controller, rowid) {
+    return ajaxRemote.get('/' + controller + '/delete', paramsForGet({ rowID: rowid }));
+}
+function _update(controller, data) {
+    return ajaxRemote.post('/' + controller + '/update', data);
+}
+
+
+function requestBase(controller) {
+    this.list = function (pageIndex, pageSize) {
+        return _list(controller, pageIndex, pageSize);
+    };
+    this.create = function (data) {
+        return _create(controller, data);
+    };
+    this.delete = function (rowid) {
+        return _delete(controller, rowid);
+    };
+    this.update = function (data) {
+        return _update(controller, data);
+    };
+}
+const requestUser = new requestBase('user');
+// const requestUser = {
+//     controller: 'user',
+//     list(pageIndex, pageSize) {
+//         return _list(this.controller, pageIndex, pageSize);
+//     },
+//     create(data) {
+//         return _create(this.controller, data);
+//     },
+//     delete(rowid) {
+//         return _delete(this.controller, rowid);
+//     },
+//     update(data) {
+//         return _update(this.controller, data);
+//     }
+// };
+
+export { requestModule, requestForm, system, ReqCommonDataCompany, requestCommonDataDept, requestUser };

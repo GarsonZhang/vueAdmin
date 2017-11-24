@@ -263,7 +263,7 @@ export default {
           me.showInfo("保存成功", 3);
         })
         .catch(err => {
-          me.$refs.modalModule.buttonLoading = false;
+          me.$refs[this.refName_modal].buttonLoading = false;
         });
     },
     //加载列表

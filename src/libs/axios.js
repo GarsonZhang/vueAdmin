@@ -1,9 +1,22 @@
 import axios from 'axios';
 import Vue from 'vue';
+import Promise from 'Promise';
+import md5 from './md5';
+import util from './util';
 
 let axiosProvider = {
 
 };
+
+function getValue(obj) {
+    var type = util.typeOf(obj);
+    if (type === 'object' || type === 'array') {
+        var str = JSON.stringify(obj);
+        return str;
+    }
+    else
+        return obj;
+}
 
 axiosProvider._getRemote = function () {
     var v = axios.create({
@@ -11,29 +24,48 @@ axiosProvider._getRemote = function () {
         timeout: 10000
     });
     //处理请求
-    /* 
-    v.interceptors.request.use(  
-        config => {  
-            var xtoken = getXtoken()  
-            if(xtoken != null){  
-                config.headers['X-Token'] = xtoken  
-            }  
-            if(config.method=='post'){  
-                config.data = {  
-                    ...config.data,  
-                    _t: Date.parse(new Date())/1000,  
-                }  
-            }else if(config.method=='get'){  
-                config.params = {  
-                    _t: Date.parse(new Date())/1000,  
-                    ...config.params  
-                }  
-            }  
-            return config  
-        },function(error){  
-            return Promise.reject(error)  
-        });  
-    */
+
+    v.interceptors.request.use(
+        config => {
+            var p = [];
+            if (config.method == 'post') {
+                if (!config.data) config.data = [];
+                config.data._t = Date.parse(new Date()) / 1000;
+
+                for (var key1 in config.data) {
+                    p.push({ key: key1, value: config.data[key1] });
+                }
+            } else if (config.method == 'get') {
+                if (!config.params) config.params = {};
+                config.params._t = Date.parse(new Date()) / 1000;
+
+                for (var key2 in config.params) {
+                    p.push({ key: key2, value: config.params[key2] });
+                }
+            }
+
+
+            //参数排序
+            p.sort((a, b) => {
+                return a.key > b.key ? 1 : -1;
+            });
+
+            //拼接字符串
+            var str = '';
+            p.forEach(e => {
+                str += ('&' + e.key + '=' + getValue(e.value));
+            });
+            if (str.length > 0) str = str.slice(1);
+            //计算签名
+            var sign = md5.hex_md5(str + 'GarsonHans');
+            config.headers['sign'] = sign;
+            // console.log('txt：' + str + 'GarsonHans');
+            // console.log('sign：' + sign);
+            return config;
+        }, error => {
+            return Promise.reject(error);
+        });
+
     //处理响应
     v.interceptors.response.use(this.axiosSuccess, this.axiosError);
 
@@ -41,6 +73,8 @@ axiosProvider._getRemote = function () {
 };
 
 axiosProvider.axiosSuccess = function (response) {
+    if (response.data.error === 0)
+        response.data = response.data.data;
     return response;
 };
 axiosProvider.axiosError = function (err) {
@@ -65,7 +99,11 @@ axiosProvider.axiosError = function (err) {
                     } break;
                     case 2: {
                         msg = '请求发生异常：<br/>';
-                        err.message = err.response.data.message;
+                        err.message = msg + err.response.data.message;
+                    } break;
+                    case 3: {
+                        msg = '签名错误：<br/>请联系管理员';
+                        err.message = msg;
                     } break;
                 }
             } break;

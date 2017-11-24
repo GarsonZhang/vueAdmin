@@ -5,12 +5,18 @@ import menuData from '../data/menu.js'
 import Promise from 'Promise';
 import axiosProvider from './axios'
 import jsonSearch from './jsonSearch'
+import md5 from './md5'
 
 let util = {
 
 };
 
+
 util.jsonSearch = jsonSearch;
+
+util.md5 = function (str) {
+	return md5.hex_md5(str);
+};
 
 util.title = function (title) {
 	title = title ? title + ' - Home' : 'iView project';
