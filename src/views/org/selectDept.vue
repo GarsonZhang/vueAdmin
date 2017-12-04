@@ -1,5 +1,5 @@
 <template>
-  <Cascader :data="data" @on-change="selected" v-model="currentValue"  change-on-select></Cascader>
+  <Cascader ref="control" :data="data" @on-change="selected" v-model="currentValue"  change-on-select></Cascader>
 </template>
 <style lang="less" scoped>
 
@@ -27,12 +27,19 @@ export default {
         this.data = [];
         return;
       }
+      var me = this;
       requestCommonDataDept.list(this.companyID).then(
         res => {
-          this.data = this.convert2Data(res.data);
+          me.data = this.convert2Data(res.data);
+          //me.$refs.control.updateSelected(true);
+          // debugger;
+          setTimeout(() => {
+            me.currentValue = me.currentValue;
+            me.$refs.control.updateSelected(true);
+          }, 50);
         },
         err => {
-          this.data = {};
+          me.data = [];
         }
       );
     },
@@ -69,7 +76,8 @@ export default {
       if (!this.$utils.isNULL(val)) v.push(val);
       this.currentValue = v;
     },
-    companyID(val){
+    companyID(val) {
+      // debugger;
       this.refreshData();
     }
   }

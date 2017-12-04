@@ -1,19 +1,19 @@
 <template>
     <Card class="a">   
         <p slot="title">系统登录</p>
-        <Form ref="formInline" :model="formInline" :rules="ruleInline">
+        <Form ref="formInline" :model="data" :rules="ruleInline">
             <FormItem prop="user">
-                <Input type="text" v-model="formInline.user" placeholder="Username">
+                <Input type="text" v-model="data.user" placeholder="Username">
                 <Icon type="ios-person-outline" slot="prepend"></Icon>
                 </Input>
             </FormItem>
             <FormItem prop="password">
-                <Input type="password" v-model="formInline.password" placeholder="Password">
+                <Input type="password" v-model="data.password" placeholder="Password">
                 <Icon type="ios-locked-outline" slot="prepend"></Icon>
                 </Input>
             </FormItem>
             <FormItem>
-                <GzButton type="primary" @click="handleSubmit('formInline')" text="登录" loadingText="登录中"></GzButton>
+                <GzButton type="primary" @click="handleSubmit" text="登录" loadingText="登录中"></GzButton>
                 <Button type="ghost" @click="handleReset('formInline')" style="margin-left: 8px">重置</Button>
             </FormItem>
         </Form>
@@ -22,15 +22,15 @@
 <style scoped>
 html,
 body {
-    height: 100%;
+  height: 100%;
 }
 
 .divContent {
-    height: 100%;
+  height: 100%;
 }
 
 .a {
-    /* width: 320px;
+  /* width: 320px;
     height: 230px;
     margin: auto;
     position: absolute;
@@ -38,44 +38,47 @@ body {
     left: 0;
     bottom: 0;
     right: 0; */
-    width: 320px;
-    height: 230px;
-    margin: auto;
-    margin-top: 10%;
+  width: 320px;
+  height: 230px;
+  margin: auto;
+  margin-top: 10%;
 }
 </style>
 
 <script>
-import GzButton from '../components/iview/button';
+import GzButton from "../components/iview/button";
+import { requestUser } from "../libs/request";
+import GZStorage from "../libs/GZStorage"
+
 export default {
-    data() {
-        return {
-            formInline: {
-                user: '',
-                password: ''
-            },
-            ruleInline: {
-                user: [
-                    { required: true, message: '请填写用户名', trigger: 'blur' }
-                ],
-                password: [
-                    { required: true, message: '请填写密码', trigger: 'blur' },
-                    { type: 'string', min: 6, message: '密码长度不能小于6位', trigger: 'blur' }
-                ]
-            }
-        }
-    },
-    components: {
-        GzButton
-    },
-    methods: {
-        handleSubmit(name) {
-            // debugger
-            this.$refs[name].validate((valid) => {
-                if (valid) {
-                    // this.$Message.success('提交成功!');
-                    //http://www.cnblogs.com/wisewrong/p/6277262.html
-                    /*
+  data() {
+    return {
+      data: {
+        user: "",
+        password: ""
+      },
+      ruleInline: {
+        user: [{ required: true, message: "请填写用户名", trigger: "blur" }],
+        password: [
+          { required: true, message: "请填写密码", trigger: "blur" },
+          { type: "string", min: 6, message: "密码长度不能小于6位", trigger: "blur" }
+        ]
+      }
+    };
+  },
+  components: {
+    GzButton
+  },
+  methods: {
+    handleSubmit(e, button) {
+      // debugger
+      localStorage.setItem("isLogin", false);
+      var _this=this;
+      this.$refs["formInline"].validate(valid => {
+        if (valid) {
+          // this.$Message.success('提交成功!');
+          //http://www.cnblogs.com/wisewrong/p/6277262.html
+          /*
                     //  字符串
                         this.$router.push('/home/first')
                         // 对象
@@ -83,15 +86,36 @@ export default {
                         // 命名的路由
                         this.$router.push({ name: 'home', params: { userId: wise }})
                     */
-                    this.$router.push({ name: 'home'});
-                } else {
-                    this.$Message.error('表单验证失败!');
-                }
+          requestUser
+            .login(_this.data.user, _this.data.password)
+            .then(res => {
+                // debugger
+              if (res.data.Status != 0) {
+                _this.$Message.error("用户状态异常，限制登录!");
+                button.loading = false;
+                return;
+              }
+              // debugger
+              GZStorage.setToken(res.data.Token);
+              GZStorage.setSecretKey(res.data.rid,res.data.TokenSecret);
+              GZStorage.setAccount(res.data.Account);
+              GZStorage.setUserName(res.data.UserName);
+              GZStorage.setLogin(true);
+              _this.$parent.getMenus();
+              _this.$router.push({ name: "home" });
             })
-        },
-        handleReset(name) {
-            this.$refs[name].resetFields();
+            .catch(err => {
+              button.loading = false;
+            });
+        } else {
+          _this.$Message.error("表单验证失败!");
+          button.loading = false;
         }
+      });
+    },
+    handleReset(name) {
+      this.$refs[name].resetFields();
     }
-}
+  }
+};
 </script>

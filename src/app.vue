@@ -14,7 +14,7 @@ body {
 </style>
 
 <script>
-import {system} from './libs/request'
+import { system } from "./libs/request";
 
 export default {
   data() {
@@ -25,22 +25,26 @@ export default {
   created() {
     // debugger
     //判断是否登录，如果登录就获取，如果没登录，则在登录后获取
-    this.getMenus();
+    if (window.location.pathname != "/Login") {
+      if (localStorage.getItem("isLogin") == "true") {
+        //判断登陆是否过期,
+        this.getMenus();
+        // var serverTime = localStorage.getItem("item");
+        // var current = Math.round(new Date().getTime() / 1000);
+        // var guoqi = current > serverTime;
+        // if (guoqi) {
+        //   localStorage.setItem("isLogin", false);
+        //   this.$router.push({ name: "login" });
+        // } else this.getMenus();
+      } else {
+        this.$router.push({ name: "login" });
+      }
+    }
   },
   mounted() {},
   beforeDestroy() {},
   methods: {
     getMenus() {
-      //console.log('1 '+this.getNowFormatDate());
-
-      // this.$utils.ajax.get("/static/menus.json").then(res => {
-      //   this.dataMenus = res.data;
-      //   var customer_router = this.$utils.convertRouteMap(res.data);
-      //   var v={children:customer_router};
-      //   this.$router.options.routes.push(v);
-      //   this.$router.addRoutes(customer_router);
-      // });
-
       system.getMenu().then(res => {
         this.dataMenus = res.data;
         var customer_router = this.$utils.convertRouteMap(res.data);

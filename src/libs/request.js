@@ -9,10 +9,6 @@ function paramsForGet(obj) {
     };
 }
 
-function paramsForGet_ID(_id) {
-    return paramsForGet({ id: _id });
-}
-
 // function doajax(ajax) {
 //     new Promise(function (resolve, reject) {
 //         ajax.then(res => {
@@ -37,11 +33,8 @@ const requestModule = {
         // });
         return ajaxRemote.get('/module/list');
     },
-    get(_id) {
-        var param = { id: _id };
-        var config = {
-            params: param
-        };
+    get(rowID) {
+  
         // return new Promise(function (resolve, reject) {
         //     ajaxRemote.get('/module/get', config)
         //         .then(res => {
@@ -51,6 +44,7 @@ const requestModule = {
         //             reject(err);
         //         });
         // });
+        var config = paramsForGet({rowID});
         return ajaxRemote.get('/module/get', config);
     },
     create(data) {
@@ -80,22 +74,20 @@ const requestModule = {
     updateBatch(datas) {
         return ajaxRemote.post('/module/updatebatch', datas);
     },
-    delete(_id) {
-        var param = { id: _id };
-        var config = {
-            params: param
-        };
+    delete(rowID) {
+        var config = paramsForGet({rowID});
         return ajaxRemote.get('/module/delete', config);
     }
 };
 //模块功能请求类
 const requestForm = {
-    list(_id) {
-        var config = paramsForGet_ID(_id);
+    list(moduleID) {
+        // debugger
+        var config = paramsForGet({moduleID});
         return ajaxRemote.get('/moduleform/list', config);
     },
-    get(_id) {
-        var config = paramsForGet_ID(_id);
+    get(rowID) {
+        var config = paramsForGet({rowID});
         return ajaxRemote.get('/moduleform/get', config);
     },
     create(data) {
@@ -107,8 +99,8 @@ const requestForm = {
     updateBatch(datas) {
         return ajaxRemote.post('/moduleform/updatebatch', datas);
     },
-    delete(_id) {
-        var config = paramsForGet_ID(_id);
+    delete(rowID) {
+        var config = paramsForGet({rowID});
         return ajaxRemote.get('/moduleform/delete', config);
     }
 };
@@ -129,8 +121,8 @@ const ReqCommonDataCompany = {
     search(code) {
         return ajaxRemote.get('/company/search', paramsForGet({ code: code }));
     },
-    get(_id) {
-        var config = paramsForGet_ID(_id);
+    get(rowID) {
+        var config = paramsForGet({rowID});
         return ajaxRemote.get('/company/get', config);
     },
     create(data) {
@@ -174,6 +166,9 @@ const requestCommonDataDept = {
 function _list(controller, pageIndex, pageSize) {
     return ajaxRemote.get('/' + controller + '/list', paramsForGet({ pageSize: pageSize, pageIndex: pageIndex }));
 }
+function _get(controller, _id) {
+    return ajaxRemote.get('/' + controller + '/get', paramsForGet({ rowID: _id }));
+}
 function _create(controller, data) {
     return ajaxRemote.post('/' + controller + '/create', data);
 }
@@ -189,6 +184,9 @@ function requestBase(controller) {
     this.list = function (pageIndex, pageSize) {
         return _list(controller, pageIndex, pageSize);
     };
+    this.get = function (_id) {
+        return _get(controller, _id);
+    };
     this.create = function (data) {
         return _create(controller, data);
     };
@@ -198,22 +196,28 @@ function requestBase(controller) {
     this.update = function (data) {
         return _update(controller, data);
     };
+
 }
 const requestUser = new requestBase('user');
-// const requestUser = {
-//     controller: 'user',
-//     list(pageIndex, pageSize) {
-//         return _list(this.controller, pageIndex, pageSize);
-//     },
-//     create(data) {
-//         return _create(this.controller, data);
-//     },
-//     delete(rowid) {
-//         return _delete(this.controller, rowid);
-//     },
-//     update(data) {
-//         return _update(this.controller, data);
-//     }
-// };
+requestUser.login = function (account, pwd) {
+    return ajaxRemote.get('/user/login', paramsForGet({ account:account,pwd:pwd }));
+};
+const requestAPIList={
+    list(pageIndex,pageSize){
+        return ajaxRemote.get('/apilist/list', paramsForGet({pageIndex,pageSize}));
+    },
+    import(){
+        return ajaxRemote.get('/apilist/import');
+    },
+    get(rowID){
+        return ajaxRemote.get('/apilist/get',paramsForGet({rowID}));
+    },
+    update(data){
+        return ajaxRemote.post('/apilist/update',data);
+    },
+    delete(rowID){
+        return ajaxRemote.get('/apilist/delete',paramsForGet({rowID}));
+    }
+};
 
-export { requestModule, requestForm, system, ReqCommonDataCompany, requestCommonDataDept, requestUser };
+export { requestModule, requestForm, system, ReqCommonDataCompany, requestCommonDataDept, requestUser,requestAPIList };

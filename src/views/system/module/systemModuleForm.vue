@@ -39,7 +39,7 @@
                     <Input v-model="editData.description" placeholder="请输入功能名称"></Input>
                 </FormItem>
                 <FormItem label="路由地址" prop="routeName">
-                    <Input v-model="editData.routeName" placeholder="请输入路由地址"></Input>
+                    <Input v-model="editData.routeName" placeholder="请输入路由地址 eg:/org/dept"></Input>
                 </FormItem>
                 <FormItem label="组件类型" prop="componentPath">
                     <Select v-model="editData.componentPath" placeholder="请选择组件类型">
@@ -48,7 +48,7 @@
                     </Select>
                 </FormItem>
                 <FormItem label="组件路径" prop="componentName">
-                    <Input v-model="editData.componentName" placeholder="请输入组件路径"></Input>
+                    <Input v-model="editData.componentName" placeholder="请输入组件路径 eg:org/page_dept.vue"></Input>
                 </FormItem>
                 </Form>
             </Modal>
@@ -344,7 +344,7 @@ export default {
       this.isLoading = true;
       return new Promise(function(resolve, reject) {
         if (!me.moduleID) {
-          me.data = {};
+          me.data = [];
           me.isLoading = false;
           reject("this.moduleID is null");
           me.showWarning("请先选择模块");
@@ -363,7 +363,7 @@ export default {
             resolve(res);
           })
           .catch(err => {
-            me.data = {};
+            me.data = [];
             me.sortCatch = [];
             me.isLoading = false;
             reject(err);

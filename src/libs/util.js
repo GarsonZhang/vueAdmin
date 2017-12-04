@@ -61,25 +61,27 @@ util.title = function (title) {
 // 		}
 // 	}
 // };
-// util.searchJsonIndex = function (jsondata, filter) {
-// 	for (var i = 0; i < jsondata.length; i++) {
-// 		var obj = jsondata[i];
-// 		if (filter(obj)) {
-// 			return i;
-// 		}
-// 	}
-// 	return -1;
-// };
-// util.searchObserver = function (data, childKey, filter) {
-// 	let selectionIndexes = [];
-// 	for (let i in data) {
-// 		var obj = data[i];
-// 		if (filter(obj)) {
-// 			return obj;
-// 		}
-
-// 	}
-// }
+util.searchJsonIndex = function (jsondata, filter) {
+	for (var i = 0; i < jsondata.length; i++) {
+		var obj = jsondata[i];
+		if (filter(obj)) {
+			return i;
+		}
+	}
+	return -1;
+};
+util.searchObserver = function (data, childKey, filter) {
+	let selectionIndexes = [];
+	for (let i in data) {
+		var obj = data[i];
+		if (filter(obj)) {
+			return obj;
+		}
+		if (childKey && obj[childKey]) {
+			this.searchObserver(obj[childKey], childKey, filter);
+		}
+	}
+}
 
 util.convertRouteMap = function (menuData) {
 

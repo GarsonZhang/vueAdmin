@@ -72,7 +72,7 @@ export default {
             // console.log("reLayout");
             me.reLayout();
             me.resizeTimer = false;
-          }, 400);
+          }, 1000);
         }
       });
     }

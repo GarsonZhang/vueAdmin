@@ -281,11 +281,12 @@ export default {
           me.request
             .list(me.companyID)
             .then(res => {
+              // debugger
               me.data = res.data;
               resolve(res);
             })
             .catch(err => {
-              me.data = {};
+              me.data = [];
               reject(err);
             });
         }
