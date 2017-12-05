@@ -85,7 +85,7 @@ export default {
   },
   created() {
     // debugger;
-    ReqCommonDataCompany.treeData().then(res => {
+    ReqCommonDataCompany.treeData(this).then(res => {
       this.companyData = res.data;
     });
   },

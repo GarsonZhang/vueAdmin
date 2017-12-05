@@ -23,7 +23,7 @@ export default {
   methods: {
     refreshData() {
       // debugger
-      ReqCommonDataCompany.list().then(
+      ReqCommonDataCompany.list(this).then(
         res => {
           this.data = this.convert2Data(res.data);
           // debugger;

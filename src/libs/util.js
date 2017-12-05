@@ -100,12 +100,12 @@ util.convertRouteMap = function (menuData) {
 		};
 
 		module.items.forEach(function (item) {
-
 			menuModule.children.push({
 				name: item.name,
 				path: item.routeName,
 				meta: {
-					title: item.text
+					title: item.text,
+					id:item.id
 				},
 				component: getPromisedComponent(item.componentPath, item.componentName)
 			});

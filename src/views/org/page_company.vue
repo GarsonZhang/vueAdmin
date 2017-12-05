@@ -166,7 +166,7 @@ export default {
         return;
       }
       this.request
-        .get(row.rowID)
+        .get(this,row.rowID)
         .then(res => {
           this.editData = res.data;
           this.editStatus = 2;
@@ -198,7 +198,7 @@ export default {
         content,
         () => {
           this.request
-            .delete(row.rowID)
+            .delete(me,row.rowID)
             .then(res => {
               var obj = this.$utils.jsonSearch.search(
                 me.data,
@@ -244,8 +244,8 @@ export default {
       // 新增 or 修改
       if (this.editStatus == 1) {
         // this.editData["sort"] = this.data.length;
-        req = this.request.create(this.editData);
-      } else req = this.request.update(this.editData);
+        req = this.request.create(this,this.editData);
+      } else req = this.request.update(this,this.editData);
       req
         .then(res => {
           // if (me.editStatus == 1) {
@@ -271,7 +271,7 @@ export default {
       var me = this;
       return new Promise(function(resolve, reject) {
         me.request
-          .list()
+          .list(me)
           .then(res => {
             me.data = res.data;
             resolve(res);

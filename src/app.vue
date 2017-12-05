@@ -45,7 +45,7 @@ export default {
   beforeDestroy() {},
   methods: {
     getMenus() {
-      system.getMenu().then(res => {
+      system.getMenu(this).then(res => {
         this.dataMenus = res.data;
         var customer_router = this.$utils.convertRouteMap(res.data);
         var v = { children: customer_router };

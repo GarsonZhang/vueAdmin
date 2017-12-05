@@ -87,7 +87,7 @@ export default {
                         this.$router.push({ name: 'home', params: { userId: wise }})
                     */
           requestUser
-            .login(_this.data.user, _this.data.password)
+            .login(_this,_this.data.user, _this.data.password)
             .then(res => {
                 // debugger
               if (res.data.Status != 0) {

@@ -22,12 +22,16 @@
         </div>
       </div>
       <div slot="main" class="main">
-        <Table :ref="refNames.table_ListData" size="small" :loading="listData.isLoading" :columns="listData.columns" :data="listData.data" highlight-row border></Table>
-        <div style="margin: 10px;overflow: hidden">
+        <gz-panel>
+          <div slot="main">
+            <Table :ref="refNames.table_ListData" size="small" :loading="listData.isLoading" :columns="listData.columns" :data="listData.data" highlight-row border></Table>
+          </div>
+          <div slot="bottom" style="margin: 10px;overflow: hidden">
           <div style="float: right;">
             <Page :total="listData.totalPage" :ref="refNames.listDataPage" :pageSizeOpts="listData.pageSizeOpts" :current="listData.currentPage"  :pageSize="listData.pageSize"  size="small" show-elevator show-sizer  @on-change="event_pageChangePage" @on-page-size-change="event_pageSizeChange"></Page>
           </div>
-        </div>
+        </div>  
+        </gz-panel>
       </div>
     </gz-panel>
     <Modal :ref="refNames.detailModal" title="用户详情" v-model="modalStatus" width=80 :styles="{'max-width':'500px'}" :mask-closable="false" :loading="(true)" @on-ok="event_editDataSubmit" @on-cancel="event_editCancel">
@@ -212,12 +216,7 @@ export default {
       }
     }
   },
-  created() {
-    // debugger;
-    // requestUser.treeData().then(res => {
-    //   this.companyData = res.data;
-    // });
-  },
+  created() {},
   mounted() {
     this.$refs[this.refNames.buttonRefresh].handleClick();
   },
@@ -255,7 +254,7 @@ export default {
         return;
       }
       requestUser
-        .get(v.rowID)
+        .get(this, v.rowID)
         .then(res => {
           this.editData = res.data;
           this.editStatus = 2;
@@ -280,7 +279,7 @@ export default {
         content,
         () => {
           requestUser
-            .delete(v.rowID)
+            .delete(me, v.rowID)
             .then(res => {
               var index = me.$utils.searchJsonIndex(me.listData.data, p => {
                 return p.rowID == v.rowID;
@@ -307,8 +306,8 @@ export default {
           var req;
           // 新增 or 修改
           if (this.editStatus == 1) {
-            req = requestUser.create(this.editData);
-          } else req = requestUser.update(this.editData);
+            req = requestUser.create(this, this.editData);
+          } else req = requestUser.update(this, this.editData);
           req
             .then(res => {
               if (me.editStatus == 1) {
@@ -338,13 +337,12 @@ export default {
       this.editStatus = 0;
     },
     onCompanyChanged(value, obj) {
-      this.editData.companyName=obj.label;
+      this.editData.companyName = obj.label;
       this.editData.deptID = "";
-      this.editData.deptName="";
-
+      this.editData.deptName = "";
     },
     onDeptChanged(value, obj) {
-      this.editData.deptName=obj.label;
+      this.editData.deptName = obj.label;
     },
     doGetSelect() {
       var v = this.$utils.searchObserver(
@@ -365,7 +363,7 @@ export default {
       var me = this;
       return new Promise(function(resolve, reject) {
         requestUser
-          .list(me.listData.currentPage, me.listData.pageSize)
+          .list(me, me.listData.currentPage, me.listData.pageSize)
           .then(res => {
             me.listData.totalPage = res.data.totalPage;
             me.listData.data = res.data.data;

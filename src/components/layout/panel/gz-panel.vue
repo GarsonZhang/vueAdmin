@@ -3,7 +3,7 @@
       <div :class="topClass" ref="top" :style="_styleTop">
           <slot name="top" ></slot>
       </div>
-      <div :class="mainClass" :style="_styleMain">
+      <div :class="mainClass" ref="main" :style="_styleMain">
           <slot name="main" class="abc"></slot>
       </div>
       <div :class="bottomClass" ref="bootom" :style="_styleBottom">
@@ -57,6 +57,16 @@ export default {
           ? this.$refs.bootom.firstChild.getBoundingClientRect().height + `px`
           : "0px"
         : "0px";
+      var me=this;
+      setTimeout(() => {
+        var mainHeight = me.$refs.main
+          ? me.$refs.main.getBoundingClientRect().height
+          : 0;
+        var mainWidth = me.$refs.main
+          ? me.$refs.main.getBoundingClientRect().height
+          : 0;
+        me.$emit("onMainResize", mainWidth, mainHeight);
+      }, 10);
     }
   },
   mounted() {

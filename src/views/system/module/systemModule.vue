@@ -202,7 +202,7 @@ export default {
         tmp_data[i]["sort"] = this.sortCache.indexOf(i);
       }
       requestModule
-        .updateBatch(tmp_data)
+        .updateBatch(this,tmp_data)
         .then(res => {
           component.loading = false;
           this.sortStatus = false;
@@ -261,7 +261,7 @@ export default {
         return;
       }
       requestModule
-        .get(v.rowID)
+        .get(this,v.rowID)
         .then(res => {
           this.editData = res.data;
           this.editStatus = 2;
@@ -293,7 +293,7 @@ export default {
         content,
         () => {
           requestModule
-            .delete(v.rowID)
+            .delete(me,v.rowID)
             .then(res => {
               var index = me.$utils.searchJsonIndex(me.data, p => {
                 return p.rowID == v.rowID;
@@ -334,7 +334,7 @@ export default {
       var me = this;
       return new Promise(function(resolve, reject) {
         requestModule
-          .list()
+          .list(me)
           .then(res => {
             me.data = res.data;
             me.sortCache = [];
@@ -357,8 +357,8 @@ export default {
       // 新增 or 修改
       if (this.editStatus == 1) {
         this.editData["sort"] = this.data.length;
-        req = requestModule.create(this.editData);
-      } else req = requestModule.update(this.editData);
+        req = requestModule.create(this,this.editData);
+      } else req = requestModule.update(this,this.editData);
       req
         .then(res => {
           if (me.editStatus == 1) {

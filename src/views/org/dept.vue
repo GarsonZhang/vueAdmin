@@ -178,7 +178,7 @@ export default {
         return;
       }
       this.request
-        .get(row.rowID)
+        .get(this,row.rowID)
         .then(res => {
           this.editData = res.data;
           this.editStatus = 2;
@@ -210,7 +210,7 @@ export default {
         content,
         () => {
           this.request
-            .delete(row.rowID)
+            .delete(me,row.rowID)
             .then(res => {
               var obj = this.$utils.jsonSearch.search(
                 me.data,
@@ -257,8 +257,8 @@ export default {
       // debugger
       if (this.editStatus == 1) {
         this.editData.companyID = this.companyID;
-        req = this.request.create(this.editData);
-      } else req = this.request.update(this.editData);
+        req = this.request.create(this,this.editData);
+      } else req = this.request.update(this,this.editData);
       req
         .then(res => {
           this.doLoadList();
@@ -279,7 +279,7 @@ export default {
           resolve(null);
         } else {
           me.request
-            .list(me.companyID)
+            .list(me,me.companyID)
             .then(res => {
               // debugger
               me.data = res.data;

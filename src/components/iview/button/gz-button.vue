@@ -50,7 +50,7 @@
             },
             loadingText:{
                 type:String,
-                default:''
+                default:'请求中'
             },
             showText:{
                 type:Boolean,

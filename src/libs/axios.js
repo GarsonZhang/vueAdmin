@@ -23,7 +23,6 @@ axiosProvider._getRemote = function () {
         timeout: 1000000
     });
     //处理请求
-
     v.interceptors.request.use(
         config => {
             var p = [];
@@ -70,12 +69,12 @@ axiosProvider._getRemote = function () {
             } else {
                 tokenSecret = 'GarsonHans';
             }
+            // debugger
             var _parmStr = str + tokenSecret;
             var sign = md5.hex_md5(_parmStr);
             console.log(_parmStr);
             console.log(sign);
             config.headers['sign'] = sign;
-            config.headers['client'] = 'pc';
             return config;
         }, error => {
             return Promise.reject(error);
@@ -88,7 +87,6 @@ axiosProvider._getRemote = function () {
 };
 
 axiosProvider.axiosSuccess = function (response) {
-    // debugger
     if (response.data.error === 0) {
         response.result = response.data;
 
@@ -160,7 +158,7 @@ axiosProvider.axiosError = function (err) {
                         case 7:
                         case 8:
                             {
-                                debugger
+                                // debugger
                                 localStorage.setItem('isLogin', false);
                                 // Vue.$router.push({ name: 'login' });
                                 window.location.href = "/login";

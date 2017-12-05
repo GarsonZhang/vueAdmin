@@ -28,7 +28,7 @@ export default {
         return;
       }
       var me = this;
-      requestCommonDataDept.list(this.companyID).then(
+      requestCommonDataDept.list(this,this.companyID).then(
         res => {
           me.data = this.convert2Data(res.data);
           //me.$refs.control.updateSelected(true);

@@ -1,223 +1,220 @@
 // import Promise from 'Promise';
 import axiosProvider from './axios';
 
-const ajaxRemote = axiosProvider._getRemote();
+const _ajaxRemote = axiosProvider._getRemote();
 
-function paramsForGet(obj) {
-    return {
-        params: obj
-    };
-}
+const ajax = {
+    get(pageContext, url, data) {
 
-// function doajax(ajax) {
-//     new Promise(function (resolve, reject) {
-//         ajax.then(res => {
-//             resolve(res.data.data);
-//         }).catch(err => {
-//             reject(err);
-//         });
-//     });
-// }
+        var id = pageContext.$route.meta.id;
+
+        var config = {
+            headers: {
+                'fid': id,
+                'client': 'pc'
+            },
+            params: data
+        };
+        return _ajaxRemote.get(url, config);
+    },
+    post(pageContext, url, data) {
+        var id = pageContext.$route.meta.id;
+        var config = {
+            headers: {
+                'fid': id,
+                'client': 'pc'
+            }
+        };
+        return _ajaxRemote.post(url, data,config);
+    }
+};
 
 //模块请求类
 const requestModule = {
-    list() {
-        // return new Promise(function (resolve, reject) {
-        //     ajaxRemote.get('/module/list')
-        //         .then(res => {
-        //             resolve(res);
-        //         })
-        //         .catch(err => {
-        //             reject(err);
-        //         });
-        // });
-        return ajaxRemote.get('/module/list');
+    list(context) {
+        return ajax.get(context, '/module/list');
     },
-    get(rowID) {
-  
-        // return new Promise(function (resolve, reject) {
-        //     ajaxRemote.get('/module/get', config)
-        //         .then(res => {
-        //             resolve(res);
-        //         })
-        //         .catch(err => {
-        //             reject(err);
-        //         });
-        // });
-        var config = paramsForGet({rowID});
-        return ajaxRemote.get('/module/get', config);
+    get(context, rowID) {
+        return ajax.get(context, '/module/get', {
+            rowID
+        });
     },
-    create(data) {
-        // return new Promise(function (resolve, reject) {
-        //     ajaxRemote.post('/module/create', data)
-        //         .then(res => {
-        //             resolve(res);
-        //         })
-        //         .catch(err => {
-        //             reject(err);
-        //         });
-        // });
-        return ajaxRemote.post('/module/create', data);
+    create(context, data) {
+        return ajax.post(context, '/module/create', data);
     },
-    update(data) {
-        // return new Promise(function (resolve, reject) {
-        //     ajaxRemote.post('/module/update', data)
-        //         .then(res => {
-        //             resolve(res);
-        //         })
-        //         .catch(err => {
-        //             reject(err);
-        //         });
-        // });
-        return ajaxRemote.post('/module/update', data);
+    update(context, data) {
+        return ajax.post(context, '/module/update', data);
     },
-    updateBatch(datas) {
-        return ajaxRemote.post('/module/updatebatch', datas);
+    updateBatch(context, datas) {
+        return ajax.post(context, '/module/updatebatch', datas);
     },
-    delete(rowID) {
-        var config = paramsForGet({rowID});
-        return ajaxRemote.get('/module/delete', config);
+    delete(context, rowID) {
+        return ajax.get(context, '/module/delete', {
+            rowID
+        });
     }
 };
 //模块功能请求类
 const requestForm = {
-    list(moduleID) {
-        // debugger
-        var config = paramsForGet({moduleID});
-        return ajaxRemote.get('/moduleform/list', config);
+    list(context, moduleID) {
+        return ajax.get(context, '/moduleform/list', {
+            moduleID
+        });
     },
-    get(rowID) {
-        var config = paramsForGet({rowID});
-        return ajaxRemote.get('/moduleform/get', config);
+    get(context, rowID) {
+        return ajax.get(context, '/moduleform/get', {
+            rowID
+        });
     },
-    create(data) {
-        return ajaxRemote.post('/moduleform/create', data);
+    create(context, data) {
+        return ajax.post(context, '/module/create', data);
     },
-    update(data) {
-        return ajaxRemote.post('/moduleform/update', data);
+    update(context, data) {
+        return ajax.post(context, '/module/update', data);
     },
-    updateBatch(datas) {
-        return ajaxRemote.post('/moduleform/updatebatch', datas);
+    updateBatch(context, datas) {
+        return ajax.post(context, '/module/updatebatch', datas);
     },
-    delete(rowID) {
-        var config = paramsForGet({rowID});
-        return ajaxRemote.get('/moduleform/delete', config);
+    delete(context, rowID) {
+        return ajax.get(context, '/moduleform/get', {
+            rowID
+        });
     }
 };
 
 const system = {
-    getMenu() {
-        return ajaxRemote.get('/menu/all');
+    getMenu(context) {
+        return ajax.get(context, '/menu/all');
     },
 };
 
 const ReqCommonDataCompany = {
-    list() {
-        return ajaxRemote.get('/company/list');
+    list(context) {
+        return ajax.get(context, '/company/list');
     },
-    treeData() {
-        return ajaxRemote.get('/company/treedata');
+    treeData(context) {
+        return ajax.get(context, '/company/treedata');
     },
-    search(code) {
-        return ajaxRemote.get('/company/search', paramsForGet({ code: code }));
+    search(context, code) {
+        return ajax.get(context, '/company/search', {
+            code: code
+        });
     },
-    get(rowID) {
-        var config = paramsForGet({rowID});
-        return ajaxRemote.get('/company/get', config);
+    get(context, rowID) {
+        return ajax.get(context, '/company/get', {
+            rowID
+        });
     },
-    create(data) {
-        return ajaxRemote.post('/company/create', data);
+    create(context, data) {
+        return ajax.post(context, '/company/create', data);
     },
-    delete(rowid) {
-        return ajaxRemote.get('/company/delete', paramsForGet({ rowID: rowid }));
+    delete(context, rowid) {
+        return ajax.get(context, '/company/delete', {
+            rowID: rowid
+        });
     },
-    update(data) {
-        return ajaxRemote.post('/company/update', data);
+    update(context, data) {
+        return ajax.post(context, '/company/update', data);
     }
 };
 
 const requestCommonDataDept = {
-    list(_companyID) {
+    list(context, companyID) {
+        return ajax.get(context, '/dept/list', {
+            companyID
+        });
+    },
+    treeData(context) {
+        return ajax.get(context, '/dept/treedata');
+    },
+    search(context, companyID, code) {
+        return ajax.get(context, '/dept/search', {
+            companyID,
+            code: code
+        });
+    },
+    get(context, rowID) {
+        return ajax.get(context, '/dept/get', {
+            rowID
+        });
+    },
+    create(context, data) {
+        return ajax.post(context, '/dept/create', data);
+    },
+    delete(context, rowID) {
+        return ajax.get(context, '/dept/delete', {
+            rowID
+        });
+    },
+    update(context, data) {
+        return ajax.post(context, '/dept/update', data);
+    }
+};
+
+const requestUser = {
+    list(context, pageIndex, pageSize) {
+        return ajax.get(context, '/user/list', {
+            pageSize,
+            pageIndex
+        });
+    },
+    get(context, rowID) {
+        return ajax.get(context, '/user/get', {
+            rowID
+        });
+    },
+    create(context, data) {
+        return ajax.post(context, '/user/create', data);
+
+    },
+    delete(context, rowID) {
+        return ajax.get(context, '/user/delete', {
+            rowID
+        });
+    },
+    update(context, data) {
         // debugger
-        return ajaxRemote.get('/dept/list', paramsForGet({ companyID: _companyID }));
+        return ajax.post(context, '/user/update', data);
     },
-    treeData() {
-        return ajaxRemote.get('/dept/treedata');
-    },
-    search(_companyID, code) {
-        return ajaxRemote.get('/dept/search', paramsForGet({ companyID: _companyID, code: code }));
-    },
-    get(_id) {
-        var config = paramsForGet({ rowID: _id });
-        return ajaxRemote.get('/dept/get', config);
-    },
-    create(data) {
-        return ajaxRemote.post('/dept/create', data);
-    },
-    delete(rowid) {
-        return ajaxRemote.get('/dept/delete', paramsForGet({ rowID: rowid }));
-    },
-    update(data) {
-        return ajaxRemote.post('/dept/update', data);
+    login(context, account, pwd) {
+        return ajax.get(context, '/user/login', {
+            account: account,
+            pwd: pwd
+        });
     }
 };
 
-
-function _list(controller, pageIndex, pageSize) {
-    return ajaxRemote.get('/' + controller + '/list', paramsForGet({ pageSize: pageSize, pageIndex: pageIndex }));
-}
-function _get(controller, _id) {
-    return ajaxRemote.get('/' + controller + '/get', paramsForGet({ rowID: _id }));
-}
-function _create(controller, data) {
-    return ajaxRemote.post('/' + controller + '/create', data);
-}
-function _delete(controller, rowid) {
-    return ajaxRemote.get('/' + controller + '/delete', paramsForGet({ rowID: rowid }));
-}
-function _update(controller, data) {
-    return ajaxRemote.post('/' + controller + '/update', data);
-}
-
-
-function requestBase(controller) {
-    this.list = function (pageIndex, pageSize) {
-        return _list(controller, pageIndex, pageSize);
-    };
-    this.get = function (_id) {
-        return _get(controller, _id);
-    };
-    this.create = function (data) {
-        return _create(controller, data);
-    };
-    this.delete = function (rowid) {
-        return _delete(controller, rowid);
-    };
-    this.update = function (data) {
-        return _update(controller, data);
-    };
-
-}
-const requestUser = new requestBase('user');
-requestUser.login = function (account, pwd) {
-    return ajaxRemote.get('/user/login', paramsForGet({ account:account,pwd:pwd }));
-};
-const requestAPIList={
-    list(pageIndex,pageSize){
-        return ajaxRemote.get('/apilist/list', paramsForGet({pageIndex,pageSize}));
+const requestAPIList = {
+    list(context, pageIndex, pageSize) {
+        return ajax.get(context, '/apilist/list', {
+            pageIndex,
+            pageSize
+        });
     },
-    import(){
-        return ajaxRemote.get('/apilist/import');
+    import (context) {
+        return ajax.get(context, '/apilist/import');
     },
-    get(rowID){
-        return ajaxRemote.get('/apilist/get',paramsForGet({rowID}));
+    get(context, rowID) {
+        return ajax.get(context, '/apilist/get', {
+            rowID
+        });
     },
-    update(data){
-        return ajaxRemote.post('/apilist/update',data);
+    update(context, data) {
+        return ajax.post(context, '/apilist/update', data);
     },
-    delete(rowID){
-        return ajaxRemote.get('/apilist/delete',paramsForGet({rowID}));
+    delete(context, rowID) {
+        return ajax.get(context, '/apilist/delete', {
+            rowID
+        });
     }
 };
 
-export { requestModule, requestForm, system, ReqCommonDataCompany, requestCommonDataDept, requestUser,requestAPIList };
+export {
+    requestModule,
+    requestForm,
+    system,
+    ReqCommonDataCompany,
+    requestCommonDataDept,
+    requestUser,
+    requestAPIList
+};

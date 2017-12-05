@@ -52,7 +52,6 @@
 </style>
 <script>
 import Sortable from "sortablejs";
-import { requestModule, requestForm } from "../../../libs/request";
 import Msg from "../../../mixins/msg";
 import systemModule from "./systemModule.vue";
 import systemModuleForm from "./systemModuleForm.vue";

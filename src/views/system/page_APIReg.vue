@@ -9,27 +9,27 @@
             <gz-button :ref="refNames.buttonRefresh" icon="refresh" @click="event_buttonRefreshClick" :showText='false' />
           </Tooltip>
           <ButtonGroup class="tooltipButtonGroup">
-            <Tooltip content="导入" placement="bottom-start">
-              <gz-button type="primary" icon="android-archive" @click="event_buttonImportClick"></gz-button>
-            </Tooltip>
-            <Tooltip content="修改" placement="bottom-start">
-              <gz-button type="success" icon="edit" @click="event_buttonEditClick"></gz-button>
-            </Tooltip>
-            <Tooltip content="删除" placement="bottom-start">
-              <gz-button type="error" icon="close" @click="event_buttonDeleteClick"></gz-button>
-            </Tooltip>
+              <gz-button type="primary" icon="android-archive" @click="event_buttonImportClick" text="导入"></gz-button>
+              <gz-button type="success" icon="edit" @click="event_buttonEditClick"  text="修改"></gz-button>
+              <gz-button type="error" icon="close" @click="event_buttonDeleteClick" text="删除"></gz-button>
           </ButtonGroup>
         </div>
       </div>
-      <div slot="main" class="main">
-        <Table :ref="refNames.table_ListData" size="small" :loading="listData.isLoading" :columns="listData.columns" :data="listData.data" highlight-row border></Table>
-        <div style="margin: 10px;overflow: hidden">
+      <div slot="main" >
+        <gz-panel @onMainResize="onResizeHeight">
+          <div slot="main" class="main">
+              <Table :height="tableHeight" :ref="refNames.table_ListData" size="small" :loading="listData.isLoading" :columns="listData.columns" :data="listData.data" highlight-row border></Table>
+          </div>
+        <div slot="bottom" style="padding: 10px;overflow: hidden">
           <div style="float: right;">
             <Page :total="listData.totalPage" :pageSizeOpts="listData.pageSizeOpts" :current="listData.currentPage"  :pageSize="listData.pageSize"  
               size="small" placement="top" :ref="refNames.listDataPage"  show-elevator show-sizer  
               @on-change="event_pageChangePage" @on-page-size-change="event_pageSizeChange"></Page>
           </div>
         </div>
+        </gz-panel>
+        
+        
       </div>
     </gz-panel>
     <Modal :ref="refNames.detailModal" title="API详情" v-model="modalStatus" width=80 :styles="{'max-width':'500px'}" :mask-closable="false" :loading="(true)" @on-ok="event_editDataSubmit" @on-cancel="event_editCancel">
@@ -81,11 +81,13 @@
 <script>
 import { requestAPIList } from "../../libs/request";
 import Msg from "../../mixins/msg";
+import tableHead from "../../components/iview/table/table-head.vue";
 
 export default {
   mixins: [Msg],
   data() {
     return {
+      tableHeight: 100,
       listData: {
         isLoading: false,
         columns: [
@@ -139,13 +141,14 @@ export default {
             // required: true,
             // message: "权限类型不能为空",
             // trigger: "blur"
-            type: "enum", enum: [0,1]
+            type: "enum",
+            enum: [0, 1]
           }
         ]
       }
     };
   },
-  components: {},
+  components: { tableHead },
   computed: {
     modalStatus: {
       get() {
@@ -161,6 +164,10 @@ export default {
     this.$refs[this.refNames.buttonRefresh].handleClick();
   },
   methods: {
+    onResizeHeight(width, height) {
+      // debugger
+      this.tableHeight = height;
+    },
     // 刷新
     event_buttonRefreshClick(event, component) {
       this.listData.isLoading = true;
@@ -175,18 +182,18 @@ export default {
         });
     },
     event_pageChangePage(page) {
-      this.listData.currentPage=page;
+      this.listData.currentPage = page;
       this.$refs[this.refNames.buttonRefresh].handleClick();
     },
     event_pageSizeChange(pageSize) {
-      this.listData.pageSize=pageSize;
+      this.listData.pageSize = pageSize;
       this.$refs[this.refNames.buttonRefresh].handleClick();
     },
     // 导入
     event_buttonImportClick(event, component) {
       var _this = this;
       requestAPIList
-        .import()
+        .import(this)
         .then(res => {
           _this.listData.currentPage = 1;
           _this.$refs[this.refNames.buttonRefresh].handleClick();
@@ -205,7 +212,7 @@ export default {
         return;
       }
       requestAPIList
-        .get(v.rowID)
+        .get(this, v.rowID)
         .then(res => {
           this.editData = res.data;
           this.editStatus = 2;
@@ -230,7 +237,7 @@ export default {
         content,
         () => {
           requestAPIList
-            .delete(v.rowID)
+            .delete(me, v.rowID)
             .then(res => {
               // debugger
               var index = me.$utils.searchJsonIndex(me.listData.data, p => {
@@ -256,7 +263,7 @@ export default {
       this.$refs[this.refNames.editForm].validate(valid => {
         if (valid) {
           requestAPIList
-            .update(this.editData)
+            .update(this, this.editData)
             .then(res => {
               var index = me.$utils.searchJsonIndex(me.listData.data, p => {
                 return p.rowID == me.editData.rowID;
@@ -299,7 +306,7 @@ export default {
       var me = this;
       return new Promise(function(resolve, reject) {
         requestAPIList
-          .list(me.listData.currentPage, me.listData.pageSize)
+          .list(me, me.listData.currentPage, me.listData.pageSize)
           .then(res => {
             me.listData.totalPage = res.data.totalPage;
             me.listData.data = res.data.data;
