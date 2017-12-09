@@ -2,7 +2,7 @@ import gzButton from './iview//button';
 import GzModal from './iview/modal';
 import gzMenu from './iview/menu';
 
-import DragableTable from './iview/table/dragableTable';
+import DragableTable from './iview/dragableTable';
 import GzTreeGrid from './iview/treeGrid/tree';
 
 

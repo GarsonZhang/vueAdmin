@@ -25,7 +25,7 @@ const ajax = {
                 'client': 'pc'
             }
         };
-        return _ajaxRemote.post(url, data,config);
+        return _ajaxRemote.post(url, data, config);
     }
 };
 
@@ -66,19 +66,49 @@ const requestForm = {
             rowID
         });
     },
-    create(context, data) {
-        return ajax.post(context, '/module/create', data);
-    },
-    update(context, data) {
-        return ajax.post(context, '/module/update', data);
-    },
-    updateBatch(context, datas) {
-        return ajax.post(context, '/module/updatebatch', datas);
-    },
-    delete(context, rowID) {
-        return ajax.get(context, '/moduleform/get', {
+    actions(context, rowID) {
+        return ajax.get(context, '/moduleform/actions', {
             rowID
         });
+    },
+    create(context, data) {
+        return ajax.post(context, '/moduleform/create', data);
+    },
+    update(context, data) {
+        return ajax.post(context, '/moduleform/update', data);
+    },
+    updateBatch(context, datas) {
+        return ajax.post(context, '/moduleform/updatebatch', datas);
+    },
+    delete(context, rowID) {
+        return ajax.get(context, '/moduleform/delete', {
+            rowID
+        });
+    }
+};
+
+const requestFormAuthorize = {
+    list(context, formID) {
+        return ajax.get(context, '/moduleformauthorize/list', {
+            formID
+        });
+    },
+    get(context, rowID) {
+        return ajax.get(context, '/moduleformauthorize/get', {
+            rowID
+        });
+    },
+    delete(context, rowID) {
+        // debugger
+        return ajax.get(context, '/moduleformauthorize/delete', {
+            rowID
+        });
+    },
+    create(context, data) {
+        return ajax.post(context, '/moduleformauthorize/create', data);
+    },
+    update(context, data) {
+        return ajax.post(context, '/moduleformauthorize/update', data);
     }
 };
 
@@ -86,6 +116,9 @@ const system = {
     getMenu(context) {
         return ajax.get(context, '/menu/all');
     },
+    getMenuTree(context,id){
+        return ajax.get(context,'/sys/form',{id});
+    }
 };
 
 const ReqCommonDataCompany = {
@@ -212,9 +245,11 @@ const requestAPIList = {
 export {
     requestModule,
     requestForm,
+    requestFormAuthorize,
     system,
     ReqCommonDataCompany,
     requestCommonDataDept,
     requestUser,
     requestAPIList
+
 };

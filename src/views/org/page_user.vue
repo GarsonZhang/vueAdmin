@@ -1,72 +1,70 @@
 <template>
-<div class="content">
-  <div class="borderPanel">
-    <gz-panel>
-      <div slot="top">
-        <div class="title">用户管理</div>
-        <div class="tools">
-          <Tooltip content="刷新" placement="bottom-start">
-            <gz-button :ref="refNames.buttonRefresh" icon="refresh" @click="event_buttonRefreshClick" :showText='false' />
-          </Tooltip>
-          <ButtonGroup class="tooltipButtonGroup">
-            <Tooltip content="新增" placement="bottom-start">
-              <gz-button type="primary" icon="plus" @click="event_buttonAddClick"></gz-button>
-            </Tooltip>
-            <Tooltip content="修改" placement="bottom-start">
-              <gz-button type="success" icon="edit" @click="event_buttonEditClick"></gz-button>
-            </Tooltip>
-            <Tooltip content="删除" placement="bottom-start">
-              <gz-button type="error" icon="close" @click="event_buttonDeleteClick"></gz-button>
-            </Tooltip>
-          </ButtonGroup>
+  <div class="content">
+    <div class="borderPanel">
+      <gz-panel>
+        <div slot="top">
+          <div class="title">用户管理</div>
+          <div class="tools">
+            <gz-button :ref="refNames.buttonRefresh" icon="refresh" @click="event_buttonRefreshClick" text="刷新" />
+            <ButtonGroup class="tooltipButtonGroup">
+              <gz-button type="primary" icon="plus" @click="event_buttonAddClick" text="新增"></gz-button>
+              <gz-button type="success" icon="edit" @click="event_buttonEditClick" text="修改"></gz-button>
+              <gz-button type="error" icon="close" @click="event_buttonDeleteClick" text="删除"></gz-button>
+            </ButtonGroup>
+
+            <gz-button type="success" icon="edit" @click="event_buttonAuthorizeClick" text="用户权限"></gz-button>
+          </div>
         </div>
-      </div>
-      <div slot="main" class="main">
-        <gz-panel>
-          <div slot="main">
-            <Table :ref="refNames.table_ListData" size="small" :loading="listData.isLoading" :columns="listData.columns" :data="listData.data" highlight-row border></Table>
-          </div>
-          <div slot="bottom" style="margin: 10px;overflow: hidden">
-          <div style="float: right;">
-            <Page :total="listData.totalPage" :ref="refNames.listDataPage" :pageSizeOpts="listData.pageSizeOpts" :current="listData.currentPage"  :pageSize="listData.pageSize"  size="small" show-elevator show-sizer  @on-change="event_pageChangePage" @on-page-size-change="event_pageSizeChange"></Page>
-          </div>
-        </div>  
-        </gz-panel>
-      </div>
-    </gz-panel>
-    <Modal :ref="refNames.detailModal" title="用户详情" v-model="modalStatus" width=80 :styles="{'max-width':'500px'}" :mask-closable="false" :loading="(true)" @on-ok="event_editDataSubmit" @on-cancel="event_editCancel">
-      <Form :ref="refNames.editForm" :model="editData" :rules="dataRule" label-position="left" :label-width="80">
-        <FormItem label="用户账号" prop="account">
-          <Input v-model="editData.account" placeholder="请输入用户账号"></Input>
-        </FormItem>
-        <FormItem label="姓名" prop="userName">
-          <Input v-model="editData.userName" placeholder="请输入姓名"></Input>
-        </FormItem>
-        <FormItem label="性别" prop="sex">
-          <Select v-model="editData.sex" placeholder="请选择性别">
-                        <Option value="1">男</Option>
-                        <Option value="2">女</Option>
-                    </Select>
-        </FormItem>
-        <FormItem label="公司" prop="companyID">
-          <SelectCompany v-model="editData.companyID" @onSelected="onCompanyChanged"></SelectCompany>
-        </FormItem>
-        <FormItem label="部门" prop="deptID">
-          <SelectDept :companyID="editData.companyID" v-model="editData.deptID" @onSelected="onDeptChanged"></SelectDept>
-        </FormItem>
-        <FormItem label="联系电话" prop="phone">
-          <Input v-model="editData.phone" placeholder="请输入联系电话"></Input>
-        </FormItem>
-        <FormItem label="状态" prop="status">
-          <Input v-model="editData.status" disabled></Input>
-        </FormItem>
-        <FormItem label="备注" prop="remark">
-          <Input v-model="editData.remark" placeholder="请输入备注信息"></Input>
-        </FormItem>
-      </Form>
-    </Modal>
+        <div slot="main" class="main">
+          <gz-panel>
+            <div slot="main">
+              <Table :ref="refNames.table_ListData" size="small" :loading="listData.isLoading" :columns="listData.columns" :data="listData.data"
+                highlight-row border></Table>
+            </div>
+            <div slot="bottom" style="margin: 10px;overflow: hidden">
+              <div style="float: right;">
+                <Page placement="top" :total="listData.totalPage" :ref="refNames.listDataPage" :pageSizeOpts="listData.pageSizeOpts" :current="listData.currentPage"
+                  :pageSize="listData.pageSize" size="small" show-elevator show-sizer @on-change="event_pageChangePage" @on-page-size-change="event_pageSizeChange"></Page>
+              </div>
+            </div>
+          </gz-panel>
+        </div>
+      </gz-panel>
+      <Modal :ref="refNames.detailModal" title="用户详情" v-model="modalStatus" width=80 :styles="{'max-width':'500px'}" :mask-closable="false"
+        :loading="(true)" @on-ok="event_editDataSubmit" @on-cancel="event_editCancel">
+        <Form :ref="refNames.editForm" :model="editData" :rules="dataRule" label-position="left" :label-width="80">
+          <FormItem label="用户账号" prop="account">
+            <Input v-model="editData.account" placeholder="请输入用户账号"></Input>
+          </FormItem>
+          <FormItem label="姓名" prop="userName">
+            <Input v-model="editData.userName" placeholder="请输入姓名"></Input>
+          </FormItem>
+          <FormItem label="性别" prop="sex">
+            <Select v-model="editData.sex" placeholder="请选择性别">
+              <Option value="1">男</Option>
+              <Option value="2">女</Option>
+            </Select>
+          </FormItem>
+          <FormItem label="公司" prop="companyID">
+            <SelectCompany v-model="editData.companyID" @onSelected="onCompanyChanged"></SelectCompany>
+          </FormItem>
+          <FormItem label="部门" prop="deptID">
+            <SelectDept :companyID="editData.companyID" v-model="editData.deptID" @onSelected="onDeptChanged"></SelectDept>
+          </FormItem>
+          <FormItem label="联系电话" prop="phone">
+            <Input v-model="editData.phone" placeholder="请输入联系电话"></Input>
+          </FormItem>
+          <FormItem label="状态" prop="status">
+            <Input v-model="editData.status" disabled></Input>
+          </FormItem>
+          <FormItem label="备注" prop="remark">
+            <Input v-model="editData.remark" placeholder="请输入备注信息"></Input>
+          </FormItem>
+        </Form>
+      </Modal>
+      <FormTreeData ref="refAuthorize" :objectID="currentUserID" :category=3></FormTreeData>
+    </div>
   </div>
-</div>
 </template>
 <style lang="less" scoped>
 .title {
@@ -86,6 +84,7 @@
   -khtml-user-select: text;
   user-select: text;
 }
+
 .table-cell-index {
   padding-left: 5px;
   padding-right: 5px;
@@ -96,7 +95,7 @@ import { requestUser } from "../../libs/request";
 import SelectCompany from "./selectCompany";
 import SelectDept from "./selectDept";
 import Msg from "../../mixins/msg";
-
+import FormTreeData from "./treeForm.vue";
 export default {
   mixins: [Msg],
   data() {
@@ -199,12 +198,14 @@ export default {
             trigger: "blur"
           }
         ]
-      }
+      },
+      currentUserID: ""
     };
   },
   components: {
     SelectCompany,
-    SelectDept
+    SelectDept,
+    FormTreeData
   },
   computed: {
     modalStatus: {
@@ -221,6 +222,17 @@ export default {
     this.$refs[this.refNames.buttonRefresh].handleClick();
   },
   methods: {
+    // 设置权限
+    event_buttonAuthorizeClick(event, component) {
+      var v = this.doGetSelect();
+      if (!v) {
+        component.loading = false;
+        return;
+      }
+      this.currentUserID = v.rowID;
+      this.$refs['refAuthorize'].show();
+        component.loading = false;
+    },
     // 刷新
     event_buttonRefreshClick(event, component) {
       this.listData.isLoading = true;
@@ -378,5 +390,3 @@ export default {
   }
 };
 </script>
-
-
