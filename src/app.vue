@@ -47,13 +47,35 @@ export default {
     getMenus() {
       system.getMenu(this).then(res => {
         this.dataMenus = res.data;
+        // this.
+        // debugger
+        
         var customer_router = this.$utils.convertRouteMap(res.data);
         var v = { children: customer_router };
-        // debugger;
         this.$router.options.routes.push(v);
         this.$router.addRoutes(customer_router);
+        
+        var dict = []; 
+        res.data.forEach(element => {
+          this.getAuthorize(dict,element);
+        });
+        this.$store.authorizeDataCache=dict;
       });
     },
+
+    getAuthorize(dict,menu){
+        if(menu.type===2){
+          dict[menu.name]=menu.authorize;
+        }
+        else{
+          if(menu.items){
+            menu.items.forEach(element => {
+              this.getAuthorize(dict,element);
+            });
+          }
+        }
+    },
+
     getNowFormatDate() {
       var date = new Date();
       var seperator1 = "-";

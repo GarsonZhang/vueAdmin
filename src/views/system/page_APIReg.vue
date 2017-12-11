@@ -9,9 +9,9 @@
             <gz-button :ref="refNames.buttonRefresh" icon="refresh" @click="event_buttonRefreshClick" :showText='false' />
           </Tooltip>
           <ButtonGroup class="tooltipButtonGroup">
-              <gz-button type="primary" icon="android-archive" @click="event_buttonImportClick" text="导入"></gz-button>
-              <gz-button type="success" icon="edit" @click="event_buttonEditClick"  text="修改"></gz-button>
-              <gz-button type="error" icon="close" @click="event_buttonDeleteClick" text="删除"></gz-button>
+              <gz-button type="primary" icon="android-archive" :permission=1 @click="event_buttonImportClick" text="导入"></gz-button>
+              <gz-button type="success" icon="edit" :permission=2 @click="event_buttonEditClick"  text="修改"></gz-button>
+              <gz-button type="error" icon="close" :permission=4 @click="event_buttonDeleteClick" text="删除"></gz-button>
           </ButtonGroup>
         </div>
       </div>
@@ -41,7 +41,7 @@
           <Input v-model="editData.url" readonly></Input>
         </FormItem>
         <FormItem label="验证类型" prop="checkType">
-          <Select v-model="editData.checkType" placeholder="API安全">
+          <Select v-model="editData.checkType" placeholder="API安全" label-in-value @on-change="event_checkTypeChanged">
             <Option v-for="item in [{value:0,label:'公开'},{value:1,label:'验证'}]" :key="item.value" :value="item.value">{{item.label}}</Option>
                         <!-- <Option value=0>公开</Option>
                         <Option value=2>验证</Option> -->
@@ -82,7 +82,6 @@
 import { requestAPIList } from "../../libs/request";
 import Msg from "../../mixins/msg";
 import tableHead from "../../components/iview/table/table-head.vue";
-
 export default {
   mixins: [Msg],
   data() {
@@ -164,6 +163,9 @@ export default {
     this.$refs[this.refNames.buttonRefresh].handleClick();
   },
   methods: {
+    event_checkTypeChanged(a,b){
+      this.editData.checkTypeName=a.label;
+    },
     onResizeHeight(width, height) {
       // debugger
       this.tableHeight = height;

@@ -116,8 +116,16 @@ const system = {
     getMenu(context) {
         return ajax.get(context, '/menu/all');
     },
-    getMenuTree(context,id){
-        return ajax.get(context,'/sys/form',{id});
+    getMenuTree(context,objectID){
+        return ajax.get(context,'/authorize/formTree',{objectID});
+    },
+    updateAuthorize(context,category,objectID,data){
+        // debugger;
+        return ajax.post(context,'/authorize/update',{
+            category,
+            objectID,
+            data
+        });
     }
 };
 
@@ -181,6 +189,39 @@ const requestCommonDataDept = {
     },
     update(context, data) {
         return ajax.post(context, '/dept/update', data);
+    }
+};
+
+const requestCommonDataPosition = {
+    list(context, companyID) {
+        return ajax.get(context, '/position/list', {
+            companyID
+        });
+    },
+    treeData(context) {
+        return ajax.get(context, '/position/treedata');
+    },
+    search(context, companyID, code) {
+        return ajax.get(context, '/position/search', {
+            companyID,
+            code: code
+        });
+    },
+    get(context, rowID) {
+        return ajax.get(context, '/position/get', {
+            rowID
+        });
+    },
+    create(context, data) {
+        return ajax.post(context, '/position/create', data);
+    },
+    delete(context, rowID) {
+        return ajax.get(context, '/position/delete', {
+            rowID
+        });
+    },
+    update(context, data) {
+        return ajax.post(context, '/position/update', data);
     }
 };
 
@@ -249,6 +290,7 @@ export {
     system,
     ReqCommonDataCompany,
     requestCommonDataDept,
+    requestCommonDataPosition,
     requestUser,
     requestAPIList
 

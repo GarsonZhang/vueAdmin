@@ -174,7 +174,7 @@ axiosProvider.axiosError = function (err) {
                 }
                 break;
             case 401:
-                err.message = '未授权，请登录';
+                err.message = '未授权，请求失败';
                 break;
 
             case 403:

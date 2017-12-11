@@ -60,7 +60,7 @@
 
     </Modal>
 
-    <Modal ref="modalAuthorize" title="权限视图" v-model="modalStatus_authorize" width=80 :styles="{'max-width':'500px'}" :mask-closable="false"
+    <Modal ref="modalAuthorize" title="权限视图" v-model="modalStatus_authorize" width=80 :styles="{'max-width':'700px'}" :mask-closable="false"
       :loading="(true)">
       <Alert>权限设置以后，请求相应Action时将会校验权限，没有权限则拦截请求
         <br/>一个权限对应多个Action</Alert>
@@ -99,6 +99,9 @@
   .smallPadding .ivu-table-cell {
     padding-left: 5px;
     padding-right: 5px;
+  }
+  .ivu-table-cell>span{
+    word-break: keep-all;
   }
 </style>
 <style lang="less" scoped>
@@ -189,7 +192,6 @@
             },
             {
               title: "Actions",
-              align: "center",
               key: "actionsDes"
             },
             {
@@ -394,7 +396,7 @@
           .list(this, this.authorize.formID)
           .then(res => {
             res.data.forEach(item => {
-              item.actionsDes = item.actionsUrl.join(',');
+              item.actionsDes = item.actionsUrl.join('; \r\n ');
             });
 
             this.authorize.data = res.data;
@@ -480,6 +482,7 @@
           return;
         }
         this.editData = {};
+        this.editData.actions=[];
         this.editStatus = 1;
         component.loading = false;
       },

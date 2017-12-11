@@ -7,12 +7,12 @@
           <div class="tools">
             <gz-button :ref="refNames.buttonRefresh" icon="refresh" @click="event_buttonRefreshClick" text="刷新" />
             <ButtonGroup class="tooltipButtonGroup">
-              <gz-button type="primary" icon="plus" @click="event_buttonAddClick" text="新增"></gz-button>
-              <gz-button type="success" icon="edit" @click="event_buttonEditClick" text="修改"></gz-button>
-              <gz-button type="error" icon="close" @click="event_buttonDeleteClick" text="删除"></gz-button>
+              <gz-button type="primary" icon="plus" @click="event_buttonAddClick" :permission=1 text="新增"></gz-button>
+              <gz-button type="success" icon="edit" @click="event_buttonEditClick" :permission=2 text="修改"></gz-button>
+              <gz-button type="error" icon="close" @click="event_buttonDeleteClick" :permission=4 text="删除"></gz-button>
             </ButtonGroup>
 
-            <gz-button type="success" icon="edit" @click="event_buttonAuthorizeClick" text="用户权限"></gz-button>
+            <gz-button type="success" icon="edit" @click="event_buttonAuthorizeClick" :permission=8 text="用户权限"></gz-button>
           </div>
         </div>
         <div slot="main" class="main">
@@ -62,7 +62,7 @@
           </FormItem>
         </Form>
       </Modal>
-      <FormTreeData ref="refAuthorize" :objectID="currentUserID" :category=3></FormTreeData>
+      <FormTreeData ref="refAuthorize"></FormTreeData>
     </div>
   </div>
 </template>
@@ -198,8 +198,7 @@ export default {
             trigger: "blur"
           }
         ]
-      },
-      currentUserID: ""
+      }
     };
   },
   components: {
@@ -229,9 +228,9 @@ export default {
         component.loading = false;
         return;
       }
-      this.currentUserID = v.rowID;
-      this.$refs['refAuthorize'].show();
-        component.loading = false;
+      this.$refs["refAuthorize"].updateData(1, v.rowID);
+      this.$refs["refAuthorize"].show();
+      component.loading = false;
     },
     // 刷新
     event_buttonRefreshClick(event, component) {
