@@ -1,18 +1,18 @@
 <template>
-   <Modal class-name="vertical-center-modal" :ref="refNames_modal" title="系统功能" v-model="modalStatus" 
+   <Modal class-name="autoHeight" :ref="refNames_modal" title="添加成员" v-model="modalStatus" width=80 :styles="{'max-width':'800px'}"
       :mask-closable="false" :loading="(true)" @on-ok="event_submit" @on-cancel="event_cancel">
       <Tree ref="refTree" :data="data" show-checkbox></Tree>
     </Modal>
 </template>
 <style lang="less">
-.vertical-center-modal {
+.autoHeight {
   display: flex;
   align-items: center;
   justify-content: center;
   .ivu-modal {
     top: 0;
-     height: 100%;
-     max-height: 700px;
+    height: 100%;
+    max-height: 700px;
     .ivu-modal-content {
       height: 100%;
       .ivu-modal-body {
@@ -28,10 +28,11 @@
       }
     }
   }
-}
- .ivu-modal-body {
+
+  .ivu-modal-body {
     overflow-y: auto;
   }
+}
 </style>
 
 <script>

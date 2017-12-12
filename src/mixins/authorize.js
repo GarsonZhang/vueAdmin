@@ -7,11 +7,12 @@ export default {
     created() {
         // debugger
         this._authorize = this.$store.authorizeDataCache[this.$route.name];
+        // console.log('routeName:'+this.$route.name+'  Authorize:'+this._authorize);
     },
     methods: {
         VerifyPermissions(authorize) {
             // debugger
-            return this._authorize & authorize === authorize;
+            return (this._authorize & authorize) === authorize;
         }
     }
 };

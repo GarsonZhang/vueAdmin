@@ -92,6 +92,7 @@ export default {
       ];
     },
     isAuthroize() {
+      // console.log('Text'+this.text+ 'permission：'+this.permission)
       if (this.permission > 0) {
         return this.VerifyPermissions(this.permission);
       } else return true;
