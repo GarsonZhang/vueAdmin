@@ -7,7 +7,7 @@
           </div>
           <div>value:{{testValue}}</div>
           <div>
-            <tree-select
+            <gz-tree-select
               :treeData="testData"
               :treeProps="testProps"
               v-model="testValue"
@@ -15,7 +15,7 @@
               :dropDownMaxHeight="500"
               placeholder="请选择部门"
             >
-          </tree-select>
+          </gz-tree-select>
           </div>
       </div>
       <div class="main">
@@ -48,12 +48,11 @@
 <script>
 import Msg from "../../mixins/msg";
 import SelectCompany from "./selectCompany";
-import treeSelect from "../../components/controls/tree-select/tree-select.vue";
 import { ReqCommonDataCompany } from "../../libs/request";
 export default {
   name: "ChooseUser",
   mixins: [Msg],
-  components: { SelectCompany ,treeSelect},
+  components: { SelectCompany},
   data() {
     return {
       testValue:'',

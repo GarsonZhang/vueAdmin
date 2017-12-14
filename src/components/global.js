@@ -7,10 +7,13 @@ import GzTreeGrid from './iview/treeGrid/tree';
 
 
 import gzPanel from './layout/panel';
+import gzTree from './controls/gz-tree';
+import gzTreeSelect from './controls/gz-tree-select';
+
 
 
 const gziview = {
-    gzButton, GzModal, gzMenu, gzPanel,DragableTable,GzTreeGrid
+    gzButton, GzModal, gzMenu, gzPanel,DragableTable,GzTreeGrid,gzTree,gzTreeSelect
 };
 
 const install = function (Vue) {

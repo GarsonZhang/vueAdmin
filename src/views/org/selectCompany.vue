@@ -1,5 +1,14 @@
 <template>
-  <Cascader :data="data" trigger="hover" @on-change="selected" v-model="currentValue"  change-on-select></Cascader>
+  <!-- <Cascader :data="data" trigger="hover" @on-change="selected" v-model="currentValue"  change-on-select></Cascader> -->
+    <gz-tree-select
+              :treeData="data"
+              :treeProps="dataProps"
+              v-model="currentValue"
+              :dropDownMaxHeight="500"
+              placeholder="请选择公司"
+            >
+          </gz-tree-select>
+
 </template>
 <style lang="less" scoped>
 
@@ -11,6 +20,12 @@ export default {
   data() {
     return {
       data: [],
+      dataProps:{
+            label: "label",
+            children: "children",
+            level:"deep",
+            value:"value"
+        },
       currentValue: []
     };
   },
@@ -25,15 +40,15 @@ export default {
       // debugger
       ReqCommonDataCompany.list(this).then(
         res => {
-          this.data = this.convert2Data(res.data);
+          this.data = this.convert2Data(1,res.data);
           // debugger;
         },
         err => {
-          this.data = {};
+          this.data = [];
         }
       );
     },
-    convert2Data(lst) {
+    convert2Data(deep,lst) {
       var v = [];
       lst.forEach(function(element) {
         var item = {
@@ -41,10 +56,11 @@ export default {
           label: element.companyName_chs,
           levelID: element.levelID,
           parentID: element.parentFullID,
-          parentName:element.parentFullName
+          deep:deep,
+          parentName: element.parentFullName
         };
         if (element.children)
-          item.children = this.convert2Data(element.children);
+          item.children = this.convert2Data(deep+1,element.children);
         v.push(item);
       }, this);
       return v;

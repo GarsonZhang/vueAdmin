@@ -1,16 +1,14 @@
 <template>
       <ul class="nodePanel">
-                    <tree-node
+                    <gz-tree-node
                         v-for="child in treeNodes[treeProps.children]"
                         :node="child"
                         :key="child[treeProps.value]"
                         :multiple="multiple"
                         :currentNodeId="currentNodeId"
                         :treeProps="treeProps"
-                        :eventHub="eventHub"
-                        :query="query"
-                        :isQuering="isQuering">
-                    </tree-node>
+                        :eventHub="eventHub">
+                    </gz-tree-node>
                 </ul>
 </template>
 <style lang="less" scoped>
@@ -24,11 +22,12 @@ import { objArrDeepCopy } from "./utils/tools";
 import debounce from "throttle-debounce/throttle";
 import Vue from "vue";
 
-import treeNode from "./tree-node.vue";
+import gzTreeNode from "./gz-tree-node.vue";
 
 export default {
+  name: "gzTree",
   components: {
-    treeNode
+    gzTreeNode
   },
   props: {
     treeData: {
@@ -46,12 +45,12 @@ export default {
       type: Boolean
     },
     query: "",
-    isQuering: false,
     value: ""
   },
 
   data() {
     return {
+      isQuering: false,
       treeNodes: {
         [this.treeProps.children]: objArrDeepCopy(this.treeData, {
           visible: true
@@ -73,6 +72,11 @@ export default {
     },
     value(val) {
       this.currentNodeId = val;
+    },
+    query(val) {
+      // if (isQuering) {
+      this.handleFilter();
+      // }
     }
   },
   created() {
@@ -81,6 +85,48 @@ export default {
   },
 
   methods: {
+    handleFilter: debounce(1000, function() {
+      this.treeFilterMethod(this.treeNodes);
+    }),
+    treeFilterMethod(node) {
+      // debugger
+      //1 有子项
+      //2 有选中值
+      var flag = 0;
+
+      let self = this;
+      let childNodes = node[self.treeProps.children];
+      if (!childNodes) return;
+      childNodes.forEach(child => {
+        child.visible =
+          self.query === ""
+            ? true
+            : child[self.treeProps.label]
+                .toLowerCase()
+                .indexOf(self.query.toLowerCase()) > -1;
+        if (child.visible) flag = flag | 1;
+        if (child[self.treeProps.value] === this.currentNodeId) flag = flag | 2;
+
+        flag = flag | self.treeFilterMethod(child);
+      });
+      // if (!node.visible && childNodes.length) {
+      //   let allHidden = true;
+      //   childNodes.forEach(child => {
+      //     if (child.visible) allHidden = false;
+      //   });
+      //   node.visible = allHidden === false;
+      // }
+      if (!node.visible && (flag & 1) === 1) {
+        node.visible = true;
+      }
+      if (node.visible) {
+        if (self.query === "") {
+          node.expanded = (flag & 2) === 2;
+        } else this.$set(node, "expanded", true);
+      }
+
+      return flag;
+    },
     handleNodeClick(node, event) {
       // if(event){
       //     this.isDefault = false;
@@ -97,7 +143,7 @@ export default {
       this.currentNodeId = node[this.treeProps.value];
       // this.treeSelected = node[this.treeProps.label];
       // this.currentSelected = this.treeSelected;
-    //   debugger
+      //   debugger
       this.$emit("input", this.currentNodeId);
       this.$emit("on-select", node);
       // }

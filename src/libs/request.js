@@ -133,9 +133,9 @@ const ReqCommonDataCompany = {
     list(context) {
         return ajax.get(context, '/company/list');
     },
-    treeData(context) {
-        return ajax.get(context, '/company/treedata');
-    },
+    // treeData(context) {
+    //     return ajax.get(context, '/company/treedata');
+    // },
     search(context, code) {
         return ajax.get(context, '/company/search', {
             code: code
