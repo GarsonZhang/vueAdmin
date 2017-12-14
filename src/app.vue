@@ -3,14 +3,8 @@
         <router-view></router-view>
     </div>
 </template>
-<style>
-html,
-body {
-  height: 100%;
-}
-.divContent {
-  height: 100%;
-}
+<style lang="less">
+  @import "./main.less";
 </style>
 
 <script>

@@ -21,6 +21,7 @@
     "iview": "^2.0.0-rc.13",
     "mavon-editor": "^2.2.10",
     "sortablejs": "^1.6.1",
+    "throttle-debounce": "^1.0.1",
     "vue": "^2.2.6",
     "vue-router": "^2.3.1",
     "vuex": "^2.2.1"

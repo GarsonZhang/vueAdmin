@@ -1,5 +1,5 @@
 <template>
-  <Cascader :data="data" @on-change="selected" v-model="currentValue"  change-on-select></Cascader>
+  <Cascader :data="data" trigger="hover" @on-change="selected" v-model="currentValue"  change-on-select></Cascader>
 </template>
 <style lang="less" scoped>
 

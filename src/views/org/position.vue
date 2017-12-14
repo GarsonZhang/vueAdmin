@@ -10,6 +10,7 @@
                   <gz-button  type="error" icon="plus" :permission=4 @click="event_click_delete" text="删除" loadingText="请稍后"></gz-button >
                 </ButtonGroup>
                 <gz-button type="success" icon="edit" @click="event_buttonAuthorizeClick" :permission=8 text="用户权限"></gz-button>
+                <gz-button type="success" icon="edit" @click="event_buttonChooseUserClick" :permission=16 text="添加成员"></gz-button>
               </div>
 
               <div slot="main" class="main">
@@ -43,6 +44,8 @@
                 </Form>
             </Modal>
             <FormTreeData ref="refAuthorize"></FormTreeData>
+            <ChooseUser ref="refChooseUser"></ChooseUser>
+            
     </div>
 </template>
 <style lang="less">
@@ -63,6 +66,7 @@ import { requestCommonDataPosition } from "../../libs/request";
 import SelectPosition from "./selectPosition";
 import Msg from "../../mixins/msg";
 import FormTreeData from "./treeForm.vue";
+import ChooseUser from "./chooseUser.vue";
 export default {
   name: "position",
   data() {
@@ -112,7 +116,8 @@ export default {
   mixins: [Msg],
   components: {
     SelectPosition,
-    FormTreeData
+    FormTreeData,
+    ChooseUser
   },
   created() {
     this.request = requestCommonDataPosition;
@@ -133,12 +138,23 @@ export default {
       var row = this.$refs[this.refName_dataList].getSelectObj();
       if (!row) {
         component.loading = false;
-        this.showWarning("请先选择要修改的岗位");
+        this.showWarning("请先选择岗位");
         return;
       }
 
       this.$refs["refAuthorize"].updateData(2, row.rowID);
       this.$refs["refAuthorize"].show();
+      component.loading = false;
+    },
+    event_buttonChooseUserClick(event, component) {
+      var row = this.$refs[this.refName_dataList].getSelectObj();
+      if (!row) {
+        component.loading = false;
+        this.showWarning("请先选择岗位");
+        return;
+      }
+      // this.$refs["refAuthorize"].updateData(2, row.rowID);
+      this.$refs["refChooseUser"].show();
       component.loading = false;
     },
     //刷新事件
@@ -168,7 +184,7 @@ export default {
       var row = this.$refs[this.refName_dataList].getSelectObj();
       if (!row) {
         component.loading = false;
-        this.showWarning("请先选择要修改的岗位");
+        this.showWarning("请先选择岗位");
         return;
       }
       this.request
@@ -187,7 +203,7 @@ export default {
       var row = this.$refs[this.refName_dataList].getSelectObj();
       if (!row) {
         component.loading = false;
-        this.showWarning("请先选择要删除的部门");
+        this.showWarning("请先选择岗位");
         return;
       }
 

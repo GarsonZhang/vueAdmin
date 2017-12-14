@@ -90,20 +90,6 @@
 
   </div>
 </template>
-<style lang="less">
-  .table-cell-index .ivu-table-cell {
-    padding-left: 5px;
-    padding-right: 5px;
-  }
-
-  .smallPadding .ivu-table-cell {
-    padding-left: 5px;
-    padding-right: 5px;
-  }
-  .ivu-table-cell>span{
-    word-break: keep-all;
-  }
-</style>
 <style lang="less" scoped>
   .tools {
     padding-top: 5px;

@@ -1,39 +1,9 @@
 <template>
-   <Modal class-name="vertical-center-modal" :ref="refNames_modal" title="系统功能" v-model="modalStatus" 
+   <Modal class-name="vertical-center-modal dialog-modal" :ref="refNames_modal" title="系统功能" width=100 v-model="modalStatus" 
       :mask-closable="false" :loading="(true)" @on-ok="event_submit" @on-cancel="event_cancel">
       <Tree ref="refTree" :data="data" show-checkbox></Tree>
     </Modal>
 </template>
-<style lang="less">
-.vertical-center-modal {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  .ivu-modal {
-    top: 0;
-     height: 100%;
-     max-height: 700px;
-    .ivu-modal-content {
-      height: 100%;
-      .ivu-modal-body {
-        position: absolute;
-        top: 50px;
-        bottom: 60px;
-        width: 100%;
-      }
-      .ivu-modal-footer {
-        position: absolute;
-        bottom: 0px;
-        width: 100%;
-      }
-    }
-  }
-}
- .ivu-modal-body {
-    overflow-y: auto;
-  }
-</style>
-
 <script>
 import { system } from "../../libs/request";
 import Msg from "../../mixins/msg";
