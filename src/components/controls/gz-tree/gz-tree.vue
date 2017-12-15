@@ -71,7 +71,16 @@ export default {
       }
     },
     value(val) {
-      this.currentNodeId = val;
+      // debugger;
+      if (this.currentNodeId !== val) {
+        this.currentNodeId = val;
+        var node = this.getNodeByValue(this.currentNodeId);
+        this.$emit("on-afterValueChanged", node);
+        setTimeout(() => {
+          //这里要延时加载，不然无效
+          this.treeResetLayout(this.treeNodes);
+        }, 300);
+      }
     },
     query(val) {
       // if (isQuering) {
@@ -88,12 +97,31 @@ export default {
     handleFilter: debounce(1000, function() {
       this.treeFilterMethod(this.treeNodes);
     }),
+    getNodeByValue(value) {
+      return this.$utils.jsonSearch.search(
+        this.treeNodes,
+        this.treeProps.children,
+        p => p[this.treeProps.value] === value
+      );
+    },
+    treeResetLayout(node) {
+      var flag = 0;
+      let self = this;
+      let childNodes = node[self.treeProps.children];
+      if (!childNodes) return;
+      childNodes.forEach(child => {
+        if (child[self.treeProps.value] === this.currentNodeId) flag = flag | 1;
+        flag = flag | self.treeResetLayout(child);
+      });
+      // debugger;
+      this.$set(node, "expanded", (flag & 1) === 1);
+      node.expanded = (flag & 1) === 1;
+      return flag;
+    },
     treeFilterMethod(node) {
-      // debugger
       //1 有子项
       //2 有选中值
       var flag = 0;
-
       let self = this;
       let childNodes = node[self.treeProps.children];
       if (!childNodes) return;
@@ -109,44 +137,27 @@ export default {
 
         flag = flag | self.treeFilterMethod(child);
       });
-      // if (!node.visible && childNodes.length) {
-      //   let allHidden = true;
-      //   childNodes.forEach(child => {
-      //     if (child.visible) allHidden = false;
-      //   });
-      //   node.visible = allHidden === false;
-      // }
       if (!node.visible && (flag & 1) === 1) {
         node.visible = true;
       }
       if (node.visible) {
         if (self.query === "") {
-          node.expanded = (flag & 2) === 2;
+          this.$set(node, "expanded", (flag & 2) === 2);
+          //node.expanded = (flag & 2) === 2;
         } else this.$set(node, "expanded", true);
       }
 
       return flag;
     },
     handleNodeClick(node, event) {
-      // if(event){
-      //     this.isDefault = false;
-      // }
-      // if(this.multiple){
-      //     if(!this.hasSameItem(this.checkedItems,node)){
-      //         this.handleAddItem(node);
-      //         this.$emit('setSelectedId',this.checkedKeys);
-      //     }else{
-      //         this.handleDelItem(node,event);
-      //     }
-      // }else{
-      //   debugger
       this.currentNodeId = node[this.treeProps.value];
-      // this.treeSelected = node[this.treeProps.label];
-      // this.currentSelected = this.treeSelected;
-      //   debugger
       this.$emit("input", this.currentNodeId);
       this.$emit("on-select", node);
-      // }
+    },
+    clearSelect(){
+      this.currentNodeId ="";
+      this.$emit("input", "");
+      this.$emit("on-select");
     }
   }
 };

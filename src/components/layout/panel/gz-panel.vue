@@ -16,7 +16,8 @@ export default {
   name: "gzPanel",
   data() {
     return {
-      topHeight: 0
+      _topHeight: 0,
+      _bottomHeight:0
     };
   },
   props: {
@@ -39,25 +40,36 @@ export default {
     autoHeight: {
       type: Boolean,
       default: true
+    },
+    topHeight:0,
+    bottomHeight:0
+  },
+  watch: {
+    topHeight(val){
+      this._topHeight=val;
+    },
+    bottomHeight(val){
+      this._bottomHeight=val;
     }
+
   },
   methods: {
     gobject() {
       return {};
     },
     reLayout() {
-      // debugger
-      this.topHeight = this.$refs.top
+      // debugger;
+      this._topHeight = this.$refs.top
         ? this.$refs.top.firstChild
           ? this.$refs.top.firstChild.getBoundingClientRect().height + "px"
           : "0px"
         : "0px";
-      this.bottomHeight = this.$refs.bootom
+      this._bottomHeight = this.$refs.bootom
         ? this.$refs.bootom.firstChild
           ? this.$refs.bootom.firstChild.getBoundingClientRect().height + `px`
           : "0px"
         : "0px";
-      var me=this;
+      var me = this;
       setTimeout(() => {
         var mainHeight = me.$refs.main
           ? me.$refs.main.getBoundingClientRect().height
@@ -70,9 +82,10 @@ export default {
     }
   },
   mounted() {
-    this.reLayout();
-    var me = this;
     if (this.autoHeight) {
+      this.reLayout();
+      var me = this;
+
       window.addEventListener("resize", function() {
         // console.log("systemModuleForm onresize");
         if (!me.resizeTimer) {
@@ -91,21 +104,21 @@ export default {
     _styleTop() {
       var v = {};
       if (this.topStyle) v = this.$utils.deepCopy(this.topStyle);
-      v.height = this.topHeight;
+      v.height = this._topHeight;
       return v;
       console.dir(v);
     },
     _styleMain() {
       var v = {};
       if (this.topStyle) v = this.$utils.deepCopy(this.mainStyle);
-      v.top = this.topHeight;
-      v.bottom = this.bottomHeight;
+      v.top = this._topHeight;
+      v.bottom = this._bottomHeight;
       return v;
     },
     _styleBottom() {
       var v = {};
       if (this.bottomStyle) v = this.$utils.deepCopy(this.bottomStyle);
-      v.height = this.bottomHeight;
+      v.height = this._bottomHeight;
       return v;
     },
     topClass() {
@@ -143,7 +156,7 @@ export default {
 </script>
 <style scoped>
 .gz-panel-layout {
-  /* position: relative; */
+  position: relative;
   height: 100%;
   width: 100%;
 }

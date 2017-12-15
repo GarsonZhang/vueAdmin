@@ -109,7 +109,7 @@ export default {
   }
   .icon {
     padding-left: 5px;
-    padding-right: 5px;
+    padding-right: 10px;
     font-size: 1.2em;
   }
 }

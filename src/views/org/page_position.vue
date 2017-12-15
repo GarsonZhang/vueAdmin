@@ -94,9 +94,14 @@ export default {
   },
   methods: {
     event_onCompanySelectChanged(node) {
+      if(node){
        this.currentCompanyName = node.companyName_chs;
         this.currentCompanyID = node.rowID;
-
+}else
+{
+  this.currentCompanyName = '';
+        this.currentCompanyID = '';
+}
       // debugger
       // if (node.length > 0) {
       //   // debugger

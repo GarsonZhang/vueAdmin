@@ -1,13 +1,8 @@
 <template>
   <!-- <Cascader :data="data" trigger="hover" @on-change="selected" v-model="currentValue"  change-on-select></Cascader> -->
-    <gz-tree-select
-              :treeData="data"
-              :treeProps="dataProps"
-              v-model="currentValue"
-              :dropDownMaxHeight="500"
-              placeholder="请选择公司"
-            >
-          </gz-tree-select>
+  <gz-tree-select clearable  :treeData="data" :treeProps="dataProps" @on-select="selected" v-model="currentValue" :dropDownMaxHeight="500" placeholder="请选择公司"
+    :width="width">
+  </gz-tree-select>
 
 </template>
 <style lang="less" scoped>
@@ -20,17 +15,18 @@ export default {
   data() {
     return {
       data: [],
-      dataProps:{
-            label: "label",
-            children: "children",
-            level:"deep",
-            value:"value"
-        },
-      currentValue: []
+      dataProps: {
+        label: "label",
+        children: "children",
+        level: "deep",
+        value: "value"
+      },
+      currentValue: ""
     };
   },
   props: {
-    value: String
+    value: String,
+    width: 0
   },
   created() {
     this.refreshData();
@@ -40,7 +36,7 @@ export default {
       // debugger
       ReqCommonDataCompany.list(this).then(
         res => {
-          this.data = this.convert2Data(1,res.data);
+          this.data = this.convert2Data(1, res.data);
           // debugger;
         },
         err => {
@@ -48,7 +44,7 @@ export default {
         }
       );
     },
-    convert2Data(deep,lst) {
+    convert2Data(deep, lst) {
       var v = [];
       lst.forEach(function(element) {
         var item = {
@@ -56,34 +52,29 @@ export default {
           label: element.companyName_chs,
           levelID: element.levelID,
           parentID: element.parentFullID,
-          deep:deep,
+          deep: deep,
           parentName: element.parentFullName
         };
         if (element.children)
-          item.children = this.convert2Data(deep+1,element.children);
+          item.children = this.convert2Data(deep + 1, element.children);
         v.push(item);
       }, this);
       return v;
     },
-    selected(a, b) {
-      // debugger;
-      if (a.length > 0) {
-        this.$emit("input", a[a.length - 1]);
-        this.$emit("onSelected", a[a.length - 1], b[b.length - 1]);
-      } else {
-        this.$emit("input", "");
-        this.$emit("onSelected");
-      }
+    selected(node) {
+      if (node != null) {
+        this.$emit("input", node[this.dataProps.value]);
+        // debugger
+        this.$emit("onSelected", node[this.dataProps.value], node);
+      } else this.$emit("onSelected");
     }
   },
   watch: {
     value(val) {
-      var v = [];
-      if (!this.$utils.isNULL(val)) v.push(val);
-      this.currentValue = v;
+      // var v = [];
+      // if (!this.$utils.isNULL(val)) v.push(val);
+      this.currentValue = val;
     }
   }
 };
 </script>
-
-

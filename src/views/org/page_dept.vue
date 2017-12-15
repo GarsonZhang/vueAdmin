@@ -6,7 +6,8 @@
         公司信息
       </div>
       <div slot="main" class="main">
-        <Tree :data="companyData" @on-select-change="event_onCompanySelectChanged"></Tree> 
+        <!-- <Tree :data="companyData" @on-select-change="event_onCompanySelectChanged"></Tree>  -->
+        <treeCompany @on-select="event_onCompanySelectChanged"></treeCompany>
       </div>
     </gz-panel>
   </div>
@@ -69,33 +70,24 @@
 }
 </style>
 <script>
-import { ReqCommonDataCompany } from "../../libs/request";
 import dept from "./dept";
-
+import treeCompany from './treeCompany'
 export default {
   data() {
     return {
       currentCompanyID: "",
-      currentCompanyName: "",
-      companyData: []
+      currentCompanyName: ""
     };
   },
   components: {
-    dept
+    dept,treeCompany
   },
-  created() {
-    // debugger;
-    ReqCommonDataCompany.treeData(this).then(res => {
-      this.companyData = res.data;
-    });
-  },
+  created() {},
   methods: {
     event_onCompanySelectChanged(node) {
-      // debugger
-      if (node.length > 0) {
-        // debugger
-        this.currentCompanyName = node[0].title;
-        this.currentCompanyID = node[0].id;
+      if (node) {
+        this.currentCompanyName = node.companyName_chs;
+        this.currentCompanyID = node.rowID;
       } else {
         this.currentCompanyName = "";
         this.currentCompanyID = "";

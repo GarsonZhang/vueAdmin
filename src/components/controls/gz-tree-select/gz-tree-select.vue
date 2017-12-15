@@ -1,26 +1,48 @@
 <template>
-     <Poptip placement="bottom-start" class="gz"  v-model="visible">
-            <Input type="text"
-            class="arrow"
-            :class="{'expanded':visible}"
-                 v-if="!this.multiple"
-                    :readonly="!allowQuery"
-                    v-model="currentLabel"
-                    :placeholder="placetext"
-                    icon="arrow-down-b"
-                    @input="handleFilter"
-                    @on-blur="handleAutoComplete">
-                    </Input>
-        <div slot="content" :style="contextClass">
-           <gz-tree ref="tree" :treeData="treeData" :treeProps="treeProps" :query="query" v-model="currentValue" :multiple="multiple" @on-select="onSelect"></gz-tree>
-        </div>
-    </Poptip>
-</template>
+  <Poptip 
+    placement="bottom-start" 
+    class="gz" 
+    v-model="visible">
+    <Input 
+      class="arrow" 
+      type="text" 
+      :class="{'expanded':visible}" 
+      v-if="!multiple"
+      :readonly="!allowQuery" 
+      v-model="currentLabel" 
+      :placeholder="placetext" 
+      :icon="iconName" 
+      @input="handleFilter" 
+      @on-blur="handleAutoComplete"
+      @on-click.stop="handleClear"
+      v-on:mouseenter.native="mouseenter()" v-on:mouseleave.native="mouseleave()">
+    </Input>
+    <div 
+      slot="content" 
+      :style="contextClass">
+        <gzTree 
+          ref="tree" 
+          :treeData="treeData" 
+          :treeProps="treeProps" 
+          :query="query" 
+          v-model="currentValue" 
+          :multiple="multiple"
+          @on-select="onSelect"
+          @on-afterValueChanged="onAfterValueChanged">
+        </gzTree>
+    </div>
+  </Poptip>
+</template>   
+
 <style lang="less">
 .gz {
+  .ivu-poptip-rel {
+    width: 100%;
+  }
   .ivu-poptip-body {
     padding: 3px;
   }
+
   .arrow {
     i {
       transition: transform 0.3s ease-in-out;
@@ -28,14 +50,18 @@
   }
   .expanded {
     i {
-      transform: rotate(180deg);
+      &.ivu-icon-arrow-down-b {
+        transform: rotate(180deg);
+      }
     }
   }
 }
 </style>
 
 <style lang="less" scoped>
-
+.gz {
+  width: 100%;
+}
 </style>
 
 <script>
@@ -55,6 +81,7 @@ export default {
       type: Array,
       default: []
     },
+    width: 0,
     treeProps: {
       type: Object,
       default: {
@@ -72,7 +99,18 @@ export default {
   },
   watch: {
     value(val) {
-      this.currentValue = val;
+      // debugger;
+      if (this.currentValue !== val) {
+        // 外部赋值
+        this.currentValue = val;
+        // if (this.$utils.isNULL(val)) {
+        //   this.currentNode = null;
+        //   this.currentLabel = "";
+        // } else {
+        //   this.currentNode = this.$refs["tree"].getNodeByValue(val);
+        //   this.currentLabel = this.currentNode[this.treeProps.label];
+        // }
+      }
     }
   },
   data() {
@@ -82,7 +120,8 @@ export default {
       visible: false,
       currentValue: "",
       currentLabel: "",
-      currentNode: {}
+      currentNode: {},
+      iconName: "arrow-down-b"
     };
   },
   computed: {
@@ -96,7 +135,18 @@ export default {
     }
   },
   methods: {
+    mouseenter() {
+      console.log("mouseneter");
+      this.iconName = this.$utils.isNULL(this.currentValue)
+        ? "arrow-down-b"
+        : "ios-close";
+    },
+    mouseleave() {
+      console.log("mouseleave");
+      this.iconName = "arrow-down-b";
+    },
     handleFilter() {
+      // debugger;
       if (!this.visible) this.visible = true;
       this.isQuery = true;
       this.query = this.currentLabel;
@@ -107,6 +157,11 @@ export default {
         this.currentLabel = this.currentNode[this.treeProps.label];
       }
     },
+    handleClear() {
+      // this.currentValue = "";
+      // this.$emit("input", "");
+      this.$refs["tree"].clearSelect();
+    },
     clearQuery() {
       this.query = "";
       this.isQuery = false;
@@ -114,14 +169,21 @@ export default {
     handleCloseTree() {},
     onSelect(node) {
       this.currentNode = node;
-      this.currentLabel = node[this.treeProps.label];
       // debugger
+      if (node) this.currentLabel = node[this.treeProps.label];
+      else this.currentLabel = "";
+      // debugger;
       this.$emit("input", this.currentValue);
       this.visible = false;
       this.clearQuery();
       this.$emit("on-select", node);
+    },
+    onAfterValueChanged(node) {
+      // debugger
+      this.currentNode = node;
+      if (node) this.currentLabel = node[this.treeProps.label];
+      else this.currentLabel = "";
     }
   }
 };
 </script>
-
