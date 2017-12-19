@@ -17,13 +17,14 @@ const ajax = {
         };
         return _ajaxRemote.get(url, config);
     },
-    post(pageContext, url, data) {
+    post(pageContext, url, data,param) {
         var id = pageContext.$route.meta.id;
         var config = {
             headers: {
                 'fid': id,
                 'client': 'pc'
-            }
+            },
+            params:param
         };
         return _ajaxRemote.post(url, data, config);
     }
@@ -133,10 +134,12 @@ const ReqCommonDataCompany = {
     list(context) {
         return ajax.get(context, '/company/list');
     },
+    cache:[],
     // treeData(context) {
     //     return ajax.get(context, '/company/treedata');
     // },
     search(context, code) {
+        //var tag='/company/search'+code;
         return ajax.get(context, '/company/search', {
             code: code
         });
@@ -282,6 +285,17 @@ const requestAPIList = {
         });
     }
 };
+const requestUserRelation={
+    list(context,objectID){
+        return ajax.get(context, '/userrelation/list',{objectID});
+    },
+    userList(context,objectID,companyID){
+        return ajax.get(context, '/userrelation/listByCompanyID',{objectID,companyID});
+    },
+    update(context,objectID,category,data){
+        return ajax.post(context,'userrelation/update',data,{objectID,category});
+    }
+};
 
 export {
     requestModule,
@@ -292,6 +306,6 @@ export {
     requestCommonDataDept,
     requestCommonDataPosition,
     requestUser,
-    requestAPIList
-
+    requestAPIList,
+    requestUserRelation
 };

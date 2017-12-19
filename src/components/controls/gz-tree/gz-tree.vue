@@ -1,5 +1,9 @@
 <template>
-      <ul class="nodePanel">
+  <div>
+    <div v-if="isLoading">
+      <h3>加载中……</h3>
+    </div>
+      <ul class="nodePanel" v-else>
                     <gz-tree-node
                         v-for="child in treeNodes[treeProps.children]"
                         :node="child"
@@ -10,6 +14,7 @@
                         :eventHub="eventHub">
                     </gz-tree-node>
                 </ul>
+                </div>
 </template>
 <style lang="less" scoped>
 .nodePanel {
@@ -33,6 +38,10 @@ export default {
     treeData: {
       type: Array,
       default: []
+    },
+    isLoading:{
+      type:Boolean,
+      default:false
     },
     treeProps: {
       type: Object,

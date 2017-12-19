@@ -3,14 +3,14 @@
         <p slot="title">系统登录</p>
         <Form ref="formInline" :model="data" :rules="ruleInline">
             <FormItem prop="user">
-                <Input type="text" v-model="data.user" placeholder="Username">
-                <Icon type="ios-person-outline" slot="prepend"></Icon>
-                </Input>
+                <i-input type='text' v-model='data.user' placeholder='Username'>
+                  <Icon type='ios-person-outline' slot='prepend'></Icon>
+                </i-input>
             </FormItem>
             <FormItem prop="password">
-                <Input type="password" v-model="data.password" placeholder="Password">
+                <i-input type="password" v-model="data.password" placeholder="Password">
                 <Icon type="ios-locked-outline" slot="prepend"></Icon>
-                </Input>
+                </i-input>
             </FormItem>
             <FormItem>
                 <GzButton type="primary" @click="handleSubmit" text="登录" loadingText="登录中"></GzButton>

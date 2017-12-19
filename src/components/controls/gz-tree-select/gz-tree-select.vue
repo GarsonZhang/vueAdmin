@@ -15,8 +15,7 @@
       @input="handleFilter" 
       @on-blur="handleAutoComplete"
       @on-click.stop="handleClear"
-      v-on:mouseenter.native="mouseenter()" v-on:mouseleave.native="mouseleave()">
-    </Input>
+      v-on:mouseenter.native="mouseenter()" v-on:mouseleave.native="mouseleave()" />
     <div 
       slot="content" 
       :style="contextClass">
@@ -158,9 +157,12 @@ export default {
       }
     },
     handleClear() {
-      // this.currentValue = "";
-      // this.$emit("input", "");
-      this.$refs["tree"].clearSelect();
+      if(this.$utils.isNULL(this.currentValue)){
+          this.visible=!this.visible;
+      }else{
+        this.$refs["tree"].clearSelect();
+        this.iconName = "arrow-down-b";
+      }
     },
     clearQuery() {
       this.query = "";

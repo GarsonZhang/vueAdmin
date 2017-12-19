@@ -16,8 +16,8 @@ export default {
   name: "gzPanel",
   data() {
     return {
-      _topHeight: 0,
-      _bottomHeight:0
+      top_height: 0,
+      bottom_height: 0
     };
   },
   props: {
@@ -41,30 +41,21 @@ export default {
       type: Boolean,
       default: true
     },
-    topHeight:0,
-    bottomHeight:0
-  },
-  watch: {
-    topHeight(val){
-      this._topHeight=val;
-    },
-    bottomHeight(val){
-      this._bottomHeight=val;
-    }
-
+    topHeight: 0,
+    bottomHeight: 0
   },
   methods: {
     gobject() {
       return {};
     },
     reLayout() {
-      // debugger;
-      this._topHeight = this.$refs.top
+      // debugger
+      this.top_height = this.$refs.top
         ? this.$refs.top.firstChild
           ? this.$refs.top.firstChild.getBoundingClientRect().height + "px"
           : "0px"
         : "0px";
-      this._bottomHeight = this.$refs.bootom
+      this.bottom_height = this.$refs.bootom
         ? this.$refs.bootom.firstChild
           ? this.$refs.bootom.firstChild.getBoundingClientRect().height + `px`
           : "0px"
@@ -85,40 +76,47 @@ export default {
     if (this.autoHeight) {
       this.reLayout();
       var me = this;
-
-      window.addEventListener("resize", function() {
-        // console.log("systemModuleForm onresize");
-        if (!me.resizeTimer) {
-          //设置延时，禁止过大消耗浏览器性能
-          me.resizeTimer = true;
-          setTimeout(function() {
-            // console.log("reLayout");
-            me.reLayout();
-            me.resizeTimer = false;
-          }, 1000);
-        }
-      });
+      if (this.autoHeight) {
+        window.addEventListener("resize", function() {
+          // console.log("systemModuleForm onresize");
+          if (!me.resizeTimer) {
+            //设置延时，禁止过大消耗浏览器性能
+            me.resizeTimer = true;
+            setTimeout(function() {
+              // console.log("reLayout");
+              me.reLayout();
+              me.resizeTimer = false;
+            }, 1000);
+          }
+        });
+      }
     }
   },
   computed: {
+    _topH() {
+      return this.autoHeight ? this.top_height : this.topHeight + "px";
+    },
+    _bottomH() {
+      return this.autoHeight ? this.bottom_height : this.bottomHeight + "px";
+    },
     _styleTop() {
       var v = {};
       if (this.topStyle) v = this.$utils.deepCopy(this.topStyle);
-      v.height = this._topHeight;
+      v.height = this._topH;
       return v;
       console.dir(v);
     },
     _styleMain() {
       var v = {};
       if (this.topStyle) v = this.$utils.deepCopy(this.mainStyle);
-      v.top = this._topHeight;
-      v.bottom = this._bottomHeight;
+      v.top = this._topH;
+      v.bottom = this._bottomH;
       return v;
     },
     _styleBottom() {
       var v = {};
       if (this.bottomStyle) v = this.$utils.deepCopy(this.bottomStyle);
-      v.height = this._bottomHeight;
+      v.height = this._bottomH;
       return v;
     },
     topClass() {
@@ -156,14 +154,12 @@ export default {
 </script>
 <style scoped>
 .gz-panel-layout {
-  position: relative;
+  /* position: relative; */
   height: 100%;
   width: 100%;
 }
-
 .gz-panel-top {
 }
-
 .gz-panel-main {
   min-height: 200px;
   overflow: hidden;
@@ -186,5 +182,3 @@ export default {
 //   background-color: red;
 // }
 </style>
-
-

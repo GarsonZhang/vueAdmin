@@ -347,6 +347,7 @@ export default class TreeStore {
     }
 
     getAllNodesByDepthFirst() {
+        // debugger
         const visite = [];
         const allNodes = [];
         let cnode = null;

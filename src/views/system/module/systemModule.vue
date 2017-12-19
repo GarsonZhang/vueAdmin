@@ -49,6 +49,9 @@
                 <FormItem label="模块名称" prop="description">
                     <Input v-model="editData.description" placeholder="请输入模块名称"></Input>
                 </FormItem>
+                <FormItem label="图标" prop="icon">
+                    <Input v-model="editData.icon" placeholder="请输入图标"></Input>
+                </FormItem>
                 <FormItem label="组件类型" prop="componentPath">
                     <Select v-model="editData.componentPath" placeholder="请选择组件类型">
                         <Option value="views">views</Option>

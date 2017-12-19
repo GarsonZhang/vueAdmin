@@ -35,7 +35,8 @@ export default {
           // debugger;
           setTimeout(() => {
             me.currentValue = me.currentValue;
-            me.$refs.control.updateSelected(true);
+            // debugger
+            me.$refs['control'].updateSelected(true);
           }, 50);
         },
         err => {

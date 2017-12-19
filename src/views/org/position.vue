@@ -30,16 +30,16 @@
                 @on-cancel="event_formCancel">
                 <Form :ref="refName_form" :model="editData" :rules="dataRule"  label-position="left" :label-width="80">
                 <FormItem label="岗位编码" prop="posCode">
-                    <Input v-model="editData.posCode" placeholder="请输入岗位编码"></Input>
+                    <i-input v-model="editData.posCode" placeholder="请输入岗位编码"></i-input>
                 </FormItem>
                 <FormItem label="岗位名称" prop="posName">
-                    <Input v-model="editData.posName" placeholder="请输入岗位名称"></Input>
+                    <i-input v-model="editData.posName" placeholder="请输入岗位名称"></i-input>
                 </FormItem>
                 <FormItem label="上级岗位" prop="parentID">
                   <SelectPosition :ref="refName_formTree" :companyID="companyID" @onSelected="onSelected" v-model="editData.parentID"></SelectPosition>
                 </FormItem>
                 <FormItem label="备注" prop="remark">
-                    <Input v-model="editData.remark" placeholder="请输入备注信息"></Input>
+                    <i-input v-model="editData.remark" placeholder="请输入备注信息"></i-input>
                 </FormItem>
                 </Form>
             </Modal>
@@ -154,7 +154,7 @@ export default {
         return;
       }
       // this.$refs["refAuthorize"].updateData(2, row.rowID);
-      this.$refs["refChooseUser"].show();
+      this.$refs["refChooseUser"].show(row.rowID,1);
       component.loading = false;
     },
     //刷新事件
@@ -289,6 +289,7 @@ export default {
           me.request
             .list(me, me.companyID)
             .then(res => {
+              // debugger
               me.data = res.data;
               resolve(res);
             })

@@ -26,26 +26,23 @@ axiosProvider._getRemote = function () {
     v.interceptors.request.use(
         config => {
             var p = [];
+            if (!config.params) config.params = {};
+            config.params._t = Date.parse(new Date()) / 1000;
             if (config.method == 'post') {
-                if (!config.data) config.data = [];
-                config.data._t = Date.parse(new Date()) / 1000;
-
+                // if (!config.data) config.data = [];
+                // config.data._t = Date.parse(new Date()) / 1000;
                 for (var key1 in config.data) {
                     p.push({
                         key: key1,
                         value: config.data[key1]
                     });
                 }
-            } else if (config.method == 'get') {
-                if (!config.params) config.params = {};
-                config.params._t = Date.parse(new Date()) / 1000;
-
-                for (var key2 in config.params) {
-                    p.push({
-                        key: key2,
-                        value: config.params[key2]
-                    });
-                }
+            }
+            for (var key2 in config.params) {
+                p.push({
+                    key: key2,
+                    value: config.params[key2]
+                });
             }
 
             //参数排序
@@ -91,7 +88,7 @@ axiosProvider.axiosSuccess = function (response) {
         response.result = response.data;
 
         if (response.result && response.result.tokenSecret) { //密钥有更新了
-            GZStorage.setSecretKey(response.result.rid,response.result.tokenSecret);
+            GZStorage.setSecretKey(response.result.rid, response.result.tokenSecret);
         }
         response.data = response.data.data;
     }
