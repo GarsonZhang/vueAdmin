@@ -258,6 +258,9 @@ const requestUser = {
             account: account,
             pwd: pwd
         });
+    },
+    logout(context) {
+        return ajax.get(context, '/user/logout');
     }
 };
 

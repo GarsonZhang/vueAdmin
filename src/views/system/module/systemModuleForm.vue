@@ -596,7 +596,7 @@ export default {
     },
 
     //功能排序取消
-    event_moduleFormSortCancelClick(event, component) {
+    event_moduleFormSortCancelClick( component) {
       this.sortStatus = false;
 
       this.doModuleFormRefresh()

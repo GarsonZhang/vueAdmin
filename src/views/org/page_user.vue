@@ -20,7 +20,7 @@
               <Table :ref="refNames.table_ListData" size="small" :loading="listData.isLoading" :columns="listData.columns" :data="listData.data"
                 highlight-row border></Table>
             </div>
-            <div slot="bottom" style="margin: 10px;overflow: hidden">
+            <div slot="bottom" style="padding: 10px;overflow: hidden">
               <div style="float: right;">
                 <Page placement="top" :total="listData.totalPage" :ref="refNames.listDataPage" :pageSizeOpts="listData.pageSizeOpts" :current="listData.currentPage"
                   :pageSize="listData.pageSize" size="small" show-elevator show-sizer @on-change="event_pageChangePage" @on-page-size-change="event_pageSizeChange"></Page>
@@ -221,7 +221,7 @@ export default {
   },
   methods: {
     // 设置权限
-    event_buttonAuthorizeClick(event, component) {
+    event_buttonAuthorizeClick( component) {
       var v = this.doGetSelect();
       if (!v) {
         component.loading = false;
@@ -232,7 +232,7 @@ export default {
       component.loading = false;
     },
     // 刷新
-    event_buttonRefreshClick(event, component) {
+    event_buttonRefreshClick( component) {
       this.listData.isLoading = true;
       this.doRefresh()
         .then(res => {
@@ -251,13 +251,13 @@ export default {
       this.$refs[this.refNames.buttonRefresh].handleClick();
     },
     // 新增
-    event_buttonAddClick(event, component) {
+    event_buttonAddClick( component) {
       this.editData = {};
       this.editStatus = 1;
       component.loading = false;
     },
     // 修改
-    event_buttonEditClick(event, component) {
+    event_buttonEditClick( component) {
       var v = this.doGetSelect();
       if (!v) {
         component.loading = false;
@@ -275,7 +275,7 @@ export default {
         });
     },
     // 删除
-    event_buttonDeleteClick(event, component) {
+    event_buttonDeleteClick( component) {
       var v = this.doGetSelect();
       if (!v) {
         component.loading = false;

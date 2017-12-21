@@ -7,7 +7,20 @@ GZStorage.getInstance = function() {
     }
     return this.instance;
 };
-
+GZStorage.clear=function(){
+    localStorage.removeItem('token');  
+    localStorage.removeItem('secretID');
+    localStorage.removeItem('secretKey');
+    localStorage.removeItem('pwd');
+    localStorage.removeItem('userName');
+    localStorage.removeItem('isLogin');
+    this.token=null;
+    this.secretID=null;
+    this.secretKey=null;
+    this.pwd=null;
+    this.userName=null;
+    this.isLogin=undefined;
+};
 GZStorage.setToken = function (token) {
     // debugger
     localStorage.setItem('token', token);

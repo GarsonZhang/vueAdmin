@@ -218,7 +218,7 @@ export default {
         });
     },
     //模块排序取消
-    event_moduleSortCancelClick(event, component) {
+    event_moduleSortCancelClick( component) {
       this.sortStatus = false;
       this.doModuleRefresh()
         .then(res => {
@@ -230,7 +230,7 @@ export default {
     },
 
     //刷新模块点击事件
-    event_moduleRefreshClick(event, component) {
+    event_moduleRefreshClick( component) {
       this.isLoading = true;
       this.doModuleRefresh()
         .then(res => {
@@ -275,7 +275,7 @@ export default {
         });
     },
     //删除模块点击事件
-    event_moduleDeleteClick(e, component) {
+    event_moduleDeleteClick(component) {
       var v = this.$utils.searchObserver(
         this.$refs.tableModule.objData,
         null,

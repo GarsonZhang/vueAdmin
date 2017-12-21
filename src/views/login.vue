@@ -13,7 +13,7 @@
                 </i-input>
             </FormItem>
             <FormItem>
-                <GzButton type="primary" @click="handleSubmit" text="登录" loadingText="登录中"></GzButton>
+                <GzButton type="primary" @click="handleSubmit" :text="$t('login')" loadingText="登录中"></GzButton>
                 <Button type="ghost" @click="handleReset('formInline')" style="margin-left: 8px">重置</Button>
             </FormItem>
         </Form>
@@ -48,7 +48,7 @@ body {
 <script>
 import GzButton from "../components/iview/button";
 import { requestUser } from "../libs/request";
-import GZStorage from "../libs/GZStorage"
+// import GZStorage from "../libs/GZStorage"
 
 export default {
   data() {
@@ -96,11 +96,11 @@ export default {
                 return;
               }
               // debugger
-              GZStorage.setToken(res.data.Token);
-              GZStorage.setSecretKey(res.data.rid,res.data.TokenSecret);
-              GZStorage.setAccount(res.data.Account);
-              GZStorage.setUserName(res.data.UserName);
-              GZStorage.setLogin(true);
+              this.$store.dataCache.setToken(res.data.Token);
+              this.$store.dataCache.setSecretKey(res.data.rid,res.data.TokenSecret);
+              this.$store.dataCache.setAccount(res.data.Account);
+              this.$store.dataCache.setUserName(res.data.UserName);
+              this.$store.dataCache.setLogin(true);
               _this.$parent.getMenus();
               _this.$router.push({ name: "home" });
             })

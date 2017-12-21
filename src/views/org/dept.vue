@@ -146,7 +146,7 @@ export default {
   },
   methods: {
     //刷新事件
-    event_click_refresh(event, component) {
+    event_click_refresh(component) {
       this.doLoadList().then(
         res => {
           component.loading = false;
@@ -157,7 +157,7 @@ export default {
       );
     },
     //新增事件
-    event_click_create(event, component) {
+    event_click_create(component) {
       // debugger
       if(this.$utils.isNULL(this.companyID)){
         this.showWarning('机构为空，不能添加部门');
@@ -169,7 +169,7 @@ export default {
       component.loading = false;
     },
     //修改事件
-    event_click_edit(event, component) {
+    event_click_edit( component) {
       var row = this.$refs[this.refName_dataList].getSelectObj();
       // debugger;
       if (!row) {
@@ -189,7 +189,7 @@ export default {
         });
     },
     //删除事件
-    event_click_delete(event, component) {
+    event_click_delete( component) {
       var row = this.$refs[this.refName_dataList].getSelectObj();
       if (!row) {
         component.loading = false;
@@ -235,7 +235,7 @@ export default {
       );
     },
     //modal form提交
-    event_formSubmit(event, component) {
+    event_formSubmit( component) {
       this.$refs[this.refName_form].validate(valid => {
         if (valid) {
           this.doSubmit();

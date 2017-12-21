@@ -1,13 +1,48 @@
 <template>
-    <button v-if="isAuthroize" :type="htmlType" :class="classes" :disabled="disabled" @click="handleClick">
+     <Poptip v-if="showConfirm" transfer confirm :title="confirmTitle" v-model="visible" 
+        @on-ok="handleClick">
+      <button :type="htmlType" :class="classes" :disabled="disabled" @click="showPoptip">
         <Icon class="ivu-load-loop" type="load-c" v-if="loading"></Icon>
         <Icon :type="icon" v-if="icon && !loading"></Icon>
-          <span v-if="showText">
-            <span v-if="!loading">{{text}}</span>
-            <span v-else>{{loadingText}}</span>
-          </span>
+        <span v-if="showText">
+          <span v-if="!loading">{{text}}</span>
+          <span v-else>{{loadingText}}</span>
+        </span>
+      </button>
+    </Poptip>
+    <button v-else-if="isAuthroize"  :type="htmlType" :class="classes" :disabled="disabled" @click="handleClick">
+      <Icon class="ivu-load-loop" type="load-c" v-if="loading"></Icon>
+      <Icon :type="icon" v-if="icon && !loading"></Icon>
+      <span v-if="showText">
+        <span v-if="!loading">{{text}}</span>
+        <span v-else>{{loadingText}}</span>
+      </span>
     </button>
+
+
 </template>
+<style lang="less" scoped>
+.ivu-btn-group:not(.ivu-btn-group-vertical) {
+  .ivu-poptip:first-child:not(:last-child) {
+    .ivu-btn {
+      border-bottom-right-radius: 0;
+      border-top-right-radius: 0;
+    }
+  }
+  .ivu-poptip:last-child:not(:first-child) {
+    .ivu-btn {
+      border-bottom-left-radius: 0;
+      border-top-left-radius: 0;
+    }
+  }
+  .ivu-poptip:not(:first-child):not(:last-child) {
+    .ivu-btn {
+      border-radius: 0px;
+    }
+  }
+}
+</style>
+
 <script>
 import { oneOf } from "../.depend/utils/assist";
 import Authorize from "../../../mixins/authorize";
@@ -70,14 +105,26 @@ export default {
     showText: {
       type: Boolean,
       default: true
+    },
+    confirmTitle: {
+      type: String,
+      default: ""
+    },
+    validateShowConfirm: {
+      type: Function,
+      default: undefined
     }
   },
   data() {
     return {
-      loading: false
+      loading: false,
+      visible: false
     };
   },
   computed: {
+    showConfirm() {
+      return this.isAuthroize && !this.$utils.isNULL(this.confirmTitle);
+    },
     classes() {
       return [
         `${prefixCls}`,
@@ -92,7 +139,6 @@ export default {
       ];
     },
     isAuthroize() {
-      // console.log('Text'+this.text+ 'permission：'+this.permission)
       if (this.permission > 0) {
         return this.VerifyPermissions(this.permission);
       } else return true;
@@ -101,7 +147,11 @@ export default {
   methods: {
     handleClick(event) {
       this.loading = true;
-      this.$emit("click", event, this);
+      this.$emit("click", this);
+    },
+    showPoptip() {
+      if (this.validateShowConfirm) this.visible = this.validateShowConfirm();
+      else this.visible = true;
     }
   },
   mounted() {}
