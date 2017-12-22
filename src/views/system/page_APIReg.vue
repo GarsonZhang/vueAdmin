@@ -38,14 +38,14 @@
         :loading="(true)" @on-ok="event_editDataSubmit" @on-cancel="event_editCancel">
         <Form :ref="refNames.editForm" :model="editData" :rules="dataRule" label-position="left" :label-width="80">
           <FormItem label="接口名称" prop="APIName">
-            <Input v-model="editData.APIName" placeholder="请输入API名称" />>
+            <Input v-model="editData.APIName" placeholder="请输入API名称" />
           </FormItem>
           <FormItem label="URL" prop="url">
             <i-input v-model="editData.url" readonly></i-input>
           </FormItem>
           <FormItem label="验证类型" prop="checkType">
             <Select v-model="editData.checkType" placeholder="API安全" label-in-value @on-change="event_checkTypeChanged">
-              <Option v-for="item in [{value:0,label:'公开'},{value:1,label:'验证'}]" :key="item.value" :value="item.value">{{item.label}}</Option>
+              <Option v-for="item in [{value:0,label:'匿名访问'},{value:1,label:'登陆用户'},{value:2,label:'权限用户'}]" :key="item.value" :value="item.value">{{item.label}}</Option>
               <!-- <Option value=0>公开</Option>
                         <Option value=2>验证</Option> -->
             </Select>

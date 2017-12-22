@@ -12,6 +12,7 @@
   </div>
 </template>
 <script>
+import debounce from "throttle-debounce/throttle";
 export default {
   name: "gzPanel",
   data() {
@@ -70,25 +71,19 @@ export default {
           : 0;
         me.$emit("onMainResize", mainWidth, mainHeight);
       }, 10);
-    }
+    },
+    onResize: debounce(500, function() {
+      this.reLayout();
+      this.resizeTimer = false;
+    })
   },
   mounted() {
     if (this.autoHeight) {
       this.reLayout();
       var me = this;
       if (this.autoHeight) {
-        window.addEventListener("resize", function() {
-          // console.log("systemModuleForm onresize");
-          if (!me.resizeTimer) {
-            //设置延时，禁止过大消耗浏览器性能
-            me.resizeTimer = true;
-            setTimeout(function() {
-              // console.log("reLayout");
-              me.reLayout();
-              me.resizeTimer = false;
-            }, 1000);
-          }
-        });
+        // debugger;
+        window.addEventListener("resize", this.onResize);
       }
     }
   },

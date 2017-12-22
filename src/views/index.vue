@@ -11,7 +11,7 @@
             <div v-for="item in $parent.dataMenus" :key="item.name">
               <MenuItem :name="item.name">
               <Icon :type="item.icon" :size="iconSize"></Icon>
-              <span class="layout-text">{{item.text}}</span>
+              <span class="layout-text">{{getLang(item)}}</span>
               </MenuItem>
             </div>
           </div>
@@ -20,12 +20,12 @@
               <Submenu :name="item.name">
                 <template slot="title">
                   <Icon :type="item.icon"></Icon>
-                  <span>{{item.text}}</span>
+                  <span>{{getLang(item)}}</span>
                 </template>
                 <div v-for="c in item.items" :key="c.name">
                   <MenuItem :name="c.name">
                   <Icon :type="c.icon"></Icon>
-                  <span>{{c.text}}</span>
+                  <span>{{getLang(c)}}</span>
                   </MenuItem>
                 </div>
               </Submenu>
@@ -336,6 +336,23 @@ export default {
     }
   },
   methods: {
+    getLang(item){
+      // debugger
+      var text='';
+      switch(this.$lang){
+        case 'zh-CN':
+        text= item.text;
+        break;
+        case 'zh-TW':text= item.text_tw;
+        break
+        case 'en-US':text= item.text_en;
+        break;
+        default: text= item.text_other;break;
+      }
+      if(this.$utils.isNULL(text))
+        text=item.text;
+        return text;
+    },
     handleClickLangDropdown(name) {
       // debugger;
       window.localStorage.lang=name;

@@ -44,13 +44,23 @@
                 @on-cancel="event_moduleEditCancel">
                 <Form ref="formModule" :model="editData" :rules="dataRule"  label-position="left" :label-width="80">
                 <FormItem label="模块编码" prop="name">
-                    <Input v-model="editData.name" placeholder="请输入模块编码"></Input>
+                    <i-input v-model="editData.name" placeholder="请输入模块编码"></i-input>
                 </FormItem>
                 <FormItem label="模块名称" prop="description">
-                    <Input v-model="editData.description" placeholder="请输入模块名称"></Input>
+                    <i-input v-model="editData.description" placeholder="请输入模块名称"></i-input>
                 </FormItem>
+                    <FormItem label="繁体名称" prop="description_tw">
+                    <i-input v-model="editData.description_tw" placeholder="请输入模块名称"></i-input>
+                </FormItem>
+                    <FormItem label="英文名称" prop="description_en">
+                    <i-input v-model="editData.description_en" placeholder="请输入模块名称"></i-input>
+                </FormItem>
+                    <FormItem label="其他语言" prop="description_other">
+                    <i-input v-model="editData.description_other" placeholder="请输入模块名称"></i-input>
+                </FormItem>
+            
                 <FormItem label="图标" prop="icon">
-                    <Input v-model="editData.icon" placeholder="请输入图标"></Input>
+                    <i-input v-model="editData.icon" placeholder="请输入图标"></i-input>
                 </FormItem>
                 <FormItem label="组件类型" prop="componentPath">
                     <Select v-model="editData.componentPath" placeholder="请选择组件类型">
@@ -199,7 +209,7 @@ export default {
       //   .catch();
     },
     //模块排序提交
-    event_moduleSortSubmitClick(e, component) {
+    event_moduleSortSubmitClick(component) {
       var tmp_data = this.$utils.deepCopyEx(this.data);
       for (let i = 0; i < tmp_data.length; i++) {
         tmp_data[i]["sort"] = this.sortCache.indexOf(i);
@@ -243,14 +253,14 @@ export default {
         });
     },
     //新增模块点击事件
-    event_moduleAddClick(e, component) {
+    event_moduleAddClick(component) {
       this.editData = {};
       this.editStatus = 1;
       component.loading = false;
     },
 
     //修改模块点击事件
-    event_moduleEditClick(e, component) {
+    event_moduleEditClick(component) {
       var v = this.$utils.searchObserver(
         this.$refs.tableModule.objData,
         null,
@@ -317,6 +327,7 @@ export default {
 
     //模块编辑数据提交事件
     event_moduleEditDataSubmit() {
+      debugger
       this.$refs["formModule"].validate(valid => {
         if (valid) {
           this.doModuleSubmit();

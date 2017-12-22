@@ -92,7 +92,10 @@ util.convertRouteMap = function (menuData) {
 		var menuModule = {
 			name: module.name,
 			meta: {
-				title: module.text
+				title: module.text,
+				title_tw:module.text_tw,
+				title_en:module.text_en,
+				title_other:module.text_other
 			},
 			path: '/authority' + module.name,
 			component: getPromisedComponent(module.componentPath, module.componentName),
@@ -105,6 +108,9 @@ util.convertRouteMap = function (menuData) {
 				path: item.routeName,
 				meta: {
 					title: item.text,
+					title_tw:item.text_tw,
+					title_en:item.text_en,
+					title_other:item.text_other,
 					id:item.id
 				},
 				component: getPromisedComponent(item.componentPath, item.componentName)

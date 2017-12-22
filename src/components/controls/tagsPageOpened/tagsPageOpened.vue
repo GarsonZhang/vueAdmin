@@ -18,12 +18,12 @@
                 <Tag type="dot" closable color="blue">标签二</Tag>
                 <Tag type="dot" closable color="blue">标签三</Tag>
                 <Tag type="dot" closable color="blue">标签四</Tag> -->
-                <Tag type="dot" v-for="(item,index) in pageTagsList" :key="item.name" :name="item.name" 
+                <Tag type="dot" v-for="item in pageTagsList" :key="item.name" :name="item.name" 
                     :closable="item.name!='home'"
                     @click.native="linkTo(item)"
                     @on-close="closePage"
                      :color="item.name===currentPageName?'blue':'default'">
-                {{item.meta.title}}    
+                {{getLang(item.meta)}}    
                 </Tag>
                 <!-- <Tag 
                     type="dot"
@@ -105,6 +105,23 @@ export default {
     //console.log('tag create');
   },
   methods: {
+    getLang(item){
+      // debugger
+      var text='';
+      switch(this.$lang){
+        case 'zh-CN':
+        text= item.title;
+        break;
+        case 'zh-TW':text= item.title_tw;
+        break
+        case 'en-US':text= item.title_en;
+        break;
+        default: text= item.title_other;break;
+      }
+      if(this.$utils.isNULL(text))
+        text=item.title;
+        return text;
+    },
     addRouter(item) {
       // debugger
       var v = this.$utils.jsonSearch.search(

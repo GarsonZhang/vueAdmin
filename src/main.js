@@ -6,7 +6,7 @@ import Vuex from 'vuex';
 import Util from './libs/util';
 import App from './app.vue';
 import 'iview/dist/styles/iview.css';
-import './locale';//你这个咋不解析@ 我也不知道啊 什么原因？ 双引号也不行
+import './locale'; //你这个咋不解析@ 我也不知道啊 什么原因？ 双引号也不行
 
 //import axios from 'axios';
 import gziview from './components/global';
@@ -63,7 +63,23 @@ router.beforeEach((to, from, next) => {
     // console.dir(to);
     // console.dir(from);
     iView.LoadingBar.start();
-    Util.title(to.meta.title);
+    var title = '';
+    switch (Vue.config.lang) {
+        case 'zh-CN':
+            title = to.meta.title;
+            break;
+        case 'zh-TW':
+            title = to.meta.title_tw;
+            break;
+        case 'en-US':
+            title = to.meta.title_en;
+            break;
+        default:
+            title = to.meta.title_other;
+            break;
+    }
+    // Util.title(to.meta.title);
+    Util.title(title);
     next();
 });
 
@@ -76,7 +92,7 @@ const store = new Vuex.Store({
         cachePage: []
     },
     getters: {
-       
+
     },
     mutations: {
         closePage(state, name) {
@@ -113,7 +129,7 @@ const store = new Vuex.Store({
     }
 });
 
-store. dataCache= GZStorage;
+store.dataCache = GZStorage;
 
 
 new Vue({
