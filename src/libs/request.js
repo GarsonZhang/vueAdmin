@@ -17,14 +17,14 @@ const ajax = {
         };
         return _ajaxRemote.get(url, config);
     },
-    post(pageContext, url, data,param) {
+    post(pageContext, url, data, param) {
         var id = pageContext.$route.meta.id;
         var config = {
             headers: {
                 'fid': id,
                 'client': 'pc'
             },
-            params:param
+            params: param
         };
         return _ajaxRemote.post(url, data, config);
     }
@@ -117,12 +117,14 @@ const system = {
     getMenu(context) {
         return ajax.get(context, '/menu/all');
     },
-    getMenuTree(context,objectID){
-        return ajax.get(context,'/authorize/formTree',{objectID});
+    getMenuTree(context, objectID) {
+        return ajax.get(context, '/authorize/formTree', {
+            objectID
+        });
     },
-    updateAuthorize(context,category,objectID,data){
+    updateAuthorize(context, category, objectID, data) {
         // debugger;
-        return ajax.post(context,'/authorize/update',{
+        return ajax.post(context, '/authorize/update', {
             category,
             objectID,
             data
@@ -134,7 +136,7 @@ const ReqCommonDataCompany = {
     list(context) {
         return ajax.get(context, '/company/list');
     },
-    cache:[],
+    cache: [],
     // treeData(context) {
     //     return ajax.get(context, '/company/treedata');
     // },
@@ -265,10 +267,11 @@ const requestUser = {
 };
 
 const requestAPIList = {
-    list(context, pageIndex, pageSize) {
+    list(context, pageIndex, pageSize,filter) {
         return ajax.get(context, '/apilist/list', {
             pageIndex,
-            pageSize
+            pageSize,
+            filter
         });
     },
     import (context) {
@@ -288,16 +291,70 @@ const requestAPIList = {
         });
     }
 };
-const requestUserRelation={
-    list(context,objectID){
-        return ajax.get(context, '/userrelation/list',{objectID});
+const requestUserRelation = {
+    list(context, objectID) {
+        return ajax.get(context, '/userrelation/list', {
+            objectID
+        });
     },
-    userList(context,objectID,companyID){
-        return ajax.get(context, '/userrelation/listByCompanyID',{objectID,companyID});
+    userList(context, objectID, companyID) {
+        return ajax.get(context, '/userrelation/listByCompanyID', {
+            objectID,
+            companyID
+        });
     },
-    update(context,objectID,category,data){
-        return ajax.post(context,'userrelation/update',data,{objectID,category});
+    update(context, objectID, category, data) {
+        return ajax.post(context, 'userrelation/update', data, {
+            objectID,
+            category
+        });
     }
+};
+
+
+const requestOsapCommonDict = {
+    list(context) {
+        return ajax.get(context, 'SAPCommonDicMain/list');
+    },
+    mainDelete(context, rowID) {
+        return ajax.get(context, 'SAPCommonDicMain/delete', {
+            rowID
+        });
+    },
+    mainGet(context, rowID) {
+        return ajax.get(context, 'SAPCommonDicMain/get', {
+            rowID
+        });
+    },
+    mainCreate(context,data){
+        return ajax.post(context,'SAPCommonDicMain/create',data);
+    },
+    mainUpdate(context,data){
+        return ajax.post(context,'SAPCommonDicMain/update',data);
+    },
+    mainUpdateBatch(context,data){
+        // debugger
+        return ajax.post(context,'SAPCommonDicMain/updateSort',data);
+    },
+    detailList(context,mainID){
+        return ajax.get(context,'SAPCommonDicDetail/list',{mainID});
+    },
+    detailGet(context,rowID){
+        return ajax.get(context,'SAPCommonDicDetail/get',{rowID});
+    },
+    detailDelete(context,rowID){
+        return ajax.get(context,'SAPCommonDicDetail/delete',{rowID});
+    },
+    detailCreate(context,data){
+        return ajax.post(context,'SAPCommonDicDetail/create',data);
+    },
+    detailUpdate(context,data){
+        return ajax.post(context,'SAPCommonDicDetail/update',data);
+    },
+    detailUpdateBatch(context,mainID,data){
+        // debugger
+        return ajax.post(context,'SAPCommonDicDetail/updateSort',data,{mainID});
+    },
 };
 
 export {
@@ -310,5 +367,6 @@ export {
     requestCommonDataPosition,
     requestUser,
     requestAPIList,
-    requestUserRelation
+    requestUserRelation,
+    requestOsapCommonDict
 };

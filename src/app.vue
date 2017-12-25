@@ -22,7 +22,8 @@
     created() {
       // debugger
       //判断是否登录，如果登录就获取，如果没登录，则在登录后获取
-      if (window.location.pathname != "/Login") {
+      // debugger
+      if (window.location.pathname != "/login") {
         if (localStorage.getItem("isLogin") == "true") {
           //判断登陆是否过期,
           this.getMenus();

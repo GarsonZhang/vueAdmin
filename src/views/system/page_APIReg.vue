@@ -14,7 +14,11 @@
               <gz-button type="error" icon="close" :permission=4 @click="event_buttonDeleteClick" :confirmTitle="confirmTitleDelete" :validateShowConfirm="validateDelete" :text="$t('delete')"></gz-button>
             </ButtonGroup>
             <!-- <DatePicker type="date" :placeholder="placeholderDate"></DatePicker> -->
+             <i-input class="queryInput" v-model="queryStr" icon="ios-search">
+                <Button slot="append" icon="ios-search" @click="getList"></Button>
+             </i-input>
           </div>
+
         </div>
         <div slot="main">
           <gz-panel @onMainResize="onResizeHeight">
@@ -56,6 +60,10 @@
   </div>
 </template>
 <style lang="less" scoped>
+.queryInput{
+      width: 250px;
+    display: inline-table;
+}
 .title {
   height: 32px;
   line-height: 32px;
@@ -91,6 +99,7 @@ export default {
   mixins: [Msg],
   data() {
     return {
+      queryStr: "",
       confirmTitleDelete: "删除提醒",
       tableHeight: 100,
       listData: {
@@ -100,7 +109,7 @@ export default {
         currentPage: 1,
         pageSize: 20,
         pageSizeOpts: [10, 20, 50, 100],
-        currentData:{}
+        currentData: {}
       },
       refNames: {
         isLoading: false,
@@ -167,7 +176,7 @@ export default {
           key: "checkTypeName"
         }
       ];
-    }
+    },
     // lang(){
     //   return this.$lang;
     // }
@@ -194,15 +203,13 @@ export default {
     // 刷新
     event_buttonRefreshClick(component) {
       this.listData.isLoading = true;
-      this.doRefresh()
-        .then(res => {
-          component.loading = false;
+      this.doRefresh(()=>{
+           component.loading = false;
           this.listData.isLoading = false;
-        })
-        .catch(err => {
-          component.loading = false;
-          this.listData.isLoading = false;
-        });
+      })
+    },
+    getList(){
+ this.doRefresh();
     },
     event_pageChangePage(page) {
       this.listData.currentPage = page;
@@ -252,8 +259,10 @@ export default {
       if (!this.listData.currentData) {
         return false;
       }
-      debugger
-      this.confirmTitleDelete = this.$t("apiReg.deleteConfirm", [this.listData.currentData.APIName]);
+      debugger;
+      this.confirmTitleDelete = this.$t("apiReg.deleteConfirm", [
+        this.listData.currentData.APIName
+      ]);
       return true;
     },
     // 删除
@@ -262,7 +271,7 @@ export default {
       requestAPIList
         .delete(this, this.listData.currentData.rowID)
         .then(res => {
-          debugger
+          debugger;
           var index = this.$utils.searchJsonIndex(this.listData.data, p => {
             return p.rowID == this.listData.currentData.rowID;
           });
@@ -351,22 +360,19 @@ export default {
       return v;
     },
     //刷新
-    doRefresh() {
-      // debugger
-      var me = this;
-      return new Promise(function(resolve, reject) {
-        requestAPIList
-          .list(me, me.listData.currentPage, me.listData.pageSize)
+    doRefresh(callBack) {
+       requestAPIList
+          .list(this, this.listData.currentPage, this.listData.pageSize,this.queryStr)
           .then(res => {
-            me.listData.totalPage = res.data.totalPage;
-            me.listData.data = res.data.data;
-            resolve(res);
+            this.listData.totalPage = res.data.totalPage;
+            this.listData.data = res.data.data;
+            if(callBack) callBack();
           })
           .catch(err => {
-            me.listData.data = {};
-            reject(err);
+            this.listData.totalPage=0;
+            this.listData.data = [];
+             if(callBack) callBack();
           });
-      });
     }
   }
 };
