@@ -357,6 +357,59 @@ const requestOsapCommonDict = {
     },
 };
 
+const requestOsapWXConfig={
+    data(context){
+        return ajax.get(context,'wxconfig/data');
+    },
+    update(context,data){
+        return ajax.post(context,'wxconfig/update',data);
+    }
+};
+
+const requestOsapCommonDataDict = {
+    list(context) {
+        return ajax.get(context, 'CommonDictMain/list');
+    },
+    mainDelete(context, rowID) {
+        return ajax.get(context, 'CommonDictMain/delete', {
+            rowID
+        });
+    },
+    mainGet(context, rowID) {
+        return ajax.get(context, 'CommonDictMain/get', {
+            rowID
+        });
+    },
+    mainCreate(context,data){
+        return ajax.post(context,'CommonDictMain/create',data);
+    },
+    mainUpdate(context,data){
+        return ajax.post(context,'CommonDictMain/update',data);
+    },
+    mainUpdateBatch(context,data){
+        // debugger
+        return ajax.post(context,'CommonDictMain/updateSort',data);
+    },
+    detailList(context,mainID){
+        return ajax.get(context,'CommonDictDetail/list',{mainID});
+    },
+    detailGet(context,rowID){
+        return ajax.get(context,'CommonDictDetail/get',{rowID});
+    },
+    detailDelete(context,rowID){
+        return ajax.get(context,'CommonDictDetail/delete',{rowID});
+    },
+    detailCreate(context,data){
+        return ajax.post(context,'CommonDictDetail/create',data);
+    },
+    detailUpdate(context,data){
+        return ajax.post(context,'CommonDictDetail/update',data);
+    },
+    detailUpdateBatch(context,mainID,data){
+        // debugger
+        return ajax.post(context,'CommonDictDetail/updateSort',data,{mainID});
+    },
+};
 export {
     requestModule,
     requestForm,
@@ -368,5 +421,7 @@ export {
     requestUser,
     requestAPIList,
     requestUserRelation,
-    requestOsapCommonDict
+    requestOsapCommonDict,
+    requestOsapWXConfig,
+    requestOsapCommonDataDict
 };

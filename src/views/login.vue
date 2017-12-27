@@ -70,7 +70,7 @@ export default {
     GzButton
   },
   methods: {
-    handleSubmit(e, button) {
+    handleSubmit(button) {
       // debugger
       localStorage.setItem("isLogin", false);
       var _this=this;

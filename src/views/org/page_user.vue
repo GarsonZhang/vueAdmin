@@ -7,11 +7,11 @@
           <div class="tools">
             <gz-button :ref="refNames.buttonRefresh" icon="refresh" @click="event_buttonRefreshClick" text="刷新" />
             <ButtonGroup class="tooltipButtonGroup">
-              <gz-button type="primary" icon="plus" @click="event_buttonAddClick" :permission=1 text="新增"></gz-button>
-              <gz-button type="success" icon="edit" @click="event_buttonEditClick" :permission=2 text="修改"></gz-button>
-              <gz-button type="error" icon="close" @click="event_buttonDeleteClick" :permission=4 text="删除"></gz-button>
+              <gz-button type="primary" icon="plus" @click="event_buttonAddClick" v-permission="1" text="新增"></gz-button>
+              <gz-button type="success" icon="edit" @click="event_buttonEditClick" v-permission="2" text="修改"></gz-button>
+              <gz-button type="error" icon="close" @click="event_buttonDeleteClick" v-permission="4" text="删除"></gz-button>
             </ButtonGroup>
-            <gz-button type="success" icon="edit" @click="event_buttonAuthorizeClick" :permission=8 text="用户权限"></gz-button>
+            <gz-button type="success" icon="edit" @click="event_buttonAuthorizeClick" v-permission="8" text="用户权限"></gz-button>
           </div>
         </div>
         <div slot="main" class="main">
@@ -33,10 +33,10 @@
         :loading="(true)" @on-ok="event_editDataSubmit" @on-cancel="event_editCancel">
         <Form :ref="refNames.editForm" :model="editData" :rules="dataRule" label-position="left" :label-width="80">
           <FormItem label="用户账号" prop="account">
-            <Input v-model="editData.account" placeholder="请输入用户账号"></Input>
+            <i-input v-model="editData.account" placeholder="请输入用户账号"></i-input>
           </FormItem>
           <FormItem label="姓名" prop="userName">
-            <Input v-model="editData.userName" placeholder="请输入姓名"></Input>
+            <i-input v-model="editData.userName" placeholder="请输入姓名"></i-input>
           </FormItem>
           <FormItem label="性别" prop="sex">
             <Select v-model="editData.sex" placeholder="请选择性别">
@@ -51,13 +51,13 @@
             <SelectDept :companyID="editData.companyID" v-model="editData.deptID" @onSelected="onDeptChanged"></SelectDept>
           </FormItem>
           <FormItem label="联系电话" prop="phone">
-            <Input v-model="editData.phone" placeholder="请输入联系电话"></Input>
+            <i-input v-model="editData.phone" placeholder="请输入联系电话"></i-input>
           </FormItem>
           <FormItem label="状态" prop="status">
-            <Input v-model="editData.status" disabled></Input>
+            <i-input v-model="editData.status" disabled></i-input>
           </FormItem>
           <FormItem label="备注" prop="remark">
-            <Input v-model="editData.remark" placeholder="请输入备注信息"></Input>
+            <i-input v-model="editData.remark" placeholder="请输入备注信息"></i-input>
           </FormItem>
         </Form>
       </Modal>
@@ -94,9 +94,10 @@ import { requestUser } from "../../libs/request";
 import SelectCompany from "./selectCompany";
 import SelectDept from "./selectDept";
 import Msg from "../../mixins/msg";
+import Authorize from "../../mixins/authorize";
 import FormTreeData from "./treeForm.vue";
 export default {
-  mixins: [Msg],
+  mixins: [Msg,Authorize],
   data() {
     return {
       listData: {

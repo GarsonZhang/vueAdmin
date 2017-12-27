@@ -138,7 +138,7 @@ export default {
         }
       ];
     },
-    isAuthroize() {
+    isAuthroize() { //是否拥有权限，这种就只能用在这个gz-button组件
       if (this.permission > 0) {
         return this.VerifyPermissions(this.permission);
       } else return true;

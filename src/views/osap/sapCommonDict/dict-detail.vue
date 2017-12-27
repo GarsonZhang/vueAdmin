@@ -13,17 +13,19 @@
         </ButtonGroup>
       </div>
       <div slot="top" v-else class="tools">
-        <Tooltip :content="$t('refresh')" placement="bottom-start">
+              <ButtonGroup>
+        <Tooltip :content="$t('refresh')"  placement="bottom-start">
           <gz-button :ref="refNames.refresh" icon="refresh" @click="event_dataRefreshClick" :showText='false' />
         </Tooltip>
+        </ButtonGroup>
         <ButtonGroup class="tooltipButtonGroup">
-          <Tooltip :content="$t('create')" placement="bottom-start">
+          <Tooltip :content="$t('create')"  v-permission="8" placement="bottom-start">
             <gz-button type="primary" icon="plus" @click="event_dataCreateClick"></gz-button>
           </Tooltip>
-          <Tooltip :content="$t('modify')" placement="bottom-start">
+          <Tooltip :content="$t('modify')"  v-permission="16" placement="bottom-start">
             <gz-button type="success" icon="edit" @click="event_dataModifyClick"></gz-button>
           </Tooltip>
-          <Tooltip :content="$t('delete')" placement="bottom-start">
+          <Tooltip :content="$t('delete')"  v-permission="32" placement="bottom-start">
             <gz-button type="error" icon="close" @click="event_dataDeleteClick"></gz-button>
           </Tooltip>
         </ButtonGroup>
@@ -79,7 +81,7 @@
   float: right;
 }
 
-.tooltipButtonGroup {
+div.tooltipButtonGroup {
   margin-left: 5px;
 }
 
@@ -95,10 +97,11 @@
 import Sortable from "sortablejs";
 import { requestOsapCommonDict } from "../../../libs/request";
 import Msg from "../../../mixins/msg";
+import Authorize from "../../../mixins/authorize";
 
 export default {
   name: "SAPCommonDicDetail",
-  mixins: [Msg],
+  mixins: [Msg,Authorize],
   data() {
     return {
       refNames: {
@@ -226,25 +229,29 @@ export default {
   },
   created() {},
   mounted() {
-    var me = this;
-    //模块排序
-    var elModule = this.$refs[this.refNames.dataTable].$children[1].$el
-      .children[1];
-    Sortable.create(elModule, {
-      //排序移动前
-      onStart(el) {},
-      //排序移动后
-      onEnd(el) {
-        var v = me.sortCache[el.oldIndex];
-        me.sortCache.splice(el.oldIndex, 1);
-        me.sortCache.splice(el.newIndex, 0, v);
-        if (me.sortStatus === false) me.sortStatus = true;
-      },
-      //排序选择
-      onChoose(el) {}
-    });
+    if (this.VerifyPermissions(64)) this.initSort();
   },
   methods: {
+    initSort() {
+      var me = this;
+      //模块排序
+      var elModule = this.$refs[this.refNames.dataTable].$children[1].$el
+        .children[1];
+      Sortable.create(elModule, {
+        //排序移动前
+        onStart(el) {},
+        //排序移动后
+        onEnd(el) {
+          var v = me.sortCache[el.oldIndex];
+          me.sortCache.splice(el.oldIndex, 1);
+          me.sortCache.splice(el.newIndex, 0, v);
+          if (me.sortStatus === false) me.sortStatus = true;
+        },
+        //排序选择
+        onChoose(el) {}
+      });
+    },
+
     onParentSelect(value) {
       // debugger;
       var v = this.$utils.jsonSearch.search(

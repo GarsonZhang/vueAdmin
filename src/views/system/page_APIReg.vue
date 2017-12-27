@@ -136,7 +136,7 @@ export default {
             // message: "权限类型不能为空",
             // trigger: "blur"
             type: "enum",
-            enum: [0, 1]
+            enum: [0, 1,2]
           }
         ]
       }

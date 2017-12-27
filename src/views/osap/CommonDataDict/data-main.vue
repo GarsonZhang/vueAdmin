@@ -19,7 +19,6 @@
         </Tooltip>
         </ButtonGroup>
         <ButtonGroup class="tooltipButtonGroup">
-          <!-- 用指令方式和组件分离，想用哪里用哪里 -->
           <Tooltip :content="$t('create')"  v-permission="1" placement="bottom-start">
             <gz-button type="primary"  icon="plus" @click="event_dataCreateClick"></gz-button>
           </Tooltip>
@@ -39,19 +38,11 @@
     <Modal :ref="refNames.modal" :title="modalTitle" v-model="modalStatus" width="80" :styles="{'max-width':'500px'}" :mask-closable="false"
       :loading="(true)" @on-ok="event_dataEditDataSubmit" @on-cancel="event_dataEditCancel">
       <Form :ref="refNames.form" :model="editData" :rules="dataRule" label-position="left" :label-width="80">
-        <FormItem :label="$t('dictMain.form.codeLabel')" prop="code">
-          <i-input v-model="editData.code" :placeholder="$t('dictMain.form.codePlaceHolder')"></i-input>
+        <FormItem :label="$t('commonDataDictMain.form.codeLabel')" prop="code">
+          <i-input v-model="editData.code" :placeholder="$t('commonDataDictMain.form.codePlaceHolder')"></i-input>
         </FormItem>
-        <FormItem :label="$t('dictMain.form.descriptionLabel')" prop="description">
-          <i-input v-model="editData.description" :placeholder="$t('dictMain.form.descriptionPlaceHolder')"></i-input>
-        </FormItem>
-        <FormItem :label="$t('dictMain.form.parentIDLable')" prop="parentID">
-          <Select v-model="editData.parentID" @on-change="onParentSelect">
-            <Option v-for="item in data" :key="item.rowID" :value="item.rowID">{{item.description}}</Option>
-          </Select>
-        </FormItem>
-        <FormItem :label="$t('dictMain.form.parentCodeLabel')" prop="parentCode">
-          <i-input v-model="editData.parentCode" readonly></i-input>
+        <FormItem :label="$t('commonDataDictMain.form.descriptionLabel')" prop="description">
+          <i-input v-model="editData.description" :placeholder="$t('commonDataDictMain.form.descriptionPlaceHolder')"></i-input>
         </FormItem>
       </Form>
     </Modal>
@@ -89,16 +80,16 @@ div.tooltipButtonGroup {
 
 <script>
 import Sortable from "sortablejs";
-import { requestOsapCommonDict } from "../../../libs/request";
+import { requestOsapCommonDataDict } from "../../../libs/request";
 import Msg from "../../../mixins/msg";
 import Authorize from "../../../mixins/authorize";
 
 export default {
-  name: "SAPCommonDicMain",
+  name: "DataMain",
   mixins: [Msg, Authorize], //这是啥意思，混合，把两个对象混合里面的方法等，比如我公共方法，除了全局外，还可以弄个混合器，这样就不用每个地方都写这些方法
   data() {
     return {
-      flagDescription: "数据类型",
+      flagDescription: "字典类型",
       refNames: {
         refresh: "refresh",
         mainTable: "mainData",
@@ -111,21 +102,21 @@ export default {
         code: [
           {
             required: true,
-            message: this.$t("dictMain.validate.emptyCode"),
+            message: this.$t("commonDataDictMain.validate.emptyCode"),
             trigger: "blur"
           }
         ],
         description: [
           {
             required: true,
-            message: this.$t("dictMain.validate.emptyDescription"),
+            message: this.$t("commonDataDictMain.validate.emptyDescription"),
             trigger: "blur"
           },
           {
             type: "string",
             min: 2,
             max: 6,
-            message: this.$t("dictMain.validate.errDescription", [2, 6]),
+            message: this.$t("commonDataDictMain.validate.errDescription", [2, 6]),
             trigger: "blur"
           }
         ]
@@ -140,29 +131,20 @@ export default {
     columns() {
       return [
         {
-          title: this.$t("dictMain.columns.index"),
+          title: this.$t("commonDataDictMain.columns.index"),
           type: "index",
           width: 50,
           align: "center",
           className: "table-cell-index"
         },
         {
-          title: this.$t("dictMain.columns.code"),
+          title: this.$t("commonDataDictMain.columns.code"),
           key: "code",
           width: 65
         },
         {
-          title: this.$t("dictMain.columns.description"),
+          title: this.$t("commonDataDictMain.columns.description"),
           key: "description"
-        },
-        {
-          title: this.$t("dictMain.columns.parentCode"),
-          key: "parentCode",
-          width: 65
-        },
-        {
-          title: this.$t("dictMain.columns.parentName"),
-          key: "parentName"
         }
       ];
     },
@@ -241,7 +223,7 @@ export default {
       //var tmp_data = this.$utils.deepCopyEx(this.data);
       // debugger;
       var me = this;
-      requestOsapCommonDict
+      requestOsapCommonDataDict
         .mainUpdateBatch(me, me.sortCache)
         .then(res => {
           component.loading = false;
@@ -303,7 +285,7 @@ export default {
         this.showWarning(this.$t("noSelectData"));
         return;
       }
-      requestOsapCommonDict
+      requestOsapCommonDataDict
         .mainGet(this, v.rowID)
         .then(res => {
           this.editData = res.data;
@@ -336,7 +318,7 @@ export default {
         title,
         content,
         () => {
-          requestOsapCommonDict
+          requestOsapCommonDataDict
             .mainDelete(me, v.rowID)
             .then(res => {
               var index = me.$utils.searchJsonIndex(me.data, p => {
@@ -374,7 +356,7 @@ export default {
       this.editStatus = 0;
     },
     getList(callback) {
-      requestOsapCommonDict
+      requestOsapCommonDataDict
         .list(this)
         .then(res => {
           this.data = res.data;
@@ -397,8 +379,8 @@ export default {
       // 新增 or 修改
       if (this.editStatus == 1) {
         this.editData["fSort"] = this.data.length;
-        req = requestOsapCommonDict.mainCreate(this, this.editData);
-      } else req = requestOsapCommonDict.mainUpdate(this, this.editData);
+        req = requestOsapCommonDataDict.mainCreate(this, this.editData);
+      } else req = requestOsapCommonDataDict.mainUpdate(this, this.editData);
       req
         .then(res => {
           if (me.editStatus == 1) {

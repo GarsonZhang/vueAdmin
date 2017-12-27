@@ -122,6 +122,13 @@ axiosProvider.axiosError = function (err) {
                                 err.message = msg;
                             }
                             break;
+                        case -3:
+                            {
+                                msg = '表单保存失败：<br/>';
+
+                                err.message = msg + err.response.data.message;
+                            }
+                            break;
                         case 2:
                             {
                                 msg = '请求发生异常：<br/>';

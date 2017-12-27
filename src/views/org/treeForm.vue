@@ -26,6 +26,7 @@ export default {
       this.modalStatus = true;
     },
     updateData(_category, _objectID) {
+       this.data = [];
       this.category = _category;
       this.objectID = _objectID;
       if (this.$utils.isNULL(_objectID)) {

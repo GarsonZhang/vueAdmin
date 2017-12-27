@@ -7,7 +7,7 @@
             <span>{{$t('mainData')}}</span>
         </div>
         <div slot="main">
-         <SAPCommonDicMain @selectChanged="event_mainSelect"></SAPCommonDicMain>
+         <data-main @selectChanged="event_mainSelect"></data-main>
         </div>
         </gz-panel>
     </i-col>
@@ -17,7 +17,7 @@
             <span>{{detailTitle}}</span>
         </div>
         <div slot="main">
-         <SAPCommonDicDetail :mainID="selectMainID" :mainDescription="selectMainDescription" :parentID="selectParentID"></SAPCommonDicDetail>
+         <data-detail :mainID="selectMainID" :mainDescription="selectMainDescription"></data-detail>
         </div>
         </gz-panel>
     </i-col>
@@ -52,11 +52,11 @@
 }
 </style>
 <script>
-import SAPCommonDicMain from "./dict-main.vue";
-import SAPCommonDicDetail from "./dict-detail.vue";
+import DataMain from "./data-main.vue";
+import DataDetail from "./data-detail.vue";
 export default {
   name: "module",
-  components: { SAPCommonDicMain, SAPCommonDicDetail },
+  components: { DataMain, DataDetail },
   data() {
     return {
       selectModule: {},
@@ -64,8 +64,7 @@ export default {
         Form: "Form"
       },
       selectMainID: "",
-      selectMainDescription: "",
-      selectParentID:""
+      selectMainDescription: ""
     };
   },
   computed: {
@@ -85,7 +84,6 @@ export default {
       this.selectMainID = row["rowID"];
       // debugger
       this.selectMainDescription = row["description"];
-      this.selectParentID=row["parentID"];
     }
   }
 };

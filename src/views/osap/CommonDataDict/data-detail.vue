@@ -13,46 +13,38 @@
         </ButtonGroup>
       </div>
       <div slot="top" v-else class="tools">
-         <ButtonGroup>
-        <Tooltip :content="$t('refresh')" placement="bottom-start">
+              <ButtonGroup>
+        <Tooltip :content="$t('refresh')"  placement="bottom-start">
           <gz-button :ref="refNames.refresh" icon="refresh" @click="event_dataRefreshClick" :showText='false' />
         </Tooltip>
         </ButtonGroup>
         <ButtonGroup class="tooltipButtonGroup">
-          <!-- 用指令方式和组件分离，想用哪里用哪里 -->
-          <Tooltip :content="$t('create')"  v-permission="1" placement="bottom-start">
-            <gz-button type="primary"  icon="plus" @click="event_dataCreateClick"></gz-button>
+          <Tooltip :content="$t('create')"  v-permission="8" placement="bottom-start">
+            <gz-button type="primary" icon="plus" @click="event_dataCreateClick"></gz-button>
           </Tooltip>
-          <Tooltip :content="$t('modify')" v-permission="2" placement="bottom-start">
+          <Tooltip :content="$t('modify')"  v-permission="16" placement="bottom-start">
             <gz-button type="success" icon="edit" @click="event_dataModifyClick"></gz-button>
           </Tooltip>
-          <Tooltip :content="$t('delete')" v-permission="4" placement="bottom-start">
+          <Tooltip :content="$t('delete')"  v-permission="32" placement="bottom-start">
             <gz-button type="error" icon="close" @click="event_dataDeleteClick"></gz-button>
           </Tooltip>
         </ButtonGroup>
       </div>
       <div slot="main">
-        <Table :ref="refNames.mainTable" size="small" class="gztag table-cell-smallpadding" :loading="isLoading" :columns="columns" :data="data"
+        <Table :ref="refNames.dataTable" size="small" class="gztag table-cell-smallpadding" :loading="isLoading" :columns="columns" :data="data"
           @on-row-click="event_dataSelect" highlight-row border></Table>
       </div>
     </gz-panel>
     <Modal :ref="refNames.modal" :title="modalTitle" v-model="modalStatus" width="80" :styles="{'max-width':'500px'}" :mask-closable="false"
       :loading="(true)" @on-ok="event_dataEditDataSubmit" @on-cancel="event_dataEditCancel">
       <Form :ref="refNames.form" :model="editData" :rules="dataRule" label-position="left" :label-width="80">
-        <FormItem :label="$t('dictMain.form.codeLabel')" prop="code">
-          <i-input v-model="editData.code" :placeholder="$t('dictMain.form.codePlaceHolder')"></i-input>
+        <FormItem :label="$t('commonDataDictDetail.form.codeLabel')" prop="code">
+          <i-input v-model="editData.code" :placeholder="$t('commonDataDictDetail.form.codePlaceHolder')"></i-input>
         </FormItem>
-        <FormItem :label="$t('dictMain.form.descriptionLabel')" prop="description">
-          <i-input v-model="editData.description" :placeholder="$t('dictMain.form.descriptionPlaceHolder')"></i-input>
+        <FormItem :label="$t('commonDataDictDetail.form.descriptionLabel')" prop="description">
+          <i-input v-model="editData.description" :placeholder="$t('commonDataDictDetail.form.descriptionPlaceHolder')"></i-input>
         </FormItem>
-        <FormItem :label="$t('dictMain.form.parentIDLable')" prop="parentID">
-          <Select v-model="editData.parentID" @on-change="onParentSelect">
-            <Option v-for="item in data" :key="item.rowID" :value="item.rowID">{{item.description}}</Option>
-          </Select>
-        </FormItem>
-        <FormItem :label="$t('dictMain.form.parentCodeLabel')" prop="parentCode">
-          <i-input v-model="editData.parentCode" readonly></i-input>
-        </FormItem>
+      
       </Form>
     </Modal>
   </div>
@@ -89,19 +81,18 @@ div.tooltipButtonGroup {
 
 <script>
 import Sortable from "sortablejs";
-import { requestOsapCommonDict } from "../../../libs/request";
+import { requestOsapCommonDataDict } from "../../../libs/request";
 import Msg from "../../../mixins/msg";
 import Authorize from "../../../mixins/authorize";
 
 export default {
-  name: "SAPCommonDicMain",
-  mixins: [Msg, Authorize], //这是啥意思，混合，把两个对象混合里面的方法等，比如我公共方法，除了全局外，还可以弄个混合器，这样就不用每个地方都写这些方法
+  name: "DataDetail",
+  mixins: [Msg,Authorize],
   data() {
     return {
-      flagDescription: "数据类型",
       refNames: {
         refresh: "refresh",
-        mainTable: "mainData",
+        dataTable: "mainData",
         modal: "modal",
         form: "form"
       },
@@ -111,21 +102,14 @@ export default {
         code: [
           {
             required: true,
-            message: this.$t("dictMain.validate.emptyCode"),
+            message: this.$t("commonDataDictDetail.validate.emptyCode"),
             trigger: "blur"
           }
         ],
         description: [
           {
             required: true,
-            message: this.$t("dictMain.validate.emptyDescription"),
-            trigger: "blur"
-          },
-          {
-            type: "string",
-            min: 2,
-            max: 6,
-            message: this.$t("dictMain.validate.errDescription", [2, 6]),
+            message: this.$t("commonDataDictDetail.validate.emptyDescription"),
             trigger: "blur"
           }
         ]
@@ -136,33 +120,42 @@ export default {
       isLoading: false
     };
   },
+  props: {
+    mainID: {
+      type: String,
+      default: ""
+    },
+    mainDescription: {
+      type: String,
+      default: ""
+    }
+  },
+  watch: {
+    mainID(val) {
+      if (this.$utils.isNULL(val)) {
+        this.data = [];
+        this.sortCache = [];
+      } else this.$refs[this.refNames.refresh].handleClick();
+    }
+  },
   computed: {
     columns() {
       return [
         {
-          title: this.$t("dictMain.columns.index"),
+          title: this.$t("commonDataDictDetail.columns.index"),
           type: "index",
           width: 50,
           align: "center",
           className: "table-cell-index"
         },
         {
-          title: this.$t("dictMain.columns.code"),
+          title: this.$t("commonDataDictDetail.columns.code"),
           key: "code",
           width: 65
         },
         {
-          title: this.$t("dictMain.columns.description"),
+          title: this.$t("commonDataDictDetail.columns.description"),
           key: "description"
-        },
-        {
-          title: this.$t("dictMain.columns.parentCode"),
-          key: "parentCode",
-          width: 65
-        },
-        {
-          title: this.$t("dictMain.columns.parentName"),
-          key: "parentName"
         }
       ];
     },
@@ -177,16 +170,15 @@ export default {
     modalTitle: {
       get() {
         var t = "";
-        // debugger;
         switch (this.editStatus) {
           case 1:
-            t = this.$t("dataTitleCreateFormat", [this.flagDescription]);
+            t = this.$t("dataTitleCreateFormat", [this.mainDescription]);
             break;
           case 2:
-            t = this.$t("dataTitleModifyFormat", [this.flagDescription]);
+            t = this.$t("dataTitleModifyFormat", [this.mainDescription]);
             break;
           default:
-            t = this.$t("dataTitleViewFormat", [this.flagDescription]);
+            t = this.$t("dataTitleViewFormat", [this.mainDescription]);
             break;
         }
 
@@ -196,14 +188,13 @@ export default {
   },
   created() {},
   mounted() {
-    this.$refs[this.refNames.refresh].handleClick();
     if (this.VerifyPermissions(64)) this.initSort();
   },
   methods: {
     initSort() {
       var me = this;
       //模块排序
-      var elModule = this.$refs[this.refNames.mainTable].$children[1].$el
+      var elModule = this.$refs[this.refNames.dataTable].$children[1].$el
         .children[1];
       Sortable.create(elModule, {
         //排序移动前
@@ -219,10 +210,11 @@ export default {
         onChoose(el) {}
       });
     },
+
     onParentSelect(value) {
-      debugger;
+      // debugger;
       var v = this.$utils.jsonSearch.search(
-        this.data,
+        this.parentData,
         null,
         p => p.rowID === value
       );
@@ -241,8 +233,8 @@ export default {
       //var tmp_data = this.$utils.deepCopyEx(this.data);
       // debugger;
       var me = this;
-      requestOsapCommonDict
-        .mainUpdateBatch(me, me.sortCache)
+      requestOsapCommonDataDict
+        .detailUpdateBatch(me, me.mainID, me.sortCache)
         .then(res => {
           component.loading = false;
           me.sortStatus = false;
@@ -269,7 +261,7 @@ export default {
     //模块排序取消
     event_dataSortCancelClick(component) {
       this.sortStatus = false;
-      this.getList(() => {
+      this.doGetList(() => {
         component.loading = false;
       });
     },
@@ -277,7 +269,7 @@ export default {
     //刷新模块点击事件
     event_dataRefreshClick(component) {
       this.isLoading = true;
-      this.getList(() => {
+      this.doGetList(() => {
         component.loading = false;
         this.isLoading = false;
       });
@@ -292,7 +284,7 @@ export default {
     //修改模块点击事件
     event_dataModifyClick(component) {
       var v = this.$utils.searchObserver(
-        this.$refs[this.refNames.mainTable].objData,
+        this.$refs[this.refNames.dataTable].objData,
         null,
         p => {
           return p._isHighlight == true;
@@ -303,8 +295,8 @@ export default {
         this.showWarning(this.$t("noSelectData"));
         return;
       }
-      requestOsapCommonDict
-        .mainGet(this, v.rowID)
+      requestOsapCommonDataDict
+        .detailGet(this, v.rowID)
         .then(res => {
           this.editData = res.data;
           this.editStatus = 2;
@@ -316,9 +308,9 @@ export default {
     },
     //删除模块点击事件
     event_dataDeleteClick(component) {
-      debugger;
+      // debugger;
       var v = this.$utils.searchObserver(
-        this.$refs[this.refNames.mainTable].objData,
+        this.$refs[this.refNames.dataTable].objData,
         null,
         p => {
           return p._isHighlight == true;
@@ -336,8 +328,8 @@ export default {
         title,
         content,
         () => {
-          requestOsapCommonDict
-            .mainDelete(me, v.rowID)
+          requestOsapCommonDataDict
+            .detailDelete(me, v.rowID)
             .then(res => {
               var index = me.$utils.searchJsonIndex(me.data, p => {
                 return p.rowID == v.rowID;
@@ -373,32 +365,38 @@ export default {
       this.editData = {};
       this.editStatus = 0;
     },
-    getList(callback) {
-      requestOsapCommonDict
-        .list(this)
+    doGetList(callBack) {
+      if (this.$utils.isNULL(this.mainID)) {
+        this.data = [];
+        this.sortCache = [];
+        if (callBack) callBack();
+        return;
+      }
+      requestOsapCommonDataDict
+        .detailList(this, this.mainID)
         .then(res => {
           this.data = res.data;
           this.sortCache = [];
           for (let i = 0; i < res.data.length; i++) {
             this.sortCache.push(i);
           }
-          if (callback) callback();
+          if (callBack) callBack();
         })
         .catch(err => {
           this.data = [];
           this.sortCache = [];
-          if (callback) callback();
+          if (callBack) callBack();
         });
     },
-
     doModuleSubmit() {
       var req;
       var me = this;
       // 新增 or 修改
       if (this.editStatus == 1) {
+        this.editData["mainID"] = this.mainID;
         this.editData["fSort"] = this.data.length;
-        req = requestOsapCommonDict.mainCreate(this, this.editData);
-      } else req = requestOsapCommonDict.mainUpdate(this, this.editData);
+        req = requestOsapCommonDataDict.detailCreate(this, this.editData);
+      } else req = requestOsapCommonDataDict.detailUpdate(this, this.editData);
       req
         .then(res => {
           if (me.editStatus == 1) {
@@ -413,7 +411,7 @@ export default {
           }
           me.editStatus = 0;
 
-          me.showInfo(this.$t("saveSuccess"), 3); //zhege  showinfo,在这里是没有的，是从Msg混过来的，可以当作自己的用
+          me.showInfo(this.$t("saveSuccess"), 3);
         })
         .catch(err => {
           me.$refs[this.refNames.modal].buttonLoading = false;
