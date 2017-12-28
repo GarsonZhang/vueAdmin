@@ -1,5 +1,8 @@
 <template>
-  <Cascader ref="control" :data="data" @on-change="selected" v-model="currentValue"  change-on-select></Cascader>
+  <!-- <Cascader ref="control" :data="data" @on-change="selected" v-model="currentValue"  change-on-select></Cascader> -->
+   <gz-tree-select clearable  :treeData="data" :treeProps="dataProps" @on-select="selected" v-model="currentValue" :dropDownMaxHeight="500" placeholder="请选择部门"
+    :width="width">
+  </gz-tree-select>
 </template>
 <style lang="less" scoped>
 
@@ -11,12 +14,19 @@ export default {
   data() {
     return {
       data: [],
-      currentValue: []
+      dataProps: {
+        label: "label",
+        children: "children",
+        level: "deep",
+        value: "value"
+      },
+      currentValue: ""
     };
   },
   props: {
     value: String,
-    companyID: String
+    companyID: String,
+     width: 0
   },
   created() {
     this.refreshData();
@@ -28,22 +38,22 @@ export default {
         return;
       }
       var me = this;
-      requestCommonDataDept.list(this,this.companyID).then(
+      requestCommonDataDept.list(this, this.companyID).then(
         res => {
-          me.data = this.convert2Data(res.data);
+          me.data = this.convert2Data(1, res.data);
           //me.$refs.control.updateSelected(true);
           // debugger;
-          setTimeout(() => {
-            me.currentValue = me.currentValue;
-            me.$refs.control.updateSelected(true);
-          }, 50);
+          // setTimeout(() => {
+          //   me.currentValue = me.currentValue;
+          //   me.$refs.control.updateSelected(true);
+          // }, 50);
         },
         err => {
           me.data = [];
         }
       );
     },
-    convert2Data(lst) {
+    convert2Data(deep, lst) {
       var v = [];
       lst.forEach(function(element) {
         var item = {
@@ -51,33 +61,35 @@ export default {
           label: element.deptName,
           levelID: element.levelID,
           parentID: element.parentFullID,
+          deep: deep,
           parentName: element.parentFullName
         };
         if (element.children)
-          item.children = this.convert2Data(element.children);
+          item.children = this.convert2Data(deep + 1, element.children);
         v.push(item);
       }, this);
       return v;
     },
-    selected(a, b) {
-      // debugger;
-      if (a.length > 0) {
-        this.$emit("input", a[a.length - 1]);
-        this.$emit("onSelected", a[a.length - 1], b[b.length - 1]);
-      } else {
-        this.$emit("input", "");
-        this.$emit("onSelected");
-      }
+    selected(node) {
+      if (node != null) {
+        //debugger
+        //this.$emit("input", node[this.dataProps.value]);
+        // debugger
+        this.$emit("onSelected", node[this.dataProps.value], node);
+      } else this.$emit("onSelected");
     }
   },
   watch: {
+    currentValue(val){
+      if(this.value!=val)
+         this.$emit("input", val);
+    },
     value(val) {
-      var v = [];
-      if (!this.$utils.isNULL(val)) v.push(val);
-      this.currentValue = v;
+      this.currentValue = val;
     },
     companyID(val) {
       // debugger;
+      this.currentValue = "";
       this.refreshData();
     }
   }

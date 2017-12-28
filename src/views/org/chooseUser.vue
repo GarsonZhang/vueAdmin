@@ -264,18 +264,18 @@ export default {
     doSearch() {
       // debugger;
       this.queryType = 2;
-      console.log("this.queryType = 2;");
+      // console.log("this.queryType = 2;");
       this.queryStr = this.query;
     },
     refreshData() {},
 
     onCompanySelected(value, e) {
       this.queryType = 3;
-      console.log("this.queryType = 3;");
+      // console.log("this.queryType = 3;");
       this.queryStr = value;
     },
     onDeptSelected(node) {
-      console.log("this.queryType = 1;");
+      // console.log("this.queryType = 1;");
       this.queryType = 1;
       this.queryStr = node.rowID;
     },

@@ -1,4 +1,3 @@
-// import Promise from 'Promise';
 import axiosProvider from './axios';
 
 const _ajaxRemote = axiosProvider._getRemote();
@@ -31,7 +30,7 @@ const ajax = {
 };
 
 //模块请求类
-const requestModule = {
+export const requestModule = {
     list(context) {
         return ajax.get(context, '/module/list');
     },
@@ -56,7 +55,7 @@ const requestModule = {
     }
 };
 //模块功能请求类
-const requestForm = {
+export const requestForm = {
     list(context, moduleID) {
         return ajax.get(context, '/moduleform/list', {
             moduleID
@@ -87,8 +86,7 @@ const requestForm = {
         });
     }
 };
-
-const requestFormAuthorize = {
+export const requestFormAuthorize = {
     list(context, formID) {
         return ajax.get(context, '/moduleformauthorize/list', {
             formID
@@ -112,8 +110,7 @@ const requestFormAuthorize = {
         return ajax.post(context, '/moduleformauthorize/update', data);
     }
 };
-
-const system = {
+export const system = {
     getMenu(context) {
         return ajax.get(context, '/menu/all');
     },
@@ -131,8 +128,7 @@ const system = {
         });
     }
 };
-
-const ReqCommonDataCompany = {
+export const ReqCommonDataCompany = {
     list(context) {
         return ajax.get(context, '/company/list');
     },
@@ -163,8 +159,7 @@ const ReqCommonDataCompany = {
         return ajax.post(context, '/company/update', data);
     }
 };
-
-const requestCommonDataDept = {
+export const requestCommonDataDept = {
     list(context, companyID) {
         return ajax.get(context, '/dept/list', {
             companyID
@@ -196,8 +191,7 @@ const requestCommonDataDept = {
         return ajax.post(context, '/dept/update', data);
     }
 };
-
-const requestCommonDataPosition = {
+export const requestCommonDataPosition = {
     list(context, companyID) {
         return ajax.get(context, '/position/list', {
             companyID
@@ -229,8 +223,7 @@ const requestCommonDataPosition = {
         return ajax.post(context, '/position/update', data);
     }
 };
-
-const requestUser = {
+export const requestUser = {
     list(context, pageIndex, pageSize) {
         return ajax.get(context, '/user/list', {
             pageSize,
@@ -265,9 +258,8 @@ const requestUser = {
         return ajax.get(context, '/user/logout');
     }
 };
-
-const requestAPIList = {
-    list(context, pageIndex, pageSize,filter) {
+export const requestAPIList = {
+    list(context, pageIndex, pageSize, filter) {
         return ajax.get(context, '/apilist/list', {
             pageIndex,
             pageSize,
@@ -291,7 +283,7 @@ const requestAPIList = {
         });
     }
 };
-const requestUserRelation = {
+export const requestUserRelation = {
     list(context, objectID) {
         return ajax.get(context, '/userrelation/list', {
             objectID
@@ -311,8 +303,7 @@ const requestUserRelation = {
     }
 };
 
-
-const requestOsapCommonDict = {
+export const requestOsapCommonDict = {
     list(context) {
         return ajax.get(context, 'SAPCommonDicMain/list');
     },
@@ -326,47 +317,60 @@ const requestOsapCommonDict = {
             rowID
         });
     },
-    mainCreate(context,data){
-        return ajax.post(context,'SAPCommonDicMain/create',data);
+    mainCreate(context, data) {
+        return ajax.post(context, 'SAPCommonDicMain/create', data);
     },
-    mainUpdate(context,data){
-        return ajax.post(context,'SAPCommonDicMain/update',data);
+    mainUpdate(context, data) {
+        return ajax.post(context, 'SAPCommonDicMain/update', data);
     },
-    mainUpdateBatch(context,data){
+    mainUpdateBatch(context, data) {
         // debugger
-        return ajax.post(context,'SAPCommonDicMain/updateSort',data);
+        return ajax.post(context, 'SAPCommonDicMain/updateSort', data);
     },
-    detailList(context,mainID){
-        return ajax.get(context,'SAPCommonDicDetail/list',{mainID});
+    detailList(context, mainID) {
+        return ajax.get(context, 'SAPCommonDicDetail/list', {
+            mainID
+        });
     },
-    detailGet(context,rowID){
-        return ajax.get(context,'SAPCommonDicDetail/get',{rowID});
+    detailGet(context, rowID) {
+        return ajax.get(context, 'SAPCommonDicDetail/get', {
+            rowID
+        });
     },
-    detailDelete(context,rowID){
-        return ajax.get(context,'SAPCommonDicDetail/delete',{rowID});
+    detailDelete(context, rowID) {
+        return ajax.get(context, 'SAPCommonDicDetail/delete', {
+            rowID
+        });
     },
-    detailCreate(context,data){
-        return ajax.post(context,'SAPCommonDicDetail/create',data);
+    detailCreate(context, data) {
+        return ajax.post(context, 'SAPCommonDicDetail/create', data);
     },
-    detailUpdate(context,data){
-        return ajax.post(context,'SAPCommonDicDetail/update',data);
+    detailUpdate(context, data) {
+        return ajax.post(context, 'SAPCommonDicDetail/update', data);
     },
-    detailUpdateBatch(context,mainID,data){
+    detailUpdateBatch(context, mainID, data) {
         // debugger
-        return ajax.post(context,'SAPCommonDicDetail/updateSort',data,{mainID});
+        return ajax.post(context, 'SAPCommonDicDetail/updateSort', data, {
+            mainID
+        });
     },
 };
-
-const requestOsapWXConfig={
-    data(context){
-        return ajax.get(context,'wxconfig/data');
+export const requestOsapWXConfig = {
+    data(context) {
+        return ajax.get(context, 'wxconfig/data');
     },
-    update(context,data){
-        return ajax.post(context,'wxconfig/update',data);
+    update(context, data) {
+        return ajax.post(context, 'wxconfig/update', data);
     }
 };
+export const requestOsapCommonDataDict = {
+    dataModule(context){
+        return ajax.get(context, 'CommonDictMain/dataModule');
+    },
+    dataMonitorType(context){
+        return ajax.get(context, 'CommonDictMain/dataMonitorType');
+    },
 
-const requestOsapCommonDataDict = {
     list(context) {
         return ajax.get(context, 'CommonDictMain/list');
     },
@@ -380,48 +384,77 @@ const requestOsapCommonDataDict = {
             rowID
         });
     },
-    mainCreate(context,data){
-        return ajax.post(context,'CommonDictMain/create',data);
+    mainCreate(context, data) {
+        return ajax.post(context, 'CommonDictMain/create', data);
     },
-    mainUpdate(context,data){
-        return ajax.post(context,'CommonDictMain/update',data);
+    mainUpdate(context, data) {
+        return ajax.post(context, 'CommonDictMain/update', data);
     },
-    mainUpdateBatch(context,data){
+    mainUpdateBatch(context, data) {
         // debugger
-        return ajax.post(context,'CommonDictMain/updateSort',data);
+        return ajax.post(context, 'CommonDictMain/updateSort', data);
     },
-    detailList(context,mainID){
-        return ajax.get(context,'CommonDictDetail/list',{mainID});
+    detailList(context, mainID) {
+        return ajax.get(context, 'CommonDictDetail/list', {
+            mainID
+        });
     },
-    detailGet(context,rowID){
-        return ajax.get(context,'CommonDictDetail/get',{rowID});
+    detailGet(context, rowID) {
+        return ajax.get(context, 'CommonDictDetail/get', {
+            rowID
+        });
     },
-    detailDelete(context,rowID){
-        return ajax.get(context,'CommonDictDetail/delete',{rowID});
+    detailDelete(context, rowID) {
+        return ajax.get(context, 'CommonDictDetail/delete', {
+            rowID
+        });
     },
-    detailCreate(context,data){
-        return ajax.post(context,'CommonDictDetail/create',data);
+    detailCreate(context, data) {
+        return ajax.post(context, 'CommonDictDetail/create', data);
     },
-    detailUpdate(context,data){
-        return ajax.post(context,'CommonDictDetail/update',data);
+    detailUpdate(context, data) {
+        return ajax.post(context, 'CommonDictDetail/update', data);
     },
-    detailUpdateBatch(context,mainID,data){
+    detailUpdateBatch(context, mainID, data) {
         // debugger
-        return ajax.post(context,'CommonDictDetail/updateSort',data,{mainID});
+        return ajax.post(context, 'CommonDictDetail/updateSort', data, {
+            mainID
+        });
     },
 };
-export {
-    requestModule,
-    requestForm,
-    requestFormAuthorize,
-    system,
-    ReqCommonDataCompany,
-    requestCommonDataDept,
-    requestCommonDataPosition,
-    requestUser,
-    requestAPIList,
-    requestUserRelation,
-    requestOsapCommonDict,
-    requestOsapWXConfig,
-    requestOsapCommonDataDict
+export const requestOsapMonitorItem = {
+    list(context) {
+        return ajax.get(context, 'MonitorItem/list');
+    },
+    get(context, rowID) {
+        return ajax.get(context, 'MonitorItem/get', {
+            rowID
+        });
+    },
+    create(context, data) {
+        return ajax.post(context, 'MonitorItem/create', data);
+    },
+    update(context, data) {
+        return ajax.post(context, 'MonitorItem/update', data);
+    },
+    delete(context, rowID) {
+        return ajax.get(context, 'MonitorItem/delete', {
+            rowID
+        });
+    }
 };
+// export {
+//     requestModule,
+//     requestForm,
+//     requestFormAuthorize,
+//     system,
+//     ReqCommonDataCompany,
+//     requestCommonDataDept,
+//     requestCommonDataPosition,
+//     requestUser,
+//     requestAPIList,
+//     requestUserRelation,
+//     requestOsapCommonDict,
+//     requestOsapWXConfig,
+//     requestOsapCommonDataDict
+// };

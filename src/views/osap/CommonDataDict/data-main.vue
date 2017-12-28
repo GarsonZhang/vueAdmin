@@ -230,14 +230,14 @@ export default {
           me.sortStatus = false;
           var c = [];
           for (let i = 0; i < me.data.length; i++) {
-            me.data[i]["fSort"] = me.sortCache.indexOf(i);
+            me.data[i]["sort"] = me.sortCache.indexOf(i);
             c.push(i);
           }
           //this.sortCache = c;
           //参数排序
           debugger;
           me.data.sort((a, b) => {
-            return a.fSort > b.fSort;
+            return a.sort > b.sort;
           });
           me.sortCache = [];
           for (let i = 0; i < me.data.length; i++) {
@@ -378,7 +378,7 @@ export default {
       var me = this;
       // 新增 or 修改
       if (this.editStatus == 1) {
-        this.editData["fSort"] = this.data.length;
+        this.editData["sort"] = this.data.length;
         req = requestOsapCommonDataDict.mainCreate(this, this.editData);
       } else req = requestOsapCommonDataDict.mainUpdate(this, this.editData);
       req

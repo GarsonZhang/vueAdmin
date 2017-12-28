@@ -135,13 +135,13 @@ export default {
   },
   methods: {
     mouseenter() {
-      console.log("mouseneter");
+      // console.log("mouseneter");
       this.iconName = this.$utils.isNULL(this.currentValue)
         ? "arrow-down-b"
         : "ios-close";
     },
     mouseleave() {
-      console.log("mouseleave");
+      // console.log("mouseleave");
       this.iconName = "arrow-down-b";
     },
     handleFilter() {

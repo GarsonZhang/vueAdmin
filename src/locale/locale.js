@@ -146,9 +146,45 @@ customer.commonDataDictDetail = {
     }
 };
 
+customer.commonMonitorItem = {
+    'zh-CN': {
+        keys: {
+            titleCreate:'项目新增',
+            titleModify:'项目修改',
+            titleView:'查看',
+            index: '序号',
+            moduleID:'模块ID',
+            moduleDescription:'模块',
+            code: '监察代码',
+            description: '描述',
+            typeID:'监察类型ID',
+            typeDescription:'监察类型',
+            score:'扣分',
+            remark:'说明',
+            keyAll:'备注',
+            key:'关键字'
+        },
+
+    },
+    'zh-TW': {
+
+    },
+    'en-US': {
+
+    }
+};
+
 
 let system = {
     'zh-CN': {
+        validateErr:{
+            empty:'{0} 不能为空',
+            lengthBetween: '{0} 长度必须介于{1}和{2}之间'
+        },
+        placeHolder:{
+            input:'请输入{0}',
+            select:'请选择',
+        },
         pageSize: '{0} 条/页',
         login: '登陆',
         save: '保存',
@@ -179,6 +215,14 @@ let system = {
 
     },
     'zh-TW': {
+        validateErr:{
+            empty:'{0} 不能为空',
+            lengthBetween: '{0} 长度必须介于{1}和{2}之间'
+        },
+        placeHolder:{
+            input:'请输入 {0}',
+            select:'请选择',
+        },
         mainData: '主数据',
         detailData: '明细数据',
         pageSize: '{0} 條/葉',
@@ -202,6 +246,14 @@ let system = {
         dataRuleNullMsg: '{0}不能為空',
     },
     'en-US': {
+        validateErr:{
+            empty:'{0} 不能为空',
+            lengthBetween: '{0} 长度必须介于{1}和{2}之间'
+        },
+        placeHolder:{
+            input:'please input {0}',
+            select:'请选择',
+        },
         mainData: 'mainData',
         detailData: 'detail',
         pageSize: '{0} / page',
@@ -222,6 +274,7 @@ let system = {
         dataTitleView: 'data detail',
         dataTitleViewFormat: '{0} - detail',
         noSelectData: 'no select data',
+       
     }
 };
 
