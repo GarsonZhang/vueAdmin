@@ -57,7 +57,7 @@ import systemModule from "./systemModule.vue";
 import systemModuleForm from "./systemModuleForm.vue";
 
 export default {
-  name: "module",
+  // name: "module",
   mixins: [Msg],
   components: { systemModule, systemModuleForm },
   data() {

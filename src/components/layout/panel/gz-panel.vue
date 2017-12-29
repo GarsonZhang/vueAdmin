@@ -71,7 +71,7 @@ export default {
           : 0;
         me.$emit("onMainResize", mainWidth, mainHeight);
       }, 10);
-      console.log(this.top_height);
+      // console.log(this.top_height);
     }
   },
   mounted() {
@@ -103,7 +103,7 @@ export default {
       if (this.topStyle) v = this.$utils.deepCopy(this.topStyle);
       v.height = this._topH;
       return v;
-      console.dir(v);
+      // console.dir(v);
     },
     _styleMain() {
       var v = {};

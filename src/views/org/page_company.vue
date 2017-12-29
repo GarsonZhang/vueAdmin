@@ -5,9 +5,9 @@
               <div slot="top" class="tools" >      
                 <gz-button icon="refresh" text="刷新" loadingText="刷新中" @click="event_click_refresh" />
                 <ButtonGroup>
-                  <gz-button  type="primary" icon="plus" @click="event_click_create" text="新增" loadingText="请稍后"></gz-button >
-                  <gz-button  type="success" icon="plus" @click="event_click_edit" text="修改" loadingText="请稍后"></gz-button >
-                  <gz-button  type="error" icon="plus" @click="event_click_delete" text="删除" loadingText="请稍后"></gz-button >
+                  <gz-button  type="primary" icon="plus" v-permission="1"  @click="event_click_create" text="新增" loadingText="请稍后"></gz-button >
+                  <gz-button  type="success" icon="plus" v-permission="2" @click="event_click_edit" text="修改" loadingText="请稍后"></gz-button >
+                  <gz-button  type="error" icon="plus"  v-permission="4" @click="event_click_delete" text="删除" loadingText="请稍后"></gz-button >
                 </ButtonGroup>
               </div>
 
@@ -28,28 +28,28 @@
                 @on-cancel="event_formCancel">
                 <Form :ref="refName_form" :model="editData" :rules="dataRule"  label-position="left" :label-width="80">
                 <FormItem label="公司编码" prop="companyCode">
-                    <Input v-model="editData.companyCode" placeholder="请输入公司编码"></Input>
+                    <i-input v-model="editData.companyCode" placeholder="请输入公司编码"></i-input>
                 </FormItem>
                 <FormItem label="中文名称" prop="companyName_chs">
-                    <Input v-model="editData.companyName_chs" placeholder="请输入公司中文名称"></Input>
+                    <i-input v-model="editData.companyName_chs" placeholder="请输入公司中文名称"></i-input>
                 </FormItem>
                 <FormItem label="英文名称" prop="companyName_en">
-                    <Input v-model="editData.companyName_en" placeholder="请输入公司英文地址"></Input>
+                    <i-input v-model="editData.companyName_en" placeholder="请输入公司英文地址"></i-input>
                 </FormItem>
                 <FormItem label="上级公司" prop="parentID">
                   <SelectCompany :ref="refName_companyTree" @onSelected="onSelected" v-model="editData.parentID"></SelectCompany>
                 </FormItem>
                 <FormItem label="责任人" prop="principalName">
-                    <Input v-model="editData.principalName" placeholder="请输入责任人"></Input>
+                    <i-input v-model="editData.principalName" placeholder="请输入责任人"></i-input>
                 </FormItem>
                 <FormItem label="联系电话" prop="principalPhone">
-                    <Input v-model="editData.principalPhone" placeholder="请输入联系电话"></Input>
+                    <i-input v-model="editData.principalPhone" placeholder="请输入联系电话"></i-input>
                 </FormItem>
                 <FormItem label="邮箱地址" prop="principalEmail">
-                    <Input v-model="editData.principalEmail" placeholder="请输入邮箱地址"></Input>
+                    <i-input v-model="editData.principalEmail" placeholder="请输入邮箱地址"></i-input>
                 </FormItem>
                 <FormItem label="公司地址" prop="address">
-                    <Input v-model="editData.address" placeholder="请输入公司地址"></Input>
+                    <i-input v-model="editData.address" placeholder="请输入公司地址"></i-input>
                 </FormItem>
                 </Form>
             </Modal>
@@ -66,6 +66,7 @@
 import { ReqCommonDataCompany } from "../../libs/request";
 import SelectCompany from "./selectCompany";
 import Msg from "../../mixins/msg";
+import Authorize from "../../mixins/authorize";
 export default {
   data() {
     return {
@@ -120,7 +121,7 @@ export default {
       refName_companyTree: "companyTree"
     };
   },
-  mixins: [Msg],
+  mixins: [Msg,Authorize],
   components: {
     SelectCompany
   },

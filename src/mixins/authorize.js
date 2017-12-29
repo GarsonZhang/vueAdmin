@@ -1,5 +1,5 @@
 export default {
-    name:'Authorize',
+    // name:'Authorize',
     directives: {
         permission: {
             bind(el, binding,vnode) {

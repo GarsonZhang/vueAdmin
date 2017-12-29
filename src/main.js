@@ -96,6 +96,7 @@ const store = new Vuex.Store({
     },
     mutations: {
         closePage(state, name) {
+            console.log('closePage');
             state.cachePage.forEach((item, index) => {
                 if (item === name) {
                     state.cachePage.splice(index, 1);
@@ -103,13 +104,16 @@ const store = new Vuex.Store({
             });
         },
         increateTag(state, tagObj) {
+            console.log('increateTag');
             state.cachePage.push(tagObj.name);
         },
         clearAllTags(state) {
+            console.log('clearAllTags');
             state.cachePage.splice(1, state.cachePage.length);
         },
         clearOtherTags(state, name) {
             let currentIndex = -1;
+            console.log('clearOtherTags');
             for (var i = 0; i < state.cachePage.length; i++) {
                 if (state.cachePage[i] === name) {
                     currentIndex = i;

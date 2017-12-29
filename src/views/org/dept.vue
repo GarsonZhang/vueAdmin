@@ -5,9 +5,9 @@
               <div slot="top" class="tools" >      
                 <gz-button icon="refresh" text="刷新" loadingText="刷新中" @click="event_click_refresh" />
                 <ButtonGroup>
-                  <gz-button  type="primary" icon="plus" @click="event_click_create" text="新增" loadingText="请稍后"></gz-button >
-                  <gz-button  type="success" icon="plus" @click="event_click_edit" text="修改" loadingText="请稍后"></gz-button >
-                  <gz-button  type="error" icon="plus" @click="event_click_delete" text="删除" loadingText="请稍后"></gz-button >
+                  <gz-button  type="primary" icon="plus" v-permission="1" @click="event_click_create" text="新增" loadingText="请稍后"></gz-button >
+                  <gz-button  type="success" icon="plus" v-permission="2" @click="event_click_edit" text="修改" loadingText="请稍后"></gz-button >
+                  <gz-button  type="error" icon="plus" v-permission="4" @click="event_click_delete" text="删除" loadingText="请稍后"></gz-button >
                 </ButtonGroup>
               </div>
 
@@ -69,6 +69,7 @@
 import { requestCommonDataDept } from "../../libs/request";
 import SelectDept from "./selectDept";
 import Msg from "../../mixins/msg";
+import Authorize from "../../mixins/authorize";
 export default {
   name: "dept",
   data() {
@@ -127,7 +128,7 @@ export default {
   props: {
     companyID: String
   },
-  mixins: [Msg],
+  mixins: [Msg,Authorize],
   components: {
     SelectDept
   },

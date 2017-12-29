@@ -69,8 +69,8 @@ axiosProvider._getRemote = function () {
             // debugger
             var _parmStr = str + tokenSecret;
             var sign = md5.hex_md5(_parmStr);
-            console.log(_parmStr);
-            console.log(sign);
+            // console.log(_parmStr);
+            // console.log(sign);
             config.headers['sign'] = sign;
             return config;
         }, error => {

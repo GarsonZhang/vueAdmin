@@ -24,7 +24,7 @@ export default {
     };
   },
   mounted() {
-    // debugger;
+    debugger;
     ReqCommonDataCompany.list(this).then(
       res => {
         this.companyData = res.data;

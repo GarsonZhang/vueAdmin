@@ -168,7 +168,7 @@ export default {
       }
     },
     handleSelect(){
-      console.log('tree-node.vue.handleSelect');
+      // console.log('tree-node.vue.handleSelect');
       this.node.setSelected();
     },
 
@@ -193,7 +193,7 @@ export default {
 
     const tree = this.tree;
     if (!tree) {
-      console.warn("Can not find node's tree.");
+      // console.warn("Can not find node's tree.");
     }
 
     const props = tree.props || {};

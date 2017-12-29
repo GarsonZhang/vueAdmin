@@ -180,26 +180,29 @@ export default {
   },
   created() {},
   mounted() {
-    this.$refs["moduleRefresh"].handleClick();
-
-    var me = this;
-    //模块排序
-    var elModule = this.$refs["tableModule"].$children[1].$el.children[1];
-    Sortable.create(elModule, {
-      //排序移动前
-      onStart(el) {},
-      //排序移动后
-      onEnd(el) {
-        var v = me.sortCache[el.oldIndex];
-        me.sortCache.splice(el.oldIndex, 1);
-        me.sortCache.splice(el.newIndex, 0, v);
-        if (me.sortStatus === false) me.sortStatus = true;
-      },
-      //排序选择
-      onChoose(el) {}
-    });
+    this.load();
   },
   methods: {
+    load() {
+      this.$refs["moduleRefresh"].handleClick();
+
+      var me = this;
+      //模块排序
+      var elModule = this.$refs["tableModule"].$children[1].$el.children[1];
+      Sortable.create(elModule, {
+        //排序移动前
+        onStart(el) {},
+        //排序移动后
+        onEnd(el) {
+          var v = me.sortCache[el.oldIndex];
+          me.sortCache.splice(el.oldIndex, 1);
+          me.sortCache.splice(el.newIndex, 0, v);
+          if (me.sortStatus === false) me.sortStatus = true;
+        },
+        //排序选择
+        onChoose(el) {}
+      });
+    },
     //选择一个模块，加载模块功能
     event_moduleSelect(row, index) {
       //this.selectModule = row;
@@ -215,7 +218,7 @@ export default {
         tmp_data[i]["sort"] = this.sortCache.indexOf(i);
       }
       requestModule
-        .updateBatch(this,tmp_data)
+        .updateBatch(this, tmp_data)
         .then(res => {
           component.loading = false;
           this.sortStatus = false;
@@ -228,7 +231,7 @@ export default {
         });
     },
     //模块排序取消
-    event_moduleSortCancelClick( component) {
+    event_moduleSortCancelClick(component) {
       this.sortStatus = false;
       this.doModuleRefresh()
         .then(res => {
@@ -240,7 +243,7 @@ export default {
     },
 
     //刷新模块点击事件
-    event_moduleRefreshClick( component) {
+    event_moduleRefreshClick(component) {
       this.isLoading = true;
       this.doModuleRefresh()
         .then(res => {
@@ -274,7 +277,7 @@ export default {
         return;
       }
       requestModule
-        .get(this,v.rowID)
+        .get(this, v.rowID)
         .then(res => {
           this.editData = res.data;
           this.editStatus = 2;
@@ -293,7 +296,7 @@ export default {
           return p._isHighlight == true;
         }
       );
-       if (!v) {
+      if (!v) {
         component.loading = false;
         this.showWarning("请先选择要编辑的模块");
         return;
@@ -306,7 +309,7 @@ export default {
         content,
         () => {
           requestModule
-            .delete(me,v.rowID)
+            .delete(me, v.rowID)
             .then(res => {
               var index = me.$utils.searchJsonIndex(me.data, p => {
                 return p.rowID == v.rowID;
@@ -327,7 +330,7 @@ export default {
 
     //模块编辑数据提交事件
     event_moduleEditDataSubmit() {
-      debugger
+      debugger;
       this.$refs["formModule"].validate(valid => {
         if (valid) {
           this.doModuleSubmit();
@@ -371,8 +374,8 @@ export default {
       // 新增 or 修改
       if (this.editStatus == 1) {
         this.editData["sort"] = this.data.length;
-        req = requestModule.create(this,this.editData);
-      } else req = requestModule.update(this,this.editData);
+        req = requestModule.create(this, this.editData);
+      } else req = requestModule.update(this, this.editData);
       req
         .then(res => {
           if (me.editStatus == 1) {
