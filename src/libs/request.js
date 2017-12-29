@@ -364,10 +364,10 @@ export const requestOsapWXConfig = {
     }
 };
 export const requestOsapCommonDataDict = {
-    dataModule(context){
+    dataModule(context) {
         return ajax.get(context, 'CommonDictMain/dataModule');
     },
-    dataMonitorType(context){
+    dataMonitorType(context) {
         return ajax.get(context, 'CommonDictMain/dataMonitorType');
     },
 
@@ -441,6 +441,24 @@ export const requestOsapMonitorItem = {
         return ajax.get(context, 'MonitorItem/delete', {
             rowID
         });
+    }
+};
+
+export const requestOsapMonitorItemUserCfg = {
+    list(context,userID) {
+        return ajax.get(context, 'MonitorITemUserReciveCfg/list',{userID});
+    },
+    get(context,rowID){
+        return ajax.get(context, 'MonitorITemUserReciveCfg/get',{rowID});
+    },
+    delete(context,rowID){
+        return ajax.get(context, 'MonitorITemUserReciveCfg/delete',{rowID});
+    },
+    create(context,data){
+        return ajax.post(context, 'MonitorITemUserReciveCfg/create',data);
+    },
+    update(context,data){
+        return ajax.post(context, 'MonitorITemUserReciveCfg/update',data);
     }
 };
 // export {

@@ -149,9 +149,7 @@ export default {
         });
     },
 
-    onCreate(data) {
-      this.data.push(data);
-    },
+ 
     getSelect() {
       var v = this.$utils.searchObserver(
         this.$refs[this.refNames.dataTable].objData,
@@ -166,6 +164,9 @@ export default {
         return;
       }
       return v;
+    },
+       onCreate(data) {
+      this.data.push(data);
     },
     onModify(data) {
       var index = this.$utils.searchJsonIndex(this.data, p => {

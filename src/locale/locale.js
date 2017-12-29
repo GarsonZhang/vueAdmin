@@ -174,6 +174,28 @@ customer.commonMonitorItem = {
     }
 };
 
+customer.commonMonitorItemUserCfg = {
+    'zh-CN': {
+        keys: {
+            titleCreate:'新增',
+            titleModify:'修改',
+            titleView:'查看',
+            index: '序号',
+            monitorItemCode:'监察代码',
+            monitorItemDescription:'监察描述',
+            typeDescription: '类型',
+            columnKey:'关键字'
+        },
+
+    },
+    'zh-TW': {
+
+    },
+    'en-US': {
+
+    }
+};
+
 
 let system = {
     'zh-CN': {

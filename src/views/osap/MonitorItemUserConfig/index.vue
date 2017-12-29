@@ -1,23 +1,38 @@
 <template>
-    <div class="content">
-        <div class="nav border">
-            <gz-panel >
-                <div slot="top">
-                    <SelectCompany @onSelected="onCompanySelected" v-model="companyID" :width="200"></SelectCompany>
-                    <SelectDept :companyID="companyID" @onSelected="onDeptSelected" v-model="deptID"></SelectDept>
-                </div>
-                <div slot="main">
-                    <div class="selectItem" v-for="item in filterUserList" @click.stop="selectUser(item)" :key="item.userID" :class="{'active':item.rowID===currentUser.rowID}">
-                        <p>{{item.companyName}}</p>
-                        <p>{{item.deptName}} 【{{item.userName}}】</p>
-                    </div>
-                </div>
-            </gz-panel>
+  <div class="content">
+    <div class="nav border">
+      <gz-panel>
+        <div slot="top">
+          <SelectCompany @onSelected="onCompanySelected" v-model="companyID" :width="200"></SelectCompany>
+          <SelectDept :companyID="companyID" @onSelected="onDeptSelected" v-model="deptID"></SelectDept>
         </div>
-        <div class="main">
-            <h1>这里是table数据</h1>
+        <div slot="main">
+          <div class="selectItem" v-for="item in filterUserList" @click.stop="selectUser(item)" :key="item.userID" :class="{'active':item.rowID===currentUser.rowID}">
+            <p>{{item.companyName}}</p>
+            <p>{{item.deptName}} 【{{item.userName}}】</p>
+          </div>
         </div>
+      </gz-panel>
     </div>
+    <div class="main">
+      <gz-panel>
+        <div slot="top">
+          <div class="tools">
+            <gz-button :ref="refNames.buttonRefresh" icon="refresh" @click="event_buttonRefreshClick" text="刷新" />
+            <ButtonGroup class="tooltipButtonGroup">
+              <gz-button type="primary" icon="plus" @click="event_buttonAddClick" v-permission="1" text="新增"></gz-button>
+              <gz-button type="success" icon="edit" @click="event_buttonEditClick" v-permission="2" text="修改"></gz-button>
+              <gz-button type="error" icon="close" @click="event_buttonDeleteClick" v-permission="4" text="删除"></gz-button>
+            </ButtonGroup>
+          </div>
+        </div>
+        <div slot="main" class="main">
+          <Table :ref="refNames.dataTable" size="small" :loading="isLoading" :columns="columns" :data="data" highlight-row border></Table>
+        </div>
+      </gz-panel>
+      <data-edit :ref="refNames.form" @onCreate="onCreate" @onModify="onModify"></data-edit>
+    </div>
+  </div>
 </template>
 <style lang="less" scoped>
 .nav,
@@ -47,32 +62,44 @@
   margin: 10px;
   padding: 5px 0 0 10px;
   &.active {
-    border: 2px solid #ff5d5b;
-    // padding: 0 0px;
+    border: 2px solid #ff5d5b; // padding: 0 0px;
     background: url(../../../assets/duihao_03.png) right top no-repeat;
   }
 }
 </style>
 
 <script>
-import { requestUser } from "../../../libs/request";
+import {
+  requestUser,
+  requestOsapMonitorItemUserCfg
+} from "../../../libs/request";
 import SelectCompany from "../../org/selectCompany";
 import SelectDept from "../../org/selectDept";
+import Authorize from "../../../mixins/authorize";
+import DataEdit from "./dataEdit.vue";
 export default {
   data() {
     return {
+      isLoading: false,
       companyID: "",
       deptID: "",
       userData: [],
       queryStr: "",
       // filterUserList: [],
       currentUser: {},
-      filterType: 0
+      filterType: 0,
+      data: [],
+      refNames: {
+        dataTable: "dataTable",
+        form: "form"
+      }
     };
   },
+  mixins: [Authorize],
   components: {
     SelectCompany,
-    SelectDept
+    SelectDept,
+    DataEdit
   },
   watch: {
     companyID(val) {
@@ -106,6 +133,242 @@ export default {
         default:
           break;
       }
+    },
+    columns() {
+      return [
+        {
+          //序号
+          title: this.$t("commonMonitorItemUserCfg.keys.index"),
+          type: "index",
+          width: 50,
+          align: "center",
+          className: "table-cell-index",
+          fixed: "left"
+        },
+        {
+          //监察代码
+          title: this.$t("commonMonitorItemUserCfg.keys.monitorItemCode"),
+          key: "monitorItemCode",
+          width: 100,
+          fixed: "left"
+        },
+        {
+          //监察描述
+          title: this.$t(
+            "commonMonitorItemUserCfg.keys.monitorItemDescription"
+          ),
+          key: "monitorItemDescription",
+          width: 150,
+          fixed: "left"
+        },
+        {
+          //类型
+          title: this.$t("commonMonitorItemUserCfg.keys.typeDescription"),
+          key: "typeDescription",
+          width: 80,
+          fixed: "left"
+        },
+        {
+          title: this.$t("commonMonitorItemUserCfg.keys.columnKey") + "01",
+          key: "keyDisplay01",
+          width: 120
+        },
+        {
+          title: this.$t("commonMonitorItemUserCfg.keys.columnKey") + "02",
+          key: "keyDisplay02",
+          width: 120
+        },
+        {
+          title: this.$t("commonMonitorItemUserCfg.keys.columnKey") + "03",
+          key: "keyDisplay03",
+          width: 120
+        },
+        {
+          title: this.$t("commonMonitorItemUserCfg.keys.columnKey") + "04",
+          key: "keyDisplay04",
+          width: 120
+        },
+        {
+          title: this.$t("commonMonitorItemUserCfg.keys.columnKey") + "05",
+          key: "keyDisplay05",
+          width: 120
+        },
+        {
+          title: this.$t("commonMonitorItemUserCfg.keys.columnKey") + "06",
+          key: "keyDisplay06",
+          width: 120
+        },
+        {
+          title: this.$t("commonMonitorItemUserCfg.keys.columnKey") + "07",
+          key: "keyDisplay07",
+          width: 120
+        },
+        {
+          title: this.$t("commonMonitorItemUserCfg.keys.columnKey") + "08",
+          key: "keyDisplay08",
+          width: 120
+        },
+        {
+          title: this.$t("commonMonitorItemUserCfg.keys.columnKey") + "09",
+          key: "keyDisplay09",
+          width: 120
+        },
+        {
+          title: this.$t("commonMonitorItemUserCfg.keys.columnKey") + "10",
+          key: "keyDisplay10",
+          width: 120
+        },
+        {
+          title: this.$t("commonMonitorItemUserCfg.keys.columnKey") + "11",
+          key: "keyDisplay11",
+          width: 120
+        },
+        {
+          title: this.$t("commonMonitorItemUserCfg.keys.columnKey") + "12",
+          key: "keyDisplay12",
+          width: 120
+        },
+        {
+          title: this.$t("commonMonitorItemUserCfg.keys.columnKey") + "13",
+          key: "keyDisplay13",
+          width: 120
+        },
+        {
+          title: this.$t("commonMonitorItemUserCfg.keys.columnKey") + "14",
+          key: "keyDisplay14",
+          width: 120
+        },
+        {
+          title: this.$t("commonMonitorItemUserCfg.keys.columnKey") + "15",
+          key: "keyDisplay15",
+          width: 120
+        },
+        {
+          title: this.$t("commonMonitorItemUserCfg.keys.columnKey") + "16",
+          key: "keyDisplay16",
+          width: 120
+        },
+        {
+          title: this.$t("commonMonitorItemUserCfg.keys.columnKey") + "17",
+          key: "keyDisplay17",
+          width: 120
+        },
+        {
+          title: this.$t("commonMonitorItemUserCfg.keys.columnKey") + "18",
+          key: "keyDisplay18",
+          width: 120
+        },
+        {
+          title: this.$t("commonMonitorItemUserCfg.keys.columnKey") + "19",
+          key: "keyDisplay19",
+          width: 120
+        },
+        {
+          title: this.$t("commonMonitorItemUserCfg.keys.columnKey") + "20",
+          key: "keyDisplay20",
+          width: 120
+        },
+        {
+          title: this.$t("commonMonitorItemUserCfg.keys.columnKey") + "21",
+          key: "keyDisplay21",
+          width: 120
+        },
+        {
+          title: this.$t("commonMonitorItemUserCfg.keys.columnKey") + "22",
+          key: "keyDisplay22",
+          width: 120
+        },
+        {
+          title: this.$t("commonMonitorItemUserCfg.keys.columnKey") + "23",
+          key: "keyDisplay23",
+          width: 120
+        },
+        {
+          title: this.$t("commonMonitorItemUserCfg.keys.columnKey") + "24",
+          key: "keyDisplay24",
+          width: 120
+        },
+        {
+          title: this.$t("commonMonitorItemUserCfg.keys.columnKey") + "25",
+          key: "keyDisplay25",
+          width: 120
+        },
+        {
+          title: this.$t("commonMonitorItemUserCfg.keys.columnKey") + "26",
+          key: "keyDisplay26",
+          width: 120
+        },
+        {
+          title: this.$t("commonMonitorItemUserCfg.keys.columnKey") + "27",
+          key: "keyDisplay27",
+          width: 120
+        },
+        {
+          title: this.$t("commonMonitorItemUserCfg.keys.columnKey") + "28",
+          key: "keyDisplay28",
+          width: 120
+        },
+        {
+          title: this.$t("commonMonitorItemUserCfg.keys.columnKey") + "29",
+          key: "keyDisplay29",
+          width: 120
+        },
+        {
+          title: this.$t("commonMonitorItemUserCfg.keys.columnKey") + "30",
+          key: "keyDisplay30",
+          width: 120
+        },
+        {
+          title: this.$t("commonMonitorItemUserCfg.keys.columnKey") + "31",
+          key: "keyDisplay31",
+          width: 120
+        },
+        {
+          title: this.$t("commonMonitorItemUserCfg.keys.columnKey") + "32",
+          key: "keyDisplay32",
+          width: 120
+        },
+        {
+          title: this.$t("commonMonitorItemUserCfg.keys.columnKey") + "33",
+          key: "keyDisplay33",
+          width: 120
+        },
+        {
+          title: this.$t("commonMonitorItemUserCfg.keys.columnKey") + "34",
+          key: "keyDisplay34",
+          width: 120
+        },
+        {
+          title: this.$t("commonMonitorItemUserCfg.keys.columnKey") + "35",
+          key: "keyDisplay35",
+          width: 120
+        },
+        {
+          title: this.$t("commonMonitorItemUserCfg.keys.columnKey") + "36",
+          key: "keyDisplay36",
+          width: 120
+        },
+        {
+          title: this.$t("commonMonitorItemUserCfg.keys.columnKey") + "37",
+          key: "keyDisplay37",
+          width: 120
+        },
+        {
+          title: this.$t("commonMonitorItemUserCfg.keys.columnKey") + "38",
+          key: "keyDisplay38",
+          width: 120
+        },
+        {
+          title: this.$t("commonMonitorItemUserCfg.keys.columnKey") + "39",
+          key: "keyDisplay39",
+          width: 120
+        },
+        {
+          title: this.$t("commonMonitorItemUserCfg.keys.columnKey") + "40",
+          key: "keyDisplay40",
+          width: 120
+        }
+      ];
     }
   },
   mounted() {
@@ -119,6 +382,65 @@ export default {
       });
   },
   methods: {
+    event_buttonRefreshClick(e) {
+      this.loadData(() => {
+        e.loading = false;
+      });
+    },
+    event_buttonAddClick(btn) {
+      btn.loading = false;
+      this.$refs[this.refNames.form].showCreate(this.currentUser.rowID);
+    },
+    event_buttonEditClick(btn) {
+      var obj = this.getSelect();
+      if (!obj) return;
+      this.$refs[this.refNames.form].showModify(obj.rowID, () => {
+        btn.loading = false;
+      });
+    },
+    event_buttonDeleteClick(btn) {
+      var obj = this.getSelect();
+      if (!obj) return;
+      requestOsapMonitorItemUserCfg.delete(this, obj.rowID).then(res => {
+        var index = this.$utils.searchJsonIndex(this.data, p => {
+          return p.rowID == v.rowID;
+        });
+        this.data.splice(index, 1);
+        this.showInfo(this.$t("deleteSuccess"));
+        btn.loading = false;
+      });
+    },
+    loadData(callback) {
+      if (this.currentUser.rowID) {
+        requestOsapMonitorItemUserCfg
+          .list(this, this.currentUser.rowID)
+          .then(res => {
+            this.data = res.data;
+            if (callback) callback();
+          })
+          .catch(err => {
+            this.data = [];
+            if (callback) callback();
+          });
+      } else {
+        if (callback) callback();
+      }
+    },
+    getSelect() {
+      var v = this.$utils.searchObserver(
+        this.$refs[this.refNames.dataTable].objData,
+        null,
+        p => {
+          return p._isHighlight == true;
+        }
+      );
+      if (!v) {
+        component.loading = false;
+        this.showWarning(this.$t("noSelectData"));
+        return;
+      }
+      return v;
+    },
     onCompanySelected(value, e) {
       //   debugger;
       // this.filterUserList = this.userData.filter(
@@ -131,7 +453,6 @@ export default {
     },
     onDeptSelected(value, e) {
       //   debugger;
-
       // this.filterUserList = this.userData.filter(
       //   item => item.deptID === this.deptID
       // );
@@ -139,6 +460,16 @@ export default {
     selectUser(user) {
       // debugger
       this.currentUser = user;
+      this.loadData();
+    },
+    onCreate(data) {
+      this.data.push(data);
+    },
+    onModify(data) {
+      var index = this.$utils.searchJsonIndex(this.data, p => {
+        return p.rowID == data.rowID;
+      });
+      this.data.splice(index, 1, data);
     }
   }
 };
