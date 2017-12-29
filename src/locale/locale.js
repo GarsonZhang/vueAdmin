@@ -184,6 +184,9 @@ customer.commonMonitorItemUserCfg = {
             monitorItemCode:'监察代码',
             monitorItemDescription:'监察描述',
             typeDescription: '类型',
+            sendEmail:'发送邮件',
+            sendWebChat:'发送微信',
+            sendAffix:'发送附件',
             columnKey:'关键字'
         },
 

@@ -459,6 +459,9 @@ export const requestOsapMonitorItemUserCfg = {
     },
     update(context,data){
         return ajax.post(context, 'MonitorITemUserReciveCfg/update',data);
+    },
+    getMonitorItemKeyDatas(context,monitorItemID){
+        return ajax.get(context, 'MonitorITemUserReciveCfg/getMonitorItemKeyDatas',{monitorItemID});
     }
 };
 // export {

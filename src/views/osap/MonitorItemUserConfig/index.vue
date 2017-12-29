@@ -169,203 +169,160 @@ export default {
           fixed: "left"
         },
         {
+          //发送邮件
+          title: this.$t("commonMonitorItemUserCfg.keys.sendEmail"),
+          key: "sendMail",
+          width: 80,
+          // fixed: "left",
+          align: "center",
+          render: (h, params) => {
+            return h("Icon", {
+              props: {
+                size: "18",
+                type:
+                  params.row.sendMail === 1
+                    ? "ios-checkmark"
+                    : "ios-circle-outline"
+              }
+            });
+          }
+        },
+        {
+          //发送微信
+          title: this.$t("commonMonitorItemUserCfg.keys.sendWebChat"),
+          key: "sendWeChat",
+          width: 80,
+          // fixed: "left",
+          align: "center",
+          render: (h, params) => {
+            return h("Icon", {
+              props: {
+                size: "18",
+                type:
+                  params.row.sendWeChat === 1
+                    ? "ios-checkmark"
+                    : "ios-circle-outline"
+              }
+            });
+          }
+        },
+        {
+          //发送附件
+          title: this.$t("commonMonitorItemUserCfg.keys.sendAffix"),
+          key: "sendMailAffix",
+          width: 80,
+          // fixed: "left",
+          align: "center",
+          render: (h, params) => {
+            return h("Icon", {
+              props: {
+                size: "18",
+                type:
+                  params.row.sendMailAffix === 1
+                    ? "ios-checkmark"
+                    : "ios-circle-outline"
+              }
+            });
+          }
+        },
+        {
           title: this.$t("commonMonitorItemUserCfg.keys.columnKey") + "01",
-          key: "keyDisplay01",
+          key: "key01Label",
           width: 120
         },
         {
           title: this.$t("commonMonitorItemUserCfg.keys.columnKey") + "02",
-          key: "keyDisplay02",
+          key: "key02Label",
           width: 120
         },
         {
           title: this.$t("commonMonitorItemUserCfg.keys.columnKey") + "03",
-          key: "keyDisplay03",
+          key: "key03Label",
           width: 120
         },
         {
           title: this.$t("commonMonitorItemUserCfg.keys.columnKey") + "04",
-          key: "keyDisplay04",
+          key: "key04Label",
           width: 120
         },
         {
           title: this.$t("commonMonitorItemUserCfg.keys.columnKey") + "05",
-          key: "keyDisplay05",
+          key: "key05Label",
           width: 120
         },
         {
           title: this.$t("commonMonitorItemUserCfg.keys.columnKey") + "06",
-          key: "keyDisplay06",
+          key: "key06Label",
           width: 120
         },
         {
           title: this.$t("commonMonitorItemUserCfg.keys.columnKey") + "07",
-          key: "keyDisplay07",
+          key: "key07Label",
           width: 120
         },
         {
           title: this.$t("commonMonitorItemUserCfg.keys.columnKey") + "08",
-          key: "keyDisplay08",
+          key: "key08Label",
           width: 120
         },
         {
           title: this.$t("commonMonitorItemUserCfg.keys.columnKey") + "09",
-          key: "keyDisplay09",
+          key: "key09Label",
           width: 120
         },
         {
           title: this.$t("commonMonitorItemUserCfg.keys.columnKey") + "10",
-          key: "keyDisplay10",
+          key: "key10Label",
           width: 120
         },
         {
           title: this.$t("commonMonitorItemUserCfg.keys.columnKey") + "11",
-          key: "keyDisplay11",
+          key: "key11Label",
           width: 120
         },
         {
           title: this.$t("commonMonitorItemUserCfg.keys.columnKey") + "12",
-          key: "keyDisplay12",
+          key: "key12Label",
           width: 120
         },
         {
           title: this.$t("commonMonitorItemUserCfg.keys.columnKey") + "13",
-          key: "keyDisplay13",
+          key: "key13Label",
           width: 120
         },
         {
           title: this.$t("commonMonitorItemUserCfg.keys.columnKey") + "14",
-          key: "keyDisplay14",
+          key: "key14Label",
           width: 120
         },
         {
           title: this.$t("commonMonitorItemUserCfg.keys.columnKey") + "15",
-          key: "keyDisplay15",
+          key: "key15Label",
           width: 120
         },
         {
           title: this.$t("commonMonitorItemUserCfg.keys.columnKey") + "16",
-          key: "keyDisplay16",
+          key: "key16Label",
           width: 120
         },
         {
           title: this.$t("commonMonitorItemUserCfg.keys.columnKey") + "17",
-          key: "keyDisplay17",
+          key: "key17Label",
           width: 120
         },
         {
           title: this.$t("commonMonitorItemUserCfg.keys.columnKey") + "18",
-          key: "keyDisplay18",
+          key: "key18Label",
           width: 120
         },
         {
           title: this.$t("commonMonitorItemUserCfg.keys.columnKey") + "19",
-          key: "keyDisplay19",
+          key: "key19Label",
           width: 120
         },
         {
           title: this.$t("commonMonitorItemUserCfg.keys.columnKey") + "20",
-          key: "keyDisplay20",
-          width: 120
-        },
-        {
-          title: this.$t("commonMonitorItemUserCfg.keys.columnKey") + "21",
-          key: "keyDisplay21",
-          width: 120
-        },
-        {
-          title: this.$t("commonMonitorItemUserCfg.keys.columnKey") + "22",
-          key: "keyDisplay22",
-          width: 120
-        },
-        {
-          title: this.$t("commonMonitorItemUserCfg.keys.columnKey") + "23",
-          key: "keyDisplay23",
-          width: 120
-        },
-        {
-          title: this.$t("commonMonitorItemUserCfg.keys.columnKey") + "24",
-          key: "keyDisplay24",
-          width: 120
-        },
-        {
-          title: this.$t("commonMonitorItemUserCfg.keys.columnKey") + "25",
-          key: "keyDisplay25",
-          width: 120
-        },
-        {
-          title: this.$t("commonMonitorItemUserCfg.keys.columnKey") + "26",
-          key: "keyDisplay26",
-          width: 120
-        },
-        {
-          title: this.$t("commonMonitorItemUserCfg.keys.columnKey") + "27",
-          key: "keyDisplay27",
-          width: 120
-        },
-        {
-          title: this.$t("commonMonitorItemUserCfg.keys.columnKey") + "28",
-          key: "keyDisplay28",
-          width: 120
-        },
-        {
-          title: this.$t("commonMonitorItemUserCfg.keys.columnKey") + "29",
-          key: "keyDisplay29",
-          width: 120
-        },
-        {
-          title: this.$t("commonMonitorItemUserCfg.keys.columnKey") + "30",
-          key: "keyDisplay30",
-          width: 120
-        },
-        {
-          title: this.$t("commonMonitorItemUserCfg.keys.columnKey") + "31",
-          key: "keyDisplay31",
-          width: 120
-        },
-        {
-          title: this.$t("commonMonitorItemUserCfg.keys.columnKey") + "32",
-          key: "keyDisplay32",
-          width: 120
-        },
-        {
-          title: this.$t("commonMonitorItemUserCfg.keys.columnKey") + "33",
-          key: "keyDisplay33",
-          width: 120
-        },
-        {
-          title: this.$t("commonMonitorItemUserCfg.keys.columnKey") + "34",
-          key: "keyDisplay34",
-          width: 120
-        },
-        {
-          title: this.$t("commonMonitorItemUserCfg.keys.columnKey") + "35",
-          key: "keyDisplay35",
-          width: 120
-        },
-        {
-          title: this.$t("commonMonitorItemUserCfg.keys.columnKey") + "36",
-          key: "keyDisplay36",
-          width: 120
-        },
-        {
-          title: this.$t("commonMonitorItemUserCfg.keys.columnKey") + "37",
-          key: "keyDisplay37",
-          width: 120
-        },
-        {
-          title: this.$t("commonMonitorItemUserCfg.keys.columnKey") + "38",
-          key: "keyDisplay38",
-          width: 120
-        },
-        {
-          title: this.$t("commonMonitorItemUserCfg.keys.columnKey") + "39",
-          key: "keyDisplay39",
-          width: 120
-        },
-        {
-          title: this.$t("commonMonitorItemUserCfg.keys.columnKey") + "40",
-          key: "keyDisplay40",
+          key: "key20Label",
           width: 120
         }
       ];
