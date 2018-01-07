@@ -464,6 +464,23 @@ export const requestOsapMonitorItemUserCfg = {
         return ajax.get(context, 'MonitorITemUserReciveCfg/getMonitorItemKeyDatas',{monitorItemID});
     }
 };
+export const requestOsapAbnormalSubmit = {
+    create(context,data){
+        return ajax.post(context, 'AbnormalSubmit/create',data);
+    },
+    update(context,data){
+        return ajax.post(context, 'AbnormalSubmit/update',data);
+    },
+    delete(context,rowID){
+        return ajax.get(context, 'AbnormalSubmit/delete',{rowID});
+    },
+    get(context,rowID){
+        return ajax.get(context, 'AbnormalSubmit/get',{rowID});
+    },
+    apply(context,rowID){
+        return ajax.get(context, 'AbnormalSubmit/apply',{rowID});
+    }
+};
 // export {
 //     requestModule,
 //     requestForm,

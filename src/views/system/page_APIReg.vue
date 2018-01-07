@@ -96,6 +96,7 @@ import { requestAPIList } from "../../libs/request";
 import Msg from "../../mixins/msg";
 import tableHead from "../../components/iview/table/table-head.vue";
 export default {
+  name:'system-apireg',
   mixins: [Msg],
   data() {
     return {

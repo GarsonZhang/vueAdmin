@@ -20,7 +20,7 @@ function getValue(obj) {
 axiosProvider._getRemote = function () {
     var v = axios.create({
         baseURL: 'http://localhost:4462/api',
-        timeout: 1000000
+        timeout: 30000
     });
     //处理请求
     v.interceptors.request.use(

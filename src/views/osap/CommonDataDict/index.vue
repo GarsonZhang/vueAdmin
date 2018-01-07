@@ -55,7 +55,7 @@
 import DataMain from "./data-main.vue";
 import DataDetail from "./data-detail.vue";
 export default {
-  name: "module",
+  name: "osap-commonDict",
   components: { DataMain, DataDetail },
   data() {
     return {

@@ -23,7 +23,7 @@
                   <span>{{getLang(item)}}</span>
                 </template>
                 <div v-for="c in item.items" :key="c.name">
-                  <MenuItem :name="c.name">
+                  <MenuItem :name="c.name" v-if="c.formType===1">
                   <Icon :type="c.icon"></Icon>
                   <span>{{getLang(c)}}</span>
                   </MenuItem>
@@ -78,7 +78,7 @@
       </div>
 
 
-      <tags-page-opened></tags-page-opened>
+      <tags-page-opened ref="tagsPage"></tags-page-opened>
 
 
       <div class="layout-content">
@@ -86,6 +86,13 @@
         <keep-alive :include="cachePage">
           <router-view></router-view>
         </keep-alive>
+        <!-- 这里是需要keepalive的 -->
+        <!-- <keep-alive v-if="keep">
+            <router-view ></router-view>
+        </keep-alive> -->
+
+        <!-- 这里不会被keepalive -->
+        <!-- <router-view v-else ></router-view> -->
       </div>
       <div class="layout-copy ">
         2011-2016 &copy; TalkingData
@@ -254,6 +261,7 @@ import Vue from "vue";
 // import GZStorage from "../libs/GZStorage";
 
 export default {
+  name: "index",
   components: {
     tagsPageOpened
   },
@@ -293,8 +301,16 @@ export default {
       );
       if (item) this.setBreadcrumb(item);
     }
+    var me = this;
+    this.$utils.closePage = function(name) {
+      // debugger
+      me.$refs["tagsPage"].closePage(null, name);
+    };
   },
   computed: {
+    excludePage(){
+return this.$store.state.excludePage;
+    },
     lang() {
       return Vue.config.lang;
     },
@@ -336,26 +352,29 @@ export default {
     }
   },
   methods: {
-    getLang(item){
+    getLang(item) {
       // debugger
-      var text='';
-      switch(this.$lang){
-        case 'zh-CN':
-        text= item.text;
-        break;
-        case 'zh-TW':text= item.text_tw;
-        break
-        case 'en-US':text= item.text_en;
-        break;
-        default: text= item.text_other;break;
+      var text = "";
+      switch (this.$lang) {
+        case "zh-CN":
+          text = item.text;
+          break;
+        case "zh-TW":
+          text = item.text_tw;
+          break;
+        case "en-US":
+          text = item.text_en;
+          break;
+        default:
+          text = item.text_other;
+          break;
       }
-      if(this.$utils.isNULL(text))
-        text=item.text;
-        return text;
+      if (this.$utils.isNULL(text)) text = item.text;
+      return text;
     },
     handleClickLangDropdown(name) {
       // debugger;
-      window.localStorage.lang=name;
+      window.localStorage.lang = name;
       Vue.config.lang = name;
     },
     handleClickUserDropdown(name) {

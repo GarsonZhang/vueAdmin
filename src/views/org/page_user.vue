@@ -97,6 +97,7 @@ import Msg from "../../mixins/msg";
 import Authorize from "../../mixins/authorize";
 import FormTreeData from "./treeForm.vue";
 export default {
+  name:'org-user',
   mixins: [Msg,Authorize],
   data() {
     return {
@@ -216,7 +217,10 @@ export default {
       }
     }
   },
-  created() {},
+  created() {
+    // this.$set(this.$options,'name','org-user');
+    this.$route.meta.cName=this.$options.name;
+  },
   mounted() {
     this.$refs[this.refNames.buttonRefresh].handleClick();
   },

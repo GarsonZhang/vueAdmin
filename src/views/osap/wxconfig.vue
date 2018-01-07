@@ -35,6 +35,7 @@ import Msg from "../../mixins/msg";
 import Authorize from "../../mixins/authorize"; 
 
 export default {
+  name:'osap-wxconfig',
   data() {
     return {
       refNames: {

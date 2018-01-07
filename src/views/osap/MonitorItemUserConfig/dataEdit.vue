@@ -177,7 +177,7 @@ export default {
   methods: {
     onMonitorItemChanged(value) {
       debugger;
-      if (this.$utils.isNULL(value)) this.monitorItemData = [];
+      if (this.$utils.isNULL(value)) this.monitorItemKeyData = [];
       else
         requestOsapMonitorItemUserCfg
           .getMonitorItemKeyDatas(this, value)
@@ -186,7 +186,7 @@ export default {
             this.monitorItemKeyData = res.data;
           })
           .catch(err => {
-            this.monitorItemData = [];
+            this.monitorItemKeyData = [];
           });
     },
     initKeyData(cache) {

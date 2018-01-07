@@ -111,7 +111,8 @@ util.convertRouteMap = function (menuData) {
 					title_tw:item.text_tw,
 					title_en:item.text_en,
 					title_other:item.text_other,
-					id:item.id
+					id:item.id,
+					src:item.componentPath+'/'+item.componentName
 				},
 				component: getPromisedComponent(item.componentPath, item.componentName)
 			});
@@ -198,7 +199,13 @@ util.deepCopyEx = function (data) {
 	}
 	return o;
 };
-
+util.isNULLObject = function (obj) {
+	var count=0;
+	for (let i in obj) {
+		count++;
+	}
+	return count===0;
+};
 util.isNULL = function (obj) {
 	var v = obj === null || obj === undefined || obj.length < 1;
 	return v;

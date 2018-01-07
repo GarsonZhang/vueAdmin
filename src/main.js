@@ -62,6 +62,12 @@ router.beforeEach((to, from, next) => {
     // console.log('router.beforeEach');
     // console.dir(to);
     // console.dir(from);
+    // debugger;
+    // to.matched.forEach(r => {
+    //     if (r.instances.default) {
+    //         r.instances.default.$options.name = r.name;
+    //     }
+    // });
     iView.LoadingBar.start();
     var title = '';
     switch (Vue.config.lang) {
@@ -89,31 +95,34 @@ router.afterEach(() => {
 });
 const store = new Vuex.Store({
     state: {
-        cachePage: []
+        cachePage: [],
+        excludePage: ''
     },
     getters: {
 
     },
     mutations: {
         closePage(state, name) {
-            console.log('closePage');
+            // console.log('closePage');
             state.cachePage.forEach((item, index) => {
                 if (item === name) {
                     state.cachePage.splice(index, 1);
                 }
             });
         },
-        increateTag(state, tagObj) {
-            console.log('increateTag');
-            state.cachePage.push(tagObj.name);
+        increateTag(state, name) {
+            // console.log('increateTag');
+            // debugger
+            // if (tagObj.meta.cName)
+            state.cachePage.push(name);
         },
         clearAllTags(state) {
-            console.log('clearAllTags');
+            // console.log('clearAllTags');
             state.cachePage.splice(1, state.cachePage.length);
         },
         clearOtherTags(state, name) {
             let currentIndex = -1;
-            console.log('clearOtherTags');
+            // console.log('clearOtherTags');
             for (var i = 0; i < state.cachePage.length; i++) {
                 if (state.cachePage[i] === name) {
                     currentIndex = i;
@@ -135,6 +144,69 @@ const store = new Vuex.Store({
 
 store.dataCache = GZStorage;
 
+
+Vue.mixin({
+    created() {
+        // debugger;
+        // if (this.$route) {
+        //     this.$route.matched.forEach(e => {
+        //         if (e.path === this.$route.path) {
+        //             if (this === e.instance) {
+        //                 debugger
+        //             }
+        //         }
+        //     });
+        // }
+        // this.$options.name=this.$router.name;
+    },
+    mounted() {
+        //   debugger  
+    },
+    // beforeRouteEnter(to, from, next) {
+    //     debugger
+    //     if (to.meta.cName) {
+    //         next();
+    //     } else {
+    //         next(vm => {
+    //             // 通过 `vm` 访问组件实例
+    //             to.matched.forEach(r => {
+    //                 if (r.path === to.path) {
+    //                     if (r.instances.default === vm) {
+    //                         // to.name=vm.$options.name;
+    //                         to.meta.cName = vm.$options.name;
+    //                     }
+    //                 }
+    //             });
+    //         });
+    //     }
+    // },
+    beforeRouteLeave(to, from, next) {
+        // if (this.$options.name === 'index') {
+        //     next();
+        //     return;
+        // }
+        // if (this.$store.state.cachePage.indexOf(from.name) < 0) {
+        //     this.$destroy();
+        //     next();
+        // }
+
+
+        // if (this.$store.state.cachePage.indexOf(from.name) < 0) {
+        //     from.matched.forEach(r => {
+        //         if (r.path === from.path) {
+        //             if (r.instances.default === this) {
+
+        //                 this.$destroy();
+        //                 next();
+        //             }
+        //         }
+        //     });
+        // }
+        // this===from.matched[0].instances.default
+
+        next();
+    }
+});
 
 new Vue({
     el: '#app',

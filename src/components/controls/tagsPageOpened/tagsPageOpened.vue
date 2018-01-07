@@ -21,7 +21,7 @@
                 <Tag type="dot" v-for="item in pageTagsList" :key="item.name" :name="item.name" 
                     :closable="item.name!='home'"
                     @click.native="linkTo(item)"
-                    @on-close="closePage"
+                    @on-close="closePage(item)"
                      :color="item.name===currentPageName?'blue':'default'">
                 {{getLang(item.meta)}}    
                 </Tag>
@@ -57,7 +57,7 @@
   height: 100%;
   /* background: #fff;
   box-shadow: -3px 0 15px 3px rgba(0, 0, 0, 0.1); */
-  background:transparent;
+  background: transparent;
   z-index: 500;
 }
 </style>
@@ -84,56 +84,90 @@ export default {
     }
   },
   created() {
-    // debugger
+    // debugger;
     this.clearRouter();
-    var item = this.$utils.jsonSearch.search(
-      this.$router.options.routes,
-      "children",
-      parm => parm.name === "home"
-    );
-    this.addRouter(item);
-
+    // var item = this.$utils.jsonSearch.search(
+    //   this.$router.options.routes,
+    //   "children",
+    //   parm => parm.name === "home"
+    // );
+    // this.addRouter(item);
+    this.addHome();
+    this.addRouter();
     //
-    item = this.$utils.jsonSearch.search(
-      this.$router.options.routes,
-      "children",
-      parm => parm.name === this.$route.name
-    );
-    // console.dir(this.$route.name);
-    // console.dir(item);
-    if (item) this.addRouter(item);
-    //console.log('tag create');
+    // var  item = this.$utils.jsonSearch.search(
+    //     this.$router.options.routes,
+    //     "children",
+    //     parm => parm.name === this.$route.name
+    //   );
+    //   if (item) this.addRouter(item);
   },
   methods: {
-    getLang(item){
+    getLang(item) {
       // debugger
-      var text='';
-      switch(this.$lang){
-        case 'zh-CN':
-        text= item.title;
-        break;
-        case 'zh-TW':text= item.title_tw;
-        break
-        case 'en-US':text= item.title_en;
-        break;
-        default: text= item.title_other;break;
+      var text = "";
+      switch (this.$lang) {
+        case "zh-CN":
+          text = item.title;
+          break;
+        case "zh-TW":
+          text = item.title_tw;
+          break;
+        case "en-US":
+          text = item.title_en;
+          break;
+        default:
+          text = item.title_other;
+          break;
       }
-      if(this.$utils.isNULL(text))
-        text=item.title;
-        return text;
+      if (this.$utils.isNULL(text)) text = item.title;
+      return text;
     },
-    addRouter(item) {
+    addHome() {
+      var item = this.$utils.jsonSearch.search(
+        this.$router.options.routes,
+        "children",
+        parm => parm.name === "home"
+      );
+
+      //  var cName= this.$route.matched[1].components.default.name;
+      this.$store.commit("increateTag", "vue-home");
+      this.pageTagsList.push(item);
+    },
+    addRouter() {
+      var index = this.$route.path.indexOf(":");
+      var argu = {};
+      // debugger;
+      while (index > 0) {
+        var next_index = this.$route.path.indexOf(":", index + 1);
+        var key = "";
+        if (next_index > 0)
+          key = this.$route.path.substring(index + 1, next_index);
+        else key = this.$route.path.substring(index + 1);
+        argu[key] = this.$route.meta[key];
+        index = next_index;
+      }
+      if (!this.$utils.isNULLObject(argu)) this.$route.argu = argu;
       // debugger
       var v = this.$utils.jsonSearch.search(
         this.pageTagsList,
         null,
-        parm => parm.name === item.name
+        parm => parm.name === this.$route.name
       );
       if (v) return;
       else {
-        //debugger;
-        this.$store.commit("increateTag", item);
-        this.pageTagsList.push(item);
+        // debugger
+        // var cName= this.$route.matched[1].components.default.name;
+        this.$store.commit("increateTag", this.getCName(this.$route));
+        this.pageTagsList.push(this.$route);
+      }
+    },
+    getCName(route) {
+      if (route.matched[1].components.default.name)
+        return route.matched[1].components.default.name;
+      else {
+        // debugger
+        throw "页面必须指定name属性," + route.meta.src;
       }
     },
     clearRouter() {
@@ -156,10 +190,10 @@ export default {
     removeAllTags() {
       this.pageTagsList.splice(1);
     },
-    removeOtherTags(name) {
+    removeOtherTags() {
       let currentIndex = -1;
       for (var i = 0; i < this.pageTagsList.length; i++) {
-        if (this.pageTagsList[i].name === name) {
+        if (this.pageTagsList[i].name === this.$route.name) {
           currentIndex = i;
           break;
         }
@@ -171,12 +205,17 @@ export default {
         this.pageTagsList.splice(1, currentIndex - 1);
       }
     },
-    closePage(event, name) {
-      this.$store.commit("closePage", name);
-      this.removeTags(name);
-      if (name === this.$route.name) {
-        this.$router.push({
-          name: this.pageTagsList[0].name
+    closePage(item) {
+      var cName = this.getCName(item);
+      this.$store.state.excludePage = cName;
+      this.$store.commit("closePage", cName);
+      this.removeTags(item.name);
+      if (item.name === this.$route.name) {
+        this.$nextTick(_ => {
+          this.$store.state.excludePage = "";
+          this.$router.push({
+            name: this.pageTagsList[0].name
+          });
         });
       }
     },
@@ -224,66 +263,26 @@ export default {
       }
       this.tagBodyLeft = left;
     },
+    // 关闭其他 或关闭全部
     handleTagsOption(type) {
       if (type === "clearAll") {
-        this.$store.commit("clearOtherTags", this.$route.name);
-        this.removeOtherTags(this.$route.name);
+        this.$store.commit("clearOtherTags", this.$route.meta.cName);
+        this.removeOtherTags();
         if (this.$route.name != this.pageTagsList[0].name)
-          this.closePage(null,this.$route.name);
+          this.closePage(this.$route.name);
       } else {
-        this.$store.commit("clearOtherTags", this.$route.name);
-        this.removeOtherTags(this.$route.name);
+        this.$store.commit("clearOtherTags", this.$route.mate.cName);
+        this.removeOtherTags();
       }
       this.tagBodyLeft = 0;
-    },
-    moveToView(tag) {
-      if (tag.offsetLeft < -this.tagBodyLeft) {
-        // 标签在可视区域左侧
-        this.tagBodyLeft = -tag.offsetLeft + 10;
-      } else if (
-        tag.offsetLeft + 10 > -this.tagBodyLeft &&
-        tag.offsetLeft + tag.offsetWidth <
-          -this.tagBodyLeft + this.$refs.scrollCon.offsetWidth - 100
-      ) {
-        // 标签在可视区域
-      } else {
-        // 标签在可视区域右侧
-        this.tagBodyLeft = -(
-          tag.offsetLeft -
-          (this.$refs.scrollCon.offsetWidth - 100 - tag.offsetWidth) +
-          20
-        );
-      }
     }
   },
-  mounted() {
-    // this.refsTag = this.$refs.tagsPageOpened;
-    // setTimeout(() => {
-    //     this.refsTag.forEach((item, index) => {
-    //         if (this.$route.name === item.name) {
-    //             let tag = this.refsTag[index].$el;
-    //             this.moveToView(tag);
-    //         }
-    //     });
-    // }, 1);  // 这里不设定时器就会有偏移bug
-    // this.tagsCount = this.tagsList.length;
-  },
+  mounted() {},
   watch: {
     $route(to) {
-      // this.currentPageName = to.name;
-      // this.$nextTick(() => {
-      //     this.refsTag.forEach((item, index) => {
-      //         if (to.name === item.name) {
-      //             let tag = this.refsTag[index].$el;
-      //             this.moveToView(tag);
-      //         }
-      //     });
-      // });
-      // this.tagsCount = this.tagsList.length;
-      //this.pageTagsList.push(to);
+      // debugger
       this.currentPageName = this.$route.name;
-      this.addRouter(to);
-      //console.dir( to);
+      this.addRouter();
     }
   }
 };

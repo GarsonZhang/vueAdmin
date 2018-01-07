@@ -73,6 +73,7 @@
 import dept from "./dept";
 import treeCompany from './treeCompany'
 export default {
+  name:'org-dept',
   data() {
     return {
       currentCompanyID: "",

@@ -32,6 +32,12 @@
             <FormItem label="功能编码" prop="name">
               <i-input v-model="editData.name" placeholder="请输入功能编码"></i-input>
             </FormItem>
+              <FormItem label="类型" prop="type">
+                <Select v-model="editData.type">
+                <Option value="1">功能</Option>
+                <Option value="2">路由</Option>
+              </Select>
+            </FormItem>
             <FormItem label="功能名称" prop="description">
               <i-input v-model="editData.description" placeholder="请输入功能名称"></i-input>
             </FormItem>
@@ -245,6 +251,12 @@ export default {
           width: 60,
           align: "center"
         },
+         {
+            title: "类型",
+            align: "center",
+            key: "typeDescription",
+            width: 60
+          },
         {
           title: "名称",
           key: "name"
@@ -517,6 +529,7 @@ export default {
         return;
       }
       this.editData = {};
+      this.editData.type=1; 
       this.editData.actions = [];
       this.editStatus = 1;
       component.loading = false;

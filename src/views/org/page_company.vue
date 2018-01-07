@@ -68,6 +68,7 @@ import SelectCompany from "./selectCompany";
 import Msg from "../../mixins/msg";
 import Authorize from "../../mixins/authorize";
 export default {
+  name:'org-company',
   data() {
     return {
       request: null,

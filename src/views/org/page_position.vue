@@ -76,6 +76,7 @@ import treeCompany from './treeCompany'
 
 
 export default {
+  name:'org-position',
   data() {
     return {
       currentCompanyID: "",

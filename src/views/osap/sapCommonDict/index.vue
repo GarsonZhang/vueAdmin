@@ -55,7 +55,7 @@
 import SAPCommonDicMain from "./dict-main.vue";
 import SAPCommonDicDetail from "./dict-detail.vue";
 export default {
-  name: "module",
+  name: "osap-sapCommonDict",
   components: { SAPCommonDicMain, SAPCommonDicDetail },
   data() {
     return {

@@ -28,7 +28,7 @@ import { requestOsapMonitorItem } from "../../../libs/request";
 import DataEdit from "./dataEdit.vue";
 import Authorize from "../../../mixins/authorize";
 export default {
-  name: "MonitorItem",
+  name: "osap-monitorItem",
   data() {
     return {
       refNames: {
