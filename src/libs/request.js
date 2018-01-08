@@ -477,6 +477,9 @@ export const requestOsapAbnormalSubmit = {
     get(context,rowID){
         return ajax.get(context, 'AbnormalSubmit/get',{rowID});
     },
+    waitelist(context){
+        return ajax.get(context, 'AbnormalSubmit/waitelist');
+    },
     apply(context,rowID){
         return ajax.get(context, 'AbnormalSubmit/apply',{rowID});
     }

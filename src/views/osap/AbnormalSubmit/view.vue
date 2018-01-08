@@ -118,7 +118,7 @@ import {
 
 import Msg from "../../../mixins/msg";
 export default {
-   name:'osap-abnormalsubmit-view',
+  name: "osap-abnormalsubmit-view",
   data() {
     return {
       data: {},
@@ -141,10 +141,15 @@ export default {
       .catch(err => {
         this.monitorItemData = [];
       });
-
+  },
+  activated() {
+    // debugger
+    if (this.data.rowID === this.$route.params.id) return;
+    this.data = {};
     requestOsapAbnormalSubmit
       .get(this, this.$route.params.id)
       .then(res => {
+        console.log('获取数据成功')
         this.data = res.data;
       })
       .catch(err => {
@@ -169,7 +174,8 @@ export default {
       }
     },
     doClose() {
-      this.$utils.closePage(this.$route.name);
+      debugger
+      this.$utils.closePage(this.$route);
     },
     onMonitorItemChanged(value) {
       //   debugger;

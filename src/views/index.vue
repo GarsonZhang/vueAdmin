@@ -302,15 +302,15 @@ export default {
       if (item) this.setBreadcrumb(item);
     }
     var me = this;
-    this.$utils.closePage = function(name) {
+    this.$utils.closePage = function(route) {
       // debugger
-      me.$refs["tagsPage"].closePage(null, name);
+      me.$refs["tagsPage"].closePage(route);
     };
   },
   computed: {
-    excludePage(){
-return this.$store.state.excludePage;
-    },
+//     excludePage(){
+// return this.$store.state.excludePage;
+//     },
     lang() {
       return Vue.config.lang;
     },

@@ -95,8 +95,8 @@ router.afterEach(() => {
 });
 const store = new Vuex.Store({
     state: {
-        cachePage: [],
-        excludePage: ''
+        cachePage: []
+        // excludePage: ''
     },
     getters: {
 

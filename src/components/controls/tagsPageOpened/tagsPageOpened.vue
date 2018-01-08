@@ -135,32 +135,42 @@ export default {
       this.pageTagsList.push(item);
     },
     addRouter() {
-      var index = this.$route.path.indexOf(":");
+      var _path = this.getPath(this.$route);
+      var index = _path.indexOf(":");
       var argu = {};
       // debugger;
-      while (index > 0) {
-        var next_index = this.$route.path.indexOf(":", index + 1);
-        var key = "";
-        if (next_index > 0)
-          key = this.$route.path.substring(index + 1, next_index);
-        else key = this.$route.path.substring(index + 1);
-        argu[key] = this.$route.meta[key];
-        index = next_index;
-      }
-      if (!this.$utils.isNULLObject(argu)) this.$route.argu = argu;
+      // while (index > 0) {
+      //   var next_index = _path.indexOf(":", index + 1);
+      //   var key = "";
+      //   if (next_index > 0) key = _path.substring(index + 1, next_index);
+      //   else key = _path.substring(index + 1);
+      //   argu[key] = this.$route.params[key];
+      //   index = next_index;
+      // }
+      // if (!this.$utils.isNULLObject(argu)) this.$route.meta.argu = argu;
       // debugger
       var v = this.$utils.jsonSearch.search(
         this.pageTagsList,
         null,
         parm => parm.name === this.$route.name
       );
-      if (v) return;
-      else {
+      if (v) {
+        if (this.$route.params) {
+          for(var key in v.params){
+            v.params[key]=this.$route.params[key];
+          }
+          // v.params = this.$route.params;
+        }
+        return;
+      } else {
         // debugger
         // var cName= this.$route.matched[1].components.default.name;
         this.$store.commit("increateTag", this.getCName(this.$route));
         this.pageTagsList.push(this.$route);
       }
+    },
+    getPath(route) {
+      return route.matched[1].path;
     },
     getCName(route) {
       if (route.matched[1].components.default.name)
@@ -205,12 +215,12 @@ export default {
         this.pageTagsList.splice(1, currentIndex - 1);
       }
     },
-    closePage(item) {
-      var cName = this.getCName(item);
-      this.$store.state.excludePage = cName;
+    closePage(route) {
+      var cName = this.getCName(route);
+      // this.$store.state.excludePage = cName;
       this.$store.commit("closePage", cName);
-      this.removeTags(item.name);
-      if (item.name === this.$route.name) {
+      this.removeTags(route.name);
+      if (route.name === this.$route.name) {
         this.$nextTick(_ => {
           this.$store.state.excludePage = "";
           this.$router.push({
@@ -220,10 +230,10 @@ export default {
       }
     },
     linkTo(item) {
-      if (item.path.indexOf(":") > -1) {
+      if (item.params) {
         this.$router.push({
           name: item.name,
-          params: item.argu
+          params: item.params
         });
       } else {
         this.$router.push({
