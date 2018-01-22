@@ -58,11 +58,11 @@
 <script>
     import {
         requestOsapAbnormalData
-    } from "../../../libs/request";
+    } from "../../../../libs/request";
 
-import {SelectMonth} from "../../../components/customer"
+import {SelectMonth} from "../../../../components/customer"
 
-    import SelectCompany from "../../org/selectCompany"
+    import SelectCompany from "../../../org/selectCompany"
 
     export default {
         name: "GMRpt01",

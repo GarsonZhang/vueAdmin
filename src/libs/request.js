@@ -563,7 +563,42 @@ export const requestOsapAbnormalData = {
             companyID
         });
     },
-
+    report_ByModule(context, dataType, year, month, companyID,deptID) {
+        return ajax.get(context, '/AbnormalData/report_ByModule', {
+            dataType,
+            year,
+            month,
+            companyID,
+            deptID
+        });
+    },
+    report_ByDeptModule_html(context, dataType, year, month, companyID,deptID) {
+        return ajax.get(context, '/AbnormalData/report_DeptModule', {
+            dataType,
+            year,
+            month,
+            companyID,
+            deptID
+        });
+    },
+    report_ByMonitorItem(context, dataType, year, month, companyID,deptID) {
+        return ajax.get(context, '/AbnormalData/report_ByMonitorItem', {
+            dataType,
+            year,
+            month,
+            companyID,
+            deptID
+        });
+    },
+    report_ByDeptMonitorItem_html(context, dataType, year, month, companyID,deptID) {
+        return ajax.get(context, '/AbnormalData/report_DeptMonitorItem', {
+            dataType,
+            year,
+            month,
+            companyID,
+            deptID
+        });
+    },
 };
 // export {
 //     requestModule,

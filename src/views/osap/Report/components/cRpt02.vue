@@ -51,10 +51,10 @@
 }
 </style>
 <script>
-import { requestOsapAbnormalData } from "../../../libs/request";
+import { requestOsapAbnormalData } from "../../../../libs/request";
 import echarts from "echarts";
-import SelectCompany from "../../org/selectCompany";
-import SelectDept from "../../org/selectDept";
+import SelectCompany from "../../../org/selectCompany";
+import SelectDept from "../../../org/selectDept";
 
 export default {
   name: "GMRpt02",

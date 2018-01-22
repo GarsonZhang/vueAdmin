@@ -32,9 +32,9 @@
 }
 </style>
 <script>
-import GMRpt01 from "./cRpt01Ex.vue";
-import GMRpt02 from "./cRpt02.vue";
-import GMRpt03 from "./cRpt03.vue";
+import GMRpt01 from "./components/cRpt01Ex.vue";
+import GMRpt02 from "./components/cRpt02.vue";
+import GMRpt03 from "./components/cRpt03.vue";
 
 export default {
   name: "osap-rpt-GM",

@@ -8,18 +8,22 @@
                         <SelectCompany class="gzform-control" v-model="searchData.companyID"></SelectCompany>
                     </i-col>
                     <i-col class="gzform" span="6">
-                        <label class="gzform-label">年</label>
-                         <div class="gzform-control">
+                        <label class="gzform-label">部门代码</label>
+                        <SelectDept class="gzform-control" :companyID="searchData.companyID" v-model="searchData.deptID"></SelectDept>
+                    </i-col>
+                    <i-col class="gzform" span="6">
+                        <label class="gzform-label">年月</label>
+                        <div class="gzform-control">
                             <i-col span="12">
                                 <i-input v-model="searchData.year"></i-input>
                             </i-col>
                             <i-col span="12">
-                                     <!-- <i-input v-model="searchData.month"></i-input> -->
                                 <SelectMonth v-model="searchData.month"></SelectMonth>
                             </i-col>
+
                         </div>
                     </i-col>
-                    <i-col class="gzform" style="margin-left:10px;" span="6">
+                    <i-col class="gzform" style="margin-left:10px;" span="5">
                         <RadioGroup v-model="searchData.dataType">
                             <Radio label="1">分数</Radio>
                             <Radio label="2">计次</Radio>
@@ -30,7 +34,7 @@
             </div>
             <div slot="main" class="main">
                 <!--创建一个echarts的容器-->
-                <div id="chart_GM3" style="width:100%; height:100%;padding-left: 10px; padding-right: 10px;"></div>
+                <div id="chart_monitorItem" style="width:100%; height:100%;padding-left: 10px; padding-right: 10px;"></div>
             </div>
             <!-- <div slot="bottom">
             <h1>bottom</h1>
@@ -55,14 +59,14 @@
 }
 </style>
 <script>
-import {SelectMonth} from "../../../components/customer"
-import { requestOsapAbnormalData } from "../../../libs/request";
+import {SelectMonth} from "../../../../components/customer"
+import { requestOsapAbnormalData } from "../../../../libs/request";
 import echarts from "echarts";
-import SelectCompany from "../../org/selectCompany";
-import SelectDept from "../../org/selectDept";
+import SelectCompany from "../../../org/selectCompany";
+import SelectDept from "../../../org/selectDept";
 
 export default {
-  name: "GMRpt03",
+  name: "chartMonitorItem",
   components: {
     SelectCompany,
     SelectDept,
@@ -72,6 +76,7 @@ export default {
     return {
       searchData: {
         companyID: "",
+        deptID:"",
         year: new Date().getFullYear(),
         month: 0,
         dataType: 1
@@ -91,16 +96,16 @@ export default {
       var seriesData = [];
 
       data.forEach(function(param) {
-        legendData.push(param['OrgName']);
+        legendData.push(param['monitorItemCode']);
         seriesData.push({
-          value:param['Score'],
-          name:param['OrgName'],
+          value:param['score'],
+          name:param['monitorItemDescription'],
           tag:param
         });
       });
       return {
         title: {
-          text: "异常分布统计图 （按"+(this.searchData.dataType==1?"分数":"次数")+")",
+          text: "监察项目异常统计图 （按"+(this.searchData.dataType==1?"分数":"次数")+")",
           left: "center"
         },
         tooltip: {
@@ -136,17 +141,18 @@ export default {
       this.isLoading = true;
       var me = this;
       requestOsapAbnormalData
-        .report_GM03(
+        .report_ByMonitorItem(
           this,
           this.searchData.dataType,
           this.searchData.year,
           this.searchData.month,
-          this.searchData.companyID
+          this.searchData.companyID,
+          this.searchData.deptID
         )
         .then(res => {
           // debugger
           var dataSourceChart = echarts.init(
-            document.getElementById("chart_GM3")
+            document.getElementById("chart_monitorItem")
           );
 
           var option = this.chartOption(res.data);
