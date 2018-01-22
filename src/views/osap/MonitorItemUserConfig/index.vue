@@ -78,8 +78,8 @@ import SelectDept from "../../org/selectDept";
 import Authorize from "../../../mixins/authorize";
 import DataEdit from "./dataEdit.vue";
 export default {
+   name:'osap-monitorItemUserconfig',
   data() {
-    name:'osap-monitorItemUserconfig'
     return {
       isLoading: false,
       companyID: "",

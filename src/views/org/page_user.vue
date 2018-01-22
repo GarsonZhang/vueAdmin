@@ -53,6 +53,12 @@
           <FormItem label="联系电话" prop="phone">
             <i-input v-model="editData.phone" placeholder="请输入联系电话"></i-input>
           </FormItem>
+             <FormItem label="企业微信账号" prop="qywxAccount">
+            <i-input v-model="editData.qywxAccount"></i-input>
+          </FormItem>
+             <FormItem label="邮箱" prop="email">
+            <i-input v-model="editData.email"></i-input>
+          </FormItem>
           <FormItem label="状态" prop="status">
             <i-input v-model="editData.status" disabled></i-input>
           </FormItem>

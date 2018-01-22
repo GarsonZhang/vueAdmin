@@ -33,10 +33,14 @@
                   @on-page-size-change="event_pageSizeChange"></Page>
               </div>
             </div>
+          
           </gz-panel>
 
 
         </div>
+          <!-- <div slot="bottom">
+            <h1>bottom</h1>
+            </div> -->
       </gz-panel>
       <Modal :ref="refNames.detailModal" title="API详情" v-model="modalStatus" width=80 :styles="{'max-width':'500px'}" :mask-closable="false"
         :loading="(true)" @on-ok="event_editDataSubmit" @on-cancel="event_editCancel">

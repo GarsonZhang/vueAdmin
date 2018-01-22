@@ -445,44 +445,125 @@ export const requestOsapMonitorItem = {
 };
 
 export const requestOsapMonitorItemUserCfg = {
-    list(context,userID) {
-        return ajax.get(context, 'MonitorITemUserReciveCfg/list',{userID});
+    list(context, userID) {
+        return ajax.get(context, 'MonitorITemUserReciveCfg/list', {
+            userID
+        });
     },
-    get(context,rowID){
-        return ajax.get(context, 'MonitorITemUserReciveCfg/get',{rowID});
+    get(context, rowID) {
+        return ajax.get(context, 'MonitorITemUserReciveCfg/get', {
+            rowID
+        });
     },
-    delete(context,rowID){
-        return ajax.get(context, 'MonitorITemUserReciveCfg/delete',{rowID});
+    delete(context, rowID) {
+        return ajax.get(context, 'MonitorITemUserReciveCfg/delete', {
+            rowID
+        });
     },
-    create(context,data){
-        return ajax.post(context, 'MonitorITemUserReciveCfg/create',data);
+    create(context, data) {
+        return ajax.post(context, 'MonitorITemUserReciveCfg/create', data);
     },
-    update(context,data){
-        return ajax.post(context, 'MonitorITemUserReciveCfg/update',data);
+    update(context, data) {
+        return ajax.post(context, 'MonitorITemUserReciveCfg/update', data);
     },
-    getMonitorItemKeyDatas(context,monitorItemID){
-        return ajax.get(context, 'MonitorITemUserReciveCfg/getMonitorItemKeyDatas',{monitorItemID});
+    getMonitorItemKeyDatas(context, monitorItemID) {
+        return ajax.get(context, 'MonitorITemUserReciveCfg/getMonitorItemKeyDatas', {
+            monitorItemID
+        });
     }
 };
 export const requestOsapAbnormalSubmit = {
-    create(context,data){
-        return ajax.post(context, 'AbnormalSubmit/create',data);
+    create(context, data) {
+        return ajax.post(context, 'AbnormalSubmit/create', data);
     },
-    update(context,data){
-        return ajax.post(context, 'AbnormalSubmit/update',data);
+    update(context, data) {
+        return ajax.post(context, 'AbnormalSubmit/update', data);
     },
-    delete(context,rowID){
-        return ajax.get(context, 'AbnormalSubmit/delete',{rowID});
+    delete(context, rowID) {
+        return ajax.get(context, 'AbnormalSubmit/delete', {
+            rowID
+        });
     },
-    get(context,rowID){
-        return ajax.get(context, 'AbnormalSubmit/get',{rowID});
+    get(context, rowID) {
+        return ajax.get(context, 'AbnormalSubmit/get', {
+            rowID
+        });
     },
-    waitelist(context){
+    waitelist(context) {
         return ajax.get(context, 'AbnormalSubmit/waitelist');
     },
-    apply(context,rowID){
-        return ajax.get(context, 'AbnormalSubmit/apply',{rowID});
+    apply(context, rowID) {
+        return ajax.get(context, 'AbnormalSubmit/apply', {
+            rowID
+        });
     }
+};
+export const requestOsapAbnormalData = {
+    view(context, abnormalID) {
+        return ajax.get(context, 'AbnormalData/view', {
+            abnormalID
+        });
+    },
+    viewUser(context, abnormalID, userID) {
+        return ajax.get(context, 'AbnormalData/viewUser', {
+            abnormalID,
+            userID
+        });
+    },
+    userList(context, pageIndex, pageSize) {
+        return ajax.get(context, '/AbnormalData/userList', {
+            pageSize,
+            pageIndex
+        });
+    },
+    principalList(context, pageIndex, pageSize) {
+        return ajax.get(context, '/AbnormalData/principalList', {
+            pageSize,
+            pageIndex
+        });
+    },
+    // rptDeptYear(context, dataType,companyID, year) {
+    //     return ajax.get(context, '/AbnormalData/report_GM01', {
+    //         dataType,
+    //         companyID,
+    //         year
+    //     });
+    // },
+    report_GM01_data(context, dataType, companyID, year) {
+        var type = 'data';
+        return ajax.get(context, '/AbnormalData/report_GM01', {
+            type,
+            dataType,
+            companyID,
+            year
+        });
+    },
+    report_GM01_html(context, dataType, companyID, year) {
+        var type = 'html';
+        return ajax.get(context, '/AbnormalData/report_GM01', {
+            type,
+            dataType,
+            companyID,
+            year
+        });
+    },
+    report_GM02(context, dataType, year, companyID, deptID) {
+        return ajax.get(context, '/AbnormalData/report_GM02', {
+            dataType,
+            year,
+            companyID,
+            deptID
+        });
+    },
+    report_GM03(context, dataType, year, month, companyID) {
+        return ajax.get(context, '/AbnormalData/report_GM03', {
+            dataType,
+            year,
+            month,
+            companyID
+        });
+    },
+
 };
 // export {
 //     requestModule,

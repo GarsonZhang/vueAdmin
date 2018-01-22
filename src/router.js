@@ -23,6 +23,17 @@ const routers = [{
 },
 {
     name: 'login',
+    path: '/Login/:redirect',
+    meta: {
+        title: '登录',
+        title_tw:'登錄',
+        title_en:'login',
+        title_other:'登录'
+    },
+    component: (resolve) => require(['./views/login.vue'], resolve)
+},
+{
+    name: 'loginIndex',
     path: '/Login',
     meta: {
         title: '登录',

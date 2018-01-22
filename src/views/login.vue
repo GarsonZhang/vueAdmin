@@ -73,23 +73,13 @@ export default {
     handleSubmit(button) {
       // debugger
       localStorage.setItem("isLogin", false);
-      var _this=this;
+      var _this = this;
       this.$refs["formInline"].validate(valid => {
         if (valid) {
-          // this.$Message.success('提交成功!');
-          //http://www.cnblogs.com/wisewrong/p/6277262.html
-          /*
-                    //  字符串
-                        this.$router.push('/home/first')
-                        // 对象
-                        this.$router.push({ path: '/home/first' })
-                        // 命名的路由
-                        this.$router.push({ name: 'home', params: { userId: wise }})
-                    */
           requestUser
-            .login(_this,_this.data.user, _this.data.password)
+            .login(_this, _this.data.user, _this.data.password)
             .then(res => {
-                // debugger
+              // debugger
               if (res.data.Status != 0) {
                 _this.$Message.error("用户状态异常，限制登录!");
                 button.loading = false;
@@ -97,12 +87,20 @@ export default {
               }
               // debugger
               this.$store.dataCache.setToken(res.data.Token);
-              this.$store.dataCache.setSecretKey(res.data.rid,res.data.TokenSecret);
+              this.$store.dataCache.setSecretKey(
+                res.data.rid,
+                res.data.TokenSecret
+              );
               this.$store.dataCache.setAccount(res.data.Account);
               this.$store.dataCache.setUserName(res.data.UserName);
               this.$store.dataCache.setLogin(true);
               _this.$parent.getMenus();
-              _this.$router.push({ name: "home" });
+              // debugger;
+              if (_this.$route.params.redirect) {
+                _this.$router.push({ path: _this.$route.params.redirect });
+              } else {
+                _this.$router.push({ name: "home" });
+              }
             })
             .catch(err => {
               button.loading = false;

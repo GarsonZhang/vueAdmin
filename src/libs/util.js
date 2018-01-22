@@ -11,6 +11,8 @@ let util = {
 
 };
 
+// util.baseURL="http://localhost:4462/api";
+util.baseURLReport = "http://localhost:4462/report";
 
 util.jsonSearch = jsonSearch;
 
@@ -93,9 +95,9 @@ util.convertRouteMap = function (menuData) {
 			name: module.name,
 			meta: {
 				title: module.text,
-				title_tw:module.text_tw,
-				title_en:module.text_en,
-				title_other:module.text_other
+				title_tw: module.text_tw,
+				title_en: module.text_en,
+				title_other: module.text_other
 			},
 			path: '/authority' + module.name,
 			component: getPromisedComponent(module.componentPath, module.componentName),
@@ -108,11 +110,11 @@ util.convertRouteMap = function (menuData) {
 				path: item.routeName,
 				meta: {
 					title: item.text,
-					title_tw:item.text_tw,
-					title_en:item.text_en,
-					title_other:item.text_other,
-					id:item.id,
-					src:item.componentPath+'/'+item.componentName
+					title_tw: item.text_tw,
+					title_en: item.text_en,
+					title_other: item.text_other,
+					id: item.id,
+					src: item.componentPath + '/' + item.componentName
 				},
 				component: getPromisedComponent(item.componentPath, item.componentName)
 			});
@@ -121,6 +123,7 @@ util.convertRouteMap = function (menuData) {
 		_route.push(menuModule);
 
 	});
+
 	function getPromisedComponent(module, url) {
 		return function (resolve, reject) {
 			if (module === "components")
@@ -136,8 +139,8 @@ util.convertRouteMap = function (menuData) {
 const ajaxUrl = env === 'development' ?
 	window.location.origin :
 	env === 'production' ?
-		window.location.origin :
-		window.location.origin;
+	window.location.origin :
+	window.location.origin;
 
 util.ajax = axios.create({
 	baseURL: ajaxUrl,
@@ -200,15 +203,26 @@ util.deepCopyEx = function (data) {
 	return o;
 };
 util.isNULLObject = function (obj) {
-	var count=0;
+	var count = 0;
 	for (let i in obj) {
 		count++;
 	}
-	return count===0;
+	return count === 0;
 };
 util.isNULL = function (obj) {
 	var v = obj === null || obj === undefined || obj.length < 1;
 	return v;
+}
+
+util.GUID = function () {
+	var guid = "";
+	for (var i = 1; i <= 32; i++) {
+		var n = Math.floor(Math.random() * 16.0).toString(16);
+		guid += n;
+		if ((i == 8) || (i == 12) || (i == 16) || (i == 20))
+			guid += "-";
+	}
+	return guid;
 }
 
 export default util;

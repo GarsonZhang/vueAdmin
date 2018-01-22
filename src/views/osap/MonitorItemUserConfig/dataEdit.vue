@@ -94,11 +94,11 @@ export default {
       typeData: [
         {
           value: 1,
-          description: "责任人"
+          description: "知情人"
         },
         {
           value: 2,
-          description: "知情人"
+          description: "责任人"
         }
       ],
       status: 0,

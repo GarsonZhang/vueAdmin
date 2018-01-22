@@ -15,6 +15,15 @@ body {
 .float-right {
   float: right;
 }
+.ivu-tabs{
+.ivu-tabs-content{
+.ivu-tabs-tabpane{
+  .gz-panel-layout{
+    // position: relative;
+  }
+}
+}
+}
 .vertical-center-modal {
     display: flex;
     align-items: center;
@@ -61,7 +70,17 @@ body {
       padding-right: 5px;
     }
   }
-
+  .fastReport {
+    text-align: center;
+    table{
+      width:100%;
+      max-width: 950px;
+      display: inline-table;
+      td{
+word-break: keep-all;
+      }
+  }
+}
   .smallPadding .ivu-table-cell {
     padding-left: 5px;
     padding-right: 5px;
@@ -71,7 +90,14 @@ body {
   }
    
 
-
+.clearPadding{
+  padding-left: 0;
+  padding-right: 0;
+  .ivu-table-cell {
+    padding-left: 0;
+    padding-right: 0;
+  }
+}
   // gzbutton如果显示tootip的话在buttonGrup下会有显示不正常长
 .ivu-btn-group > .ivu-tooltip {
   margin-left: -1px;

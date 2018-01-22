@@ -35,8 +35,10 @@
           //   this.$router.push({ name: "login" });
           // } else this.getMenus();
         } else {
+          debugger
           this.$router.push({
-            name: "login"
+            name: "login",
+            params:{redirect:this.$route.fullPath}
           });
         }
       }

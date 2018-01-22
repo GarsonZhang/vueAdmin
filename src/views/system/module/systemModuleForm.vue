@@ -265,10 +265,10 @@ export default {
           title: "描述",
           key: "description"
         },
-        {
-          title: "图标",
-          key: "icon"
-        },
+        // {
+        //   title: "图标",
+        //   key: "icon"
+        // },
         {
           title: "路由",
           key: "routeName"

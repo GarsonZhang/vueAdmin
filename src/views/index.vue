@@ -46,8 +46,8 @@
           </Breadcrumb>
         </div>
         <div class="header-avator-con">
-          <span class="item" >
-             <Row type="flex" justify="end" align="middle" >
+          <span class="item">
+            <Row type="flex" justify="end" align="middle">
               <Dropdown transfer trigger="click" @on-click="handleClickLangDropdown">
                 <a href="javascript:void(0)">
                   <span>{{langText}}</span>
@@ -61,7 +61,7 @@
             </Row>
           </span>
           <span class="item end">
-            <Row type="flex" justify="end" align="middle" >
+            <Row type="flex" justify="end" align="middle">
               <Dropdown transfer trigger="click" @on-click="handleClickUserDropdown">
                 <a href="javascript:void(0)">
                   <span>{{ userName }}</span>
@@ -120,7 +120,7 @@
   width: 100%;
 }
 </style>
-<style  lang="less" scoped>
+<style lang="less" scoped>
 .layout {
   width: 100%;
   height: 100%;
@@ -194,8 +194,7 @@
   /* box-shadow: 0 1px 1px rgba(0, 0, 0, 0.1); */
   box-shadow: 0 2px 1px 1px hsla(0, 0%, 39%, 0.1);
   background-color: white;
-  line-height: 30px;
-  //   .ivu-breadcrumb {
+  line-height: 30px; //   .ivu-breadcrumb {
   //   padding: 8px 15px 0;
   // }
   .layout-breadcrumb {
@@ -232,6 +231,7 @@
   left: 0;
   right: 0;
   padding-left: 10px;
+  padding-right: 10px;
 }
 
 .content {
@@ -308,9 +308,9 @@ export default {
     };
   },
   computed: {
-//     excludePage(){
-// return this.$store.state.excludePage;
-//     },
+    //     excludePage(){
+    // return this.$store.state.excludePage;
+    //     },
     lang() {
       return Vue.config.lang;
     },
@@ -384,12 +384,11 @@ export default {
           name: "ownspace_index"
         });
       } else if (name === "loginout") {
-        // 退出登录
-        this.$store.dataCache.clear();
-        requestUser.logout(this);
-        this.$router.push({
-          name: "login"
+        requestUser.logout(this).then(res => {
+          // 退出登录
+          this.$store.dataCache.clear();
         });
+        this.$router.push({ name: "login" });
       }
     },
     showMenu() {
@@ -437,7 +436,7 @@ export default {
       this.dataBreadcrumb.splice(0, 0, v.text);
       var num = 0;
       while (v.parentNode) {
-        console.log(num++);
+        // console.log(num++);
         if (num > 40) debugger; //这里或许就死循环了
         this.dataBreadcrumb.splice(0, 0, v.parentNode.text);
         v = v.parentNode;

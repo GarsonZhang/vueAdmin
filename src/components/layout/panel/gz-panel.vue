@@ -153,7 +153,8 @@ export default {
 </script>
 <style scoped>
 .gz-panel-layout {
-  /* position: relative; */
+  /*如果注释掉，在tab中会出现bug，main会始终定位到第一页 */
+  /* position: relative; */ /*如果不注释，main height不会100%*/
   height: 100%;
   width: 100%;
 }
