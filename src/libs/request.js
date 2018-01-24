@@ -496,6 +496,11 @@ export const requestOsapAbnormalSubmit = {
         return ajax.get(context, 'AbnormalSubmit/apply', {
             rowID
         });
+    },
+    refuse(context, rowID) {
+        return ajax.get(context, 'AbnormalSubmit/refuse', {
+            rowID
+        });
     }
 };
 export const requestOsapAbnormalData = {

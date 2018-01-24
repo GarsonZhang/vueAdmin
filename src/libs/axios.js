@@ -166,7 +166,7 @@ axiosProvider.axiosError = function (err) {
                                 // debugger
                                 localStorage.setItem('isLogin', false);
                                 // Vue.$router.push({ name: 'login' });
-                                window.location.href = "/login";
+                                window.location.href = '/login';
                             }
                             break;
                         default:

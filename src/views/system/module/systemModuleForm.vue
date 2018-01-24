@@ -33,9 +33,11 @@
               <i-input v-model="editData.name" placeholder="请输入功能编码"></i-input>
             </FormItem>
               <FormItem label="类型" prop="type">
-                <Select v-model="editData.type">
-                <Option value="1">功能</Option>
+                <Select v-model="editData.type" label-in-value @on-change="onSeletType">
+                   <Option v-for="item in formType" :key="item.value" :value="item.value">{{item.description}}</Option>
+                <!-- <Option value="1">功能</Option>
                 <Option value="2">路由</Option>
+                <Option value="3">移动端</Option> -->
               </Select>
             </FormItem>
             <FormItem label="功能名称" prop="description">
@@ -242,6 +244,16 @@ export default {
           ]
         }
       },
+      formType:[{
+        value:1,
+        description:"功能"
+      },{
+        value:2,
+        description:"路由"
+      },{
+        value:3,
+        description:"移动端"
+      }],
       modalStatus_authorize: false,
       apiList: [],
       columns: [
@@ -389,6 +401,10 @@ export default {
       .catch(err => {});
   },
   methods: {
+    onSeletType(e) {
+      // debugger
+        this.editData.typeDescription=e.label;
+    },
     // 权限配置
     event_configClick() {
       var v = this.$utils.searchObserver(

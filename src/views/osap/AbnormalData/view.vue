@@ -104,7 +104,7 @@ export default {
     }
   },
   created () {
-    debugger
+    // debugger
   },
   activated() {
     // debugger

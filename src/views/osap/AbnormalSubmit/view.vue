@@ -2,8 +2,9 @@
     <div class="content">
         <gz-panel>
             <div slot="top">
-                <gz-button v-if="$utils.isNULL(data.appUser)" icon="refresh" @click="doApply" text="审核" />
-                      <gz-button icon="refresh" @click="doClose" text="close" />
+                <gz-button v-if="$utils.isNULL(data.appUser)" icon="refresh" @click="doApply" text="通过" />
+                <gz-button v-if="$utils.isNULL(data.appUser)" icon="refresh" @click="doRefuse" text="退回" />
+                <gz-button icon="refresh" @click="doClose" text="关闭" />
             </div>
             <div slot="main" class="main">
                 <Form :ref="refNames.form" :model="data" :rules="dataRule">
@@ -163,6 +164,7 @@ export default {
           .apply(this, this.data.rowID)
           .then(res => {
             btn.loading = false;
+            this.$utils.closePage(this.$route);
             this.showInfo("审核成功");
           })
           .catch(err => {
@@ -173,6 +175,24 @@ export default {
         this.showError("空数据无法审核");
       }
     },
+     doRefuse(btn) {
+      if (this.data.rowID) {
+        requestOsapAbnormalSubmit
+          .refuse(this, this.data.rowID)
+          .then(res => {
+            btn.loading = false;
+            this.$utils.closePage(this.$route);
+            this.showInfo("操作成功");
+          })
+          .catch(err => {
+            // this.showError("保存失败：<br />" + err);
+            btn.loading = false;
+          });
+      } else {
+        this.showError("空数据无法审核");
+      }
+    },
+    
     doClose() {
       debugger
       this.$utils.closePage(this.$route);
