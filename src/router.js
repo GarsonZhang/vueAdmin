@@ -1,6 +1,8 @@
+import config from '../src/config/config';
+
 const routers = [{
     name: 'index',
-    path: '/',
+    path: config.root + '/',
     meta: {
         title: '首页',
         title_tw:'首頁',
@@ -10,7 +12,7 @@ const routers = [{
     component: (resolve) => require(['./views/index.vue'], resolve),
     children:[{
         name:'home',
-        path:'/home',
+        path:config.root + '/home',
         meta: { 
             title:'首页',
             title_tw:'首頁',
@@ -19,11 +21,11 @@ const routers = [{
          },
         component: (resolve) => require(['./views/home.vue'], resolve)
     },
-    { path: '/', redirect: '/home' }]
+    { path: config.root + '/', redirect: config.root + '/home' }]
 },
 {
     name: 'login',
-    path: '/Login/:redirect',
+    path: config.root + '/Login/:redirect',
     meta: {
         title: '登录',
         title_tw:'登錄',
@@ -34,7 +36,7 @@ const routers = [{
 },
 {
     name: 'loginIndex',
-    path: '/Login',
+    path: config.root + '/Login',
     meta: {
         title: '登录',
         title_tw:'登錄',
@@ -45,7 +47,7 @@ const routers = [{
 },
 {
     name: 'test',
-    path: '/test',
+    path: config.root + '/test',
     meta: {
         title: '测试',
         title_tw:'測試',

@@ -379,10 +379,11 @@ export default {
     },
     handleClickUserDropdown(name) {
       if (name === "ownSpace") {
-        util.openNewPage(this, "ownspace_index");
-        this.$router.push({
-          name: "ownspace_index"
-        });
+        // util.openNewPage(this, "ownspace_index");
+        // this.$router.push({
+        //   name: "ownspace_index"
+        // });
+        console.log('个人中心')
       } else if (name === "loginout") {
         requestUser.logout(this).then(res => {
           // 退出登录

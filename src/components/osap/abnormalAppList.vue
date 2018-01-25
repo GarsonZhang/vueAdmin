@@ -66,34 +66,36 @@ export default {
   },
   mounted() {
     this.AbnormalDataApp = [];
-    this.isLoading=true
+    this.isLoading = true;
     requestOsapAbnormalSubmit
       .waitelist(this)
       .then(res => {
         this.AbnormalDataApp = res.data;
-         this.isLoading=false
+        this.isLoading = false;
       })
       .catch(err => {
         this.AbnormalDataApp = [];
       });
   },
   methods: {
-    refresh(){
-        this.AbnormalDataApp = [];
-        this.isLoading=true
-        requestOsapAbnormalSubmit
-            .waitelist(this)
-            .then(res => {
-                this.AbnormalDataApp = res.data;
-                this.isLoading=false
-            })
-            .catch(err => {
-                this.AbnormalDataApp = [];
-            });
+    refresh() {
+      this.AbnormalDataApp = [];
+      this.isLoading = true;
+      requestOsapAbnormalSubmit
+        .waitelist(this)
+        .then(res => {
+          this.AbnormalDataApp = res.data;
+          this.isLoading = false;
+        })
+        .catch(err => {
+          this.AbnormalDataApp = [];
+        });
     },
     viewRow(row, index) {
       this.$refs[this.refNames.dataTable].handleMouseOut(index);
-      this.$router.push({ path: "/osap/abnormal/flow/" + row.rowID });
+      this.$router.push({
+        path: this.$utils.getPath("/osap/abnormal/flow/" + row.rowID)
+      });
     }
   }
 };

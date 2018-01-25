@@ -6,15 +6,20 @@ import Promise from 'Promise';
 import axiosProvider from './axios'
 import jsonSearch from './jsonSearch'
 import md5 from './md5'
+import config from '../config/config';
 
 let util = {
 
 };
 
-// util.baseURL="http://localhost:4462/api";
-util.baseURLReport = "http://localhost:4462/report";
+util.baseURLReport = config.baseURLReport;
 
 util.jsonSearch = jsonSearch;
+
+util.getPath = function (url) {
+	return config.root+url;
+};
+
 
 util.md5 = function (str) {
 	return md5.hex_md5(str);
@@ -107,7 +112,7 @@ util.convertRouteMap = function (menuData) {
 		module.items.forEach(function (item) {
 			menuModule.children.push({
 				name: item.name,
-				path: item.routeName,
+				path: config.root + item.routeName,
 				meta: {
 					title: item.text,
 					title_tw: item.text_tw,

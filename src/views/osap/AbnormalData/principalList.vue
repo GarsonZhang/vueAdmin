@@ -143,7 +143,7 @@ export default {
     },
     viewRow(row,index) {
       this.$refs[this.refNames.dataTable].handleMouseOut(index);
-      this.$router.push({ path: "/osap/abnormal/view/" + row.rowID+"/"+row.userID });
+      this.$router.push({ path: this.$utils.getPath("/osap/abnormal/view/" + row.rowID+"/"+row.userID) });
     }
   }
 };

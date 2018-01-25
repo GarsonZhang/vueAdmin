@@ -4,6 +4,8 @@ import Promise from 'Promise';
 import md5 from './md5';
 import util from './util';
 import GZStorage from './GZStorage';
+import config from '../config/config';
+
 let axiosProvider = {
 
 };
@@ -18,9 +20,11 @@ function getValue(obj) {
 }
 
 axiosProvider._getRemote = function () {
+    // console.log(config.env);
+    // debugger
+
     var v = axios.create({
-        baseURL: 'http://localhost:4462/api',
-        // baseURL: util.baseURL,
+        baseURL: config.baseURL,
         timeout: 30000
     });
     //处理请求

@@ -51,7 +51,7 @@ Vue.prototype.$utils = Util;
 
 // 路由配置
 const RouterConfig = {
-    mode: 'history',
+    mode: 'history',// hash history
     routes: Routers
     //routes: Util.convertRouteMap()
 };

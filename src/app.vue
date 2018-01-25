@@ -35,11 +35,17 @@
           //   this.$router.push({ name: "login" });
           // } else this.getMenus();
         } else {
-          debugger
-          this.$router.push({
-            name: "login",
-            params:{redirect:this.$route.fullPath}
-          });
+          // debugger
+          if(this.$route.fullPath.length>1) {
+            this.$router.push({
+              name: "login",
+              params:{redirect:this.$route.fullPath}
+            });
+          } else {
+            this.$router.push({
+              name: "loginIndex"
+            });
+          }
         }
       }
     },
