@@ -23,8 +23,10 @@ module.exports = merge(webpackBaseConfig, {
             allChunks: true
         }),
         new webpack.optimize.CommonsChunkPlugin({
-            name: 'vendors',
-            filename: 'vendors.js'
+            // name: 'vendor-all',
+            // filename: 'vendors.js'
+            name: ['vendor-exten','vendor-iview','vendor-echart', 'vendor-base'],
+            minChunks: Infinity
         }),
         new HtmlWebpackPlugin({
             filename: '../index.html',

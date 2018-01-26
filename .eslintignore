@@ -1,4 +1,6 @@
 src/router.js
 src/libs/util.js
-src/vendors.js
+src/vendors
 webpack.base.config.js
+webpack.prod.config.js
+webpack.dev.config.js

@@ -9,10 +9,15 @@ function resolve(dir) {
 module.exports = {
     entry: {
         main: './src/main',
-        vendors: './src/vendors'
+        // 'vendor-all': './src/vendors/vendor.all.js'
+        // 'vendor-vue': './src/vendors/vendor.vue.js',
+        'vendor-base': './src/vendors/vendor.base.js',
+        'vendor-iview': './src/vendors/vendor.iview.js',
+        'vendor-echart': './src/vendors/vendor.echart.js',
+        'vendor-exten': './src/vendors/vendor.exten.js'
     },
     output: {
-        path: path.join(__dirname, './dist')
+        path: path.join(__dirname, './dist/dist')
     },
     module: {
         rules: [{

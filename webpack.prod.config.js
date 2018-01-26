@@ -1,8 +1,10 @@
 const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
+const cleanWebpackPlugin = require('clean-webpack-plugin');
 const merge = require('webpack-merge');
 const webpackBaseConfig = require('./webpack.base.config.js');
+const path = require('path');
 const fs = require('fs');
 
 fs.open('./src/config/env.js', 'w', function(err, fd) {
@@ -17,13 +19,18 @@ module.exports = merge(webpackBaseConfig, {
         chunkFilename: '[name].[hash].chunk.js'
     },
     plugins: [
+        new cleanWebpackPlugin(['dist/*'], {
+            root: path.resolve(__dirname, './')
+        }),
         new ExtractTextPlugin({
             filename: '[name].[hash].css',
             allChunks: true
         }),
         new webpack.optimize.CommonsChunkPlugin({
-            name: 'vendors',
-            filename: 'vendors.[hash].js'
+            // name: 'vendor-all',
+            // filename: 'vendors.js'
+            name: ['vendor-exten','vendor-iview','vendor-echart', 'vendor-base'],
+            minChunks: Infinity
         }),
         new webpack.DefinePlugin({
             'process.env': {
@@ -32,11 +39,13 @@ module.exports = merge(webpackBaseConfig, {
         }),
         new webpack.optimize.UglifyJsPlugin({
             compress: {
-                warnings: false
+                warnings: false,
+                drop_console: true,
+                pure_funcs: ['console.log']
             }
         }),
         new HtmlWebpackPlugin({
-            filename: '../index_prod.html',
+            filename: '../index.html',
             template: './src/template/index.ejs',
             inject: false
         })
