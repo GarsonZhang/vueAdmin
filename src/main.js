@@ -8,7 +8,6 @@ import App from './app.vue';
 import 'iview/dist/styles/iview.css';
 import './locale'; //你这个咋不解析@ 我也不知道啊 什么原因？ 双引号也不行
 
-//import axios from 'axios';
 import gziview from './components/global';
 
 

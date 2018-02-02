@@ -14,6 +14,7 @@ export default {
   data() {
     return {
       data: [],
+      // dataSource:[],
       dataProps: {
         label: "label",
         children: "children",
@@ -40,7 +41,13 @@ export default {
       var me = this;
       requestCommonDataDept.list(this, this.companyID).then(
         res => {
+          // me.dataSource=res.data;
           me.data = this.convert2Data(1, res.data);
+// debugger
+        // var hasValue=me.getObj(me.data,me.currentValue);
+        // if(hasValue==false)
+        //     me.currentValue = "";
+
           //me.$refs.control.updateSelected(true);
           // debugger;
           // setTimeout(() => {
@@ -50,6 +57,7 @@ export default {
         },
         err => {
           me.data = [];
+          //  this.currentValue = "";
         }
       );
     },
@@ -70,13 +78,30 @@ export default {
       }, this);
       return v;
     },
+    getObj(lst,value){
+      for(var i =0 ; i<lst.length; i++){
+        var element=lst[i];
+        if(element.value===value){
+          return true;
+        }
+        if(element.children){
+          if(getObj(element.children,value)==true){
+            return true
+          }
+        }
+      }
+      return false
+    },
     selected(node) {
       if (node != null) {
         //debugger
         //this.$emit("input", node[this.dataProps.value]);
         // debugger
         this.$emit("onSelected", node[this.dataProps.value], node);
-      } else this.$emit("onSelected");
+      } else {
+        this.$emit("input",'');
+        this.$emit("onSelected");
+      }
     }
   },
   watch: {
@@ -89,8 +114,8 @@ export default {
     },
     companyID(val) {
       // debugger;
-      this.currentValue = "";
       this.refreshData();
+
     }
   }
 };

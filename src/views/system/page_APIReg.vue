@@ -274,7 +274,7 @@ export default {
     event_buttonDeleteClick(component) {
       debugger;
       requestAPIList
-        .delete(this, this.listData.currentData.rowID)
+        .deleteEx(this, this.listData.currentData.rowID)
         .then(res => {
           debugger;
           var index = this.$utils.searchJsonIndex(this.listData.data, p => {

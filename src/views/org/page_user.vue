@@ -178,9 +178,9 @@ export default {
           },
           {
             type: "string",
-            min: 3,
+            min: 2,
             max: 20,
-            message: "姓名长度必须大于3且小于20",
+            message: "姓名长度必须大于2且小于20",
             trigger: "blur"
           }
         ],

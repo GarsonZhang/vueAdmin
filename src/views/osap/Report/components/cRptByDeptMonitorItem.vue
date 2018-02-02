@@ -49,7 +49,7 @@
                     </i-col>
                 </Row>
             </div>
-            <div slot="main" class="main">
+            <div slot="main" class="main" style="overflow-y: auto;">
                 <div class="fastReport"  v-html="dataHtml"></div>
                 <gzPrint :ref="refNames.print"></gzPrint>
             </div>

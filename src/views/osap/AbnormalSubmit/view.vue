@@ -2,8 +2,8 @@
     <div class="content">
         <gz-panel>
             <div slot="top">
-                <gz-button v-if="$utils.isNULL(data.appUser)" icon="refresh" @click="doApply" text="通过" />
-                <gz-button v-if="$utils.isNULL(data.appUser)" icon="refresh" @click="doRefuse" text="退回" />
+                <gz-button v-if="data.status===0" icon="refresh" @click="doApply" text="通过" />
+                <gz-button v-if="data.status===0" icon="refresh" @click="doRefuse" text="退回" />
                 <gz-button icon="refresh" @click="doClose" text="关闭" />
             </div>
             <div slot="main" class="main">

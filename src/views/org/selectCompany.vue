@@ -66,7 +66,10 @@ export default {
         this.$emit("input", node[this.dataProps.value]);
         // debugger
         this.$emit("onSelected", node[this.dataProps.value], node);
-      } else this.$emit("onSelected");
+      } else {
+        this.$emit("input",'');
+        this.$emit("onSelected");
+      }
     }
   },
   watch: {

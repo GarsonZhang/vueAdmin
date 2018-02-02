@@ -16,6 +16,19 @@ const ajax = {
         };
         return _ajaxRemote.get(url, config);
     },
+    delete(pageContext, url, data) {
+
+        var id = pageContext.$route.meta.id;
+
+        var config = {
+            headers: {
+                'fid': id,
+                'client': 'pc'
+            },
+            params: data
+        };
+        return _ajaxRemote.delete(url, config);
+    },
     post(pageContext, url, data, param) {
         var id = pageContext.$route.meta.id;
         var config = {
@@ -279,6 +292,11 @@ export const requestAPIList = {
     },
     delete(context, rowID) {
         return ajax.get(context, '/apilist/delete', {
+            rowID
+        });
+    },
+    deleteEx(context, rowID) {
+        return ajax.delete(context, '/apilist/deleteEx', {
             rowID
         });
     }

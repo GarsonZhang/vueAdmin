@@ -370,14 +370,17 @@ export default {
     },
     loadData(callback) {
       if (this.currentUser.rowID) {
+        this.isLoading = true;
         requestOsapMonitorItemUserCfg
           .list(this, this.currentUser.rowID)
           .then(res => {
             this.data = res.data;
+            this.isLoading = false;
             if (callback) callback();
           })
           .catch(err => {
             this.data = [];
+            this.isLoading = false;
             if (callback) callback();
           });
       } else {

@@ -97,6 +97,16 @@ export default {
     value: ""
   },
   watch: {
+    treeData(val) {
+      var e = this.getObj(val, this.currentValue);
+      if (e) {
+        this.currentLabel = e[this.treeProps.label];
+      } else {
+        this.currentValue = "";
+        this.currentLabel = "";
+        this.$emit("input", this.currentValue);
+      }
+    },
     value(val) {
       // debugger;
       if (this.currentValue !== val) {
@@ -134,6 +144,20 @@ export default {
     }
   },
   methods: {
+    getObj(lst, value) {
+      for (var i = 0; i < lst.length; i++) {
+        var element = lst[i];
+        if (element[this.treeProps.value] === value) {
+          return element;
+        }
+        if (element.children) {
+          var e = this.getObj(element.children, value);
+          if (e) {
+            return e;
+          }
+        }
+      }
+    },
     mouseenter() {
       // console.log("mouseneter");
       this.iconName = this.$utils.isNULL(this.currentValue)
@@ -157,9 +181,10 @@ export default {
       }
     },
     handleClear() {
-      if(this.$utils.isNULL(this.currentValue)){
-          this.visible=!this.visible;
-      }else{
+      if (this.$utils.isNULL(this.currentValue)) {
+        this.visible = !this.visible;
+      } else {
+        // debugger
         this.$refs["tree"].clearSelect();
         this.iconName = "arrow-down-b";
       }
@@ -170,18 +195,16 @@ export default {
     },
     handleCloseTree() {},
     onSelect(node) {
-      this.currentNode = node;
       // debugger
+      this.currentNode = node;
       if (node) this.currentLabel = node[this.treeProps.label];
       else this.currentLabel = "";
-      // debugger;
       this.$emit("input", this.currentValue);
       this.visible = false;
       this.clearQuery();
       this.$emit("on-select", node);
     },
     onAfterValueChanged(node) {
-      // debugger
       this.currentNode = node;
       if (node) this.currentLabel = node[this.treeProps.label];
       else this.currentLabel = "";
